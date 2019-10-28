@@ -1,6 +1,9 @@
 # Track I's Lambda Branch
 
 Welcome to track I's lambda branch. 
+<br>
+<img src="Freeman-fischer.png" width="100" height="200">
+
 
 # Set up
 ### Prereqs:
