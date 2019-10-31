@@ -55,4 +55,4 @@ Thumbs.db
 *.un~
 
 # Evil evil evil evil #
-node_modules/*
+node_modules/
