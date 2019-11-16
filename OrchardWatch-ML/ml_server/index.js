@@ -2,6 +2,8 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const url = require('url')
 const queryString = require('querystring')
+const path = require('path')
+
 
 const app = express()
 const port = 3000
@@ -18,8 +20,14 @@ app.get('/predict', function (req, res) {
 	if(modelName === undefined || imageURL === undefined) {
 		res.send('Error: request is missing required parameters')
 	}
+	
+	const spawn = require('child_process').spawn
+	var process = spawn('python',[path.join(__dirname, "testPred.py"), modelName, imageURL]);
 
-	res.send('Example ' + modelName + ' Prediction on image: '+ imageURL +' gives result: ("Applescab", .9)')
+	process.stdout.on('data', function(data) {
+		res.send(data.toString());
+	} );
+
 })
 
 //Function to handle model upload
