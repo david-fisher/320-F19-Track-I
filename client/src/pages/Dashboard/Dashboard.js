@@ -6,9 +6,11 @@ class Dashboard extends React.Component {
   }
 
   render() {
+    console.log(this.props.token);
     return (
       <div>
         <h2>Dashboard</h2>
+        {this.props.token}
       </div>
     );
   }
