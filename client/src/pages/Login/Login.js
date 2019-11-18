@@ -1,8 +1,18 @@
 import React, { useState } from "react";
 import { Button, FormGroup, FormControl, FormLabel } from "react-bootstrap";
 import "./Login.css";
+import Cookies from "universal-cookie";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link,
+  Redirect,
+  useHistory,
+  useLocation
+} from "react-router-dom";
 
-export default function Login(props) {
+export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -12,7 +22,15 @@ export default function Login(props) {
 
   function handleSubmit(event) {
     event.preventDefault();
-    console.log(email);
+    if (password === "admin") {
+      const cookies = new Cookies();
+      cookies.set("name", "David", { path: "/" });
+      cookies.set("token", "test_token_value", { path: "/" });
+      alert('Logged in');
+      window.location.reload();
+    } else {
+      alert("Invalid credentials");
+    }
   }
 
   return (
@@ -42,3 +60,4 @@ export default function Login(props) {
     </div>
   );
 }
+

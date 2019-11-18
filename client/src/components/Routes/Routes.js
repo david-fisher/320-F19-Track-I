@@ -4,6 +4,7 @@ import Home from "../../pages/Home/Home";
 import About from "../../pages/About/About";
 import Dashboard from "../../pages/Dashboard/Dashboard";
 import Login from "../../pages/Login/Login";
+import NotFound from "../../pages/NotFound/NotFound"
 
 export default function Routes() {
   return (
@@ -21,6 +22,7 @@ export default function Routes() {
       <Route path="/login">
         <Login />
       </Route>
+      <Route component={NotFound} />
     </Switch>
   );
 }
