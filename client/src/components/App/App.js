@@ -26,12 +26,14 @@ class App extends React.Component {
   render() {
     return (
       <div>
+
         <Navbar bg="dark" variant="dark">
           <Navbar.Brand href="/home">Orchard Watch</Navbar.Brand>
           <Nav className="mr-auto">
             <Nav.Link href="/home">Home</Nav.Link>
             <Nav.Link href="/about">About</Nav.Link>
           </Nav>
+
           <Nav className="justify-content-end">
             {this.state.token === undefined && (
               <Nav.Link href="/login">Login</Nav.Link>
@@ -43,6 +45,7 @@ class App extends React.Component {
                 </Dropdown.Toggle>
                 <Dropdown.Menu alignRight={true}>
                   <Dropdown.Item href="/profile">Profile</Dropdown.Item>
+                  <Dropdown.Item href="/dashboard">Dashboard</Dropdown.Item>
                   <Dropdown.Item onClick={this.logout}>Logout</Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
