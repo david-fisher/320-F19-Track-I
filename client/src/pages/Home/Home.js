@@ -10,9 +10,7 @@ class Home extends React.Component {
   render() {
     return (
       <div>
-        <Button variant="primary" onClick={checkCookie}>
-          Test
-        </Button>
+        <p>This is the home page.</p>
       </div>
     );
   }

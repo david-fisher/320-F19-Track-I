@@ -9,7 +9,6 @@ import { Route, withRouter } from "react-router-dom";
 class App extends React.Component {
   constructor(props) {
     super(props);
-    console.log(props.context);
     const cookies = new Cookies();
     this.state = {
       token: cookies.get("token"),
@@ -21,7 +20,6 @@ class App extends React.Component {
   logout = event => {
     this.state.cookie.remove("name");
     this.state.cookie.remove("token");
-    alert("Logged out");
     window.location.reload();
   };
 
@@ -29,7 +27,7 @@ class App extends React.Component {
     return (
       <div>
         <Navbar bg="dark" variant="dark">
-          <Navbar.Brand href="#home">Orchard Watch</Navbar.Brand>
+          <Navbar.Brand href="/home">Orchard Watch</Navbar.Brand>
           <Nav className="mr-auto">
             <Nav.Link href="/home">Home</Nav.Link>
             <Nav.Link href="/about">About</Nav.Link>
