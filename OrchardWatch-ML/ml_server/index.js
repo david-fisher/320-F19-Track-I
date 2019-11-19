@@ -20,10 +20,23 @@ app.get('/predict', function (req, res) {
 	if(modelName === undefined || imageURL === undefined) {
 		res.send('Error: request is missing required parameters')
 	}
-	
+	console.log(modelName)
+	console.log(imageURL)
 	const spawn = require('child_process').spawn
-	var process = spawn('python',[path.join(__dirname, "testPred.py"), modelName, imageURL]);
 
+	var fs = require('fs');
+	var path_f = path.join(__dirname, '../prediction/keras_model.py')
+
+	// fs.readdir(path_f, function(err, items) {
+ //    console.log(items);
+ 
+ //    for (var i=0; i<items.length; i++) {
+ //        console.log(items[i]);
+ //    }
+	// });
+
+	var process = spawn('python',[path_f, modelName, imageURL]);
+	console.log("spawned")
 	process.stdout.on('data', function(data) {
 		res.send(data.toString());
 	} );
