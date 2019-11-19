@@ -13,10 +13,10 @@ export default function Routes() {
   return (
     <Switch>
       <Redirect exact from="/" to="/home" />
-      <Route path="/home" exact component={Home}/>
+      <Route path="/home" exact component={Home} />
       <Route path="/about" exact component={About} />
       <AuthenticatedRoute path="/dashboard" exact component={Dashboard} />
-      <UnauthenticatedRoute path="/login" exact component={Login}  />
+      <UnauthenticatedRoute path="/login" exact component={Login} />
       <AuthenticatedRoute path="/profile" exact component={Profile} />
       <Route component={NotFound} />
     </Switch>

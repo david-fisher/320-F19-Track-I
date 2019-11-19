@@ -1,9 +1,15 @@
 import React from "react";
-import "./App.css";
 import "bootstrap/dist/css/bootstrap.css";
 import Cookies from "universal-cookie";
 import Routes from "../Routes/Routes";
-import { Nav, Navbar, Dropdown, NavItem } from "react-bootstrap";
+import {
+  Nav,
+  Navbar,
+  Dropdown,
+  NavItem,
+  Container,
+  Jumbotron
+} from "react-bootstrap";
 import { Route, withRouter } from "react-router-dom";
 
 class App extends React.Component {
@@ -26,7 +32,6 @@ class App extends React.Component {
   render() {
     return (
       <div>
-
         <Navbar bg="dark" variant="dark">
           <Navbar.Brand href="/home">Orchard Watch</Navbar.Brand>
           <Nav className="mr-auto">
