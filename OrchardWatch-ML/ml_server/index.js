@@ -18,14 +18,16 @@ app.get('/predict', function (req, res) {
 	let modelName = req.query.modelName
 	let imageURL = req.query.imageURL
 	if(modelName === undefined || imageURL === undefined) {
-		res.send('Error: request is missing required parameters')
+		res.status(412).send("Missing Parameter")
+		return;
 	}
 	console.log(modelName)
 	console.log(imageURL)
 	const spawn = require('child_process').spawn
 
 	var fs = require('fs');
-	var path_f = path.join(__dirname, '../prediction/keras_model.py')
+	//var path_f = path.join(__dirname, '../prediction/keras_model.py')
+	var path_f = path.join(__dirname, 'testPred.py')
 
 	// fs.readdir(path_f, function(err, items) {
  //    console.log(items);
@@ -48,7 +50,8 @@ app.get('/predict', function (req, res) {
 app.post('/upload/new', function (req, res) {
 	let modelName = req.query.modelName
 	if(modelName === undefined) {
-		res.send('Error: no modelName given')
+		res.status(412).send('Missing Parameter')
+		return;
 	}
 
 	res.send('Example: uploaded ' + modelName + ' model')
@@ -58,7 +61,8 @@ app.post('/upload/new', function (req, res) {
 app.put('/upload/replace', function (req, res) {
 	let modelName = req.query.modelName
 	if(modelName === undefined) {
-		res.send('Error: no modelName given')
+		res.status(412).send('Missing Parameter')
+		return;
 	}
 	res.send('Example: replaced existing model with ' + modelName + ' model')
 })
@@ -66,5 +70,5 @@ app.put('/upload/replace', function (req, res) {
 //Function handle sending back a list of models
 
 
-app.listen(port, () => console.log('Example app listening on port '+port+'!'))
+app.listen(port, () => console.log('Orchard Watch Machine Learning Service listening on port '+port+'!'))
 
