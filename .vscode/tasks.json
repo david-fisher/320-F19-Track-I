@@ -17,25 +17,14 @@
         }
       },
       {
-        "label": "Package",
+        "label": "Deploy Drone",
         "type": "shell",
-        "command": "sam package --template-file template.yaml --s3-bucket orchardwatchsandbox --output-template-file packaged.yaml",
+        "command": "aws lambda update-function-code --function-name Drone-Lambda --zip-file fileb://lambdas/Frontend-Lambda.zip",
         "group": "build",
         "presentation": {
           "reveal": "always",
           "panel": "shared"
         }
-      },
-      {
-        "label": "Deploy",
-        "type": "shell",
-        "command": "sam deploy --template-file packaged.yaml --stack-name orchardWatch",
-        "group": "build",
-        "presentation": {
-          "reveal": "always",
-          "panel": "shared"
-        },
-        "dependsOn":["Package"]
       },
     ]
   }
