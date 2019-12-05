@@ -1,0 +1,44 @@
+.App {
+  text-align: center;
+  align-content: center;
+  align-self: center;
+  text-align-last: center;
+  background-image: linear-gradient(#f4eeea, #afb1ce);
+  height: 100vh;
+}
+
+.App-logo {
+  height: 40vmin;
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+  background-image: linear-gradient(#f4eeea, #afb1ce);
+}
+
+.App-link {
+  color: #09d3ac;
+}
+
+.col {
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
+.row {
+  margin-left: 0px;
+  margin-right: 0px;
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
+.select {
+  text-align-last: center;
+}
