@@ -1,5 +1,4 @@
 import boto3
-#import psycopg2
 import uuid
 
 '''
@@ -14,70 +13,105 @@ import uuid
 
 def register(options):
     #options: a list of variables
-    email = options[0]
-    password = options[1]
-    requested_token=options[2]
+    given_email = options['email']
+    given_password = options['pass']
+    requested_token = int(options['token']) or 0 #This will set the value of requested_token to either the parameter or 0 if it is not given (DONT KNOW IF THIS 'token' WHAT IS GIVEN)
     
-   #First connect to the table 
-    connection = psycopg2.connect("dbname = User user = CloudTeam password = CloudTeam")
-    cursor = connection.cursor()
+    #First connect to the table 
+    client = boto3.client('rds-data')
     
-    #Check if the user already exist in the database
-    cursor.execute("SELECT Email from User having Email == email")
-    existing_user = cursor.fetchone()
+    #Check if the user already exist in the database and throw a 400 statuscode if they do
+    existing_user = client.execute_statement(
+        secretArn = "arn:aws:secretsmanager:us-east-2:007372221023:secret:rds-db-credentials/cluster-BZEL6PSDLGVBVJB6BIDZGZQ4MI/admin320-fsoCse", 
+        database = "db320",
+        resourceArn = "arn:aws:rds:us-east-2:007372221023:cluster:database320",
+        sql = "SELECT email FROM UserData WHERE email = given_email;")
     if(existing_user != []):
-        return{
-            'statusCode': 403 #Forbidden
-        }
-    cursor.close()
+        return{'statusCode': 403} #Forbidden
    
     #If they do not exist in the database, add them
-    input_data = "INSERT INTO User(UserID,Email,Password) VALUES(%s,%s,%s)"
-    connection = psycopg2.connect("dbname = User user = CloudTeam password = CloudTeam")
-    cursor = connection.cursor()
-    cursor.execute(input_data,(email,email,password))
-    #Add lines to handle the requested_token
-    connection.commit()
-    connection.close()
-    
+    existing_user = client.execute_statement(
+        secretArn = "arn:aws:secretsmanager:us-east-2:007372221023:secret:rds-db-credentials/cluster-BZEL6PSDLGVBVJB6BIDZGZQ4MI/admin320-fsoCse", 
+        database = "db320",
+        resourceArn = "arn:aws:rds:us-east-2:007372221023:cluster:database320",
+        sql = "INSERT INTO UserData (email, pass, type, name) VALUES (given_email,given_password,requested_token,given_email);")
+
     #Return success
-    return{
-        'statusCode': 200 #OK
-    }
+    return {'statusCode': 200} #OK
     
 def login(options):
-    frontend_email = options[0]
-    frontend_password = options[1]
-   #Connect to the User Database
-    connection = psycopg2.connect(database = "User", user = "postgres",password = "pass123", host = "127.0.0.1", port = "5432")
-    cursor = connection.cursor()
+    print("OPTIONS", options)
+    given_email = options['email']
+    given_password = options['pass']
 
-   #Check if the user does not exist in the database
-    cursor.execute("SELECT Email from User having Email == email")
-    existing_user = cursor.fetchone()
+    #Connect to the User Database
+    client = boto3.client('rds-data')
+
+    #Check if the user does not exist in the database
+    existing_user = client.execute_statement(
+        secretArn = "arn:aws:secretsmanager:us-east-2:007372221023:secret:rds-db-credentials/cluster-BZEL6PSDLGVBVJB6BIDZGZQ4MI/admin320-fsoCse", 
+        database = "db320",
+        resourceArn = "arn:aws:rds:us-east-2:007372221023:cluster:database320",
+        sql = "SELECT email FROM UserData WHERE email = given_email;")
     if(existing_user == []):
-        return{
-            'statusCode': 403 #Forbidden
-        }
+        return{'statusCode': 403} #Forbidden
     
     #Get password from existing user and if does not match return a 400 http
-    existing_password = cursor.execute("SELECT Password from User having UserID == existing_user")
-    connection.commit() 
-    if(existing_password == frontend_password):
-        return {
-            'statusCode': 403 #Forbidden
-        }
+    existing_password = client.execute_statement(
+        secretArn = "arn:aws:secretsmanager:us-east-2:007372221023:secret:rds-db-credentials/cluster-BZEL6PSDLGVBVJB6BIDZGZQ4MI/admin320-fsoCse",
+        database = "db320",
+        resourceArn = "arn:aws:rds:us-east-2:007372221023:cluster:database320",
+        sql = "SELECT pass FROM UserData WHERE email == given_email;")
+    if(existing_password != given_password):
+        return {'statusCode': 403} #Forbidden
     
-    #Create a token and then push it into the database
-    token = uuid.uuid4()
-    cursor.execute("INSERT INTO Tokens (Email,Token) \
-                 VALUES (frontend_email,token)")
-    connection.commit()
-    connection.close()
-    return{
-        'statusCode': 200 #OK
-    }
+    #Return success
+    return{'statusCode': 200} #OK
     
+def update_password(options):
+    given_email = options['email']
+    given_password = options['pass']
+    #First connect to the table 
+    client = boto3.client('rds-data')
+ 
+    #Check that the user exists
+    existing_user = client.execute_statement(
+        secretArn = "arn:aws:secretsmanager:us-east-2:007372221023:secret:rds-db-credentials/cluster-BZEL6PSDLGVBVJB6BIDZGZQ4MI/admin320-fsoCse",
+        database = "db320",
+        resourceArn = "arn:aws:rds:us-east-2:007372221023:cluster:database320",
+        sql = "SELECT email FROM UserData WHERE email == given_email;")
+    if(existing_user == []):
+        return {'statusCode': 403} #Forbidden  
+
+    #Replace password in database
+    client.execute_statement(
+        secretArn="arn:aws:secretsmanager:us-east-2:007372221023:secret:rds-db-credentials/cluster-BZEL6PSDLGVBVJB6BIDZGZQ4MI/admin320-fsoCse",
+        database="db320",
+        resourceArn="arn:aws:rds:us-east-2:007372221023:cluster:database320",
+        sql="UPDATE UserData SET pass = given_password WHERE email = given_email;")
+    
+    #Return success
+    return{'statusCode': 200}
+    
+def authorization_mobile(options):
+    given_ID = options['ID']
+    given_code = options['code']
+
+    #First connect to the table
+    client = boto3.client('rds-data')
+
+    #Check the table to see if the given_code matches anything in the database
+    existing_code = client.execute_statement(
+        secretArn = "arn:aws:secretsmanager:us-east-2:007372221023:secret:rds-db-credentials/cluster-BZEL6PSDLGVBVJB6BIDZGZQ4MI/admin320-fsoCse",
+        database = "db320",
+        resourceArn = "arn:aws:rds:us-east-2:007372221023:cluster:database320",
+        sql = "SELECT code FROM AccessCodes WHERE UserID == given_ID;")
+    
+    #If a code does not exist
+    if(existing_code == []):
+        return {'statusCode' : 403} #Forbidden
+    return{'statusCode' : 200} #OK
+
 def test(options):
     print("we made it to the test")
     print(options)
