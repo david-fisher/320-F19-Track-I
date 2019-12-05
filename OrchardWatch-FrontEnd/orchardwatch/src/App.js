@@ -86,9 +86,6 @@ class App extends React.Component {
             Orchards
           </button>
           <button onClick={() => this.setState({ page: "Data" })}>Data</button>
-          <button onClick={() => this.setState({ page: "Gallery" })}>
-            Gallery
-          </button>
           <button onClick={() => this.setState({ page: "Login" })}>
             Login
           </button>
