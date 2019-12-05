@@ -1,6 +1,7 @@
 package com.example.orchardwatch;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
@@ -21,6 +22,11 @@ public class MainActivity extends AppCompatActivity {
 // make it so the buttons dont move when you scroll and make it save camera image
     private WebView my_webview;
     Button camera;
+    Button gallery;
+
+    private static final int PICK_IMAGE = 100;
+    Uri imageUri;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,6 +43,14 @@ public class MainActivity extends AppCompatActivity {
                 catch (Exception e){
                     e.printStackTrace();
                 }
+            }
+        });
+
+        gallery = (Button)findViewById(R.id.gallery);
+        gallery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openGallery();
             }
         });
 
@@ -59,6 +73,22 @@ public class MainActivity extends AppCompatActivity {
         my_webview.loadUrl("https://www.umass.edu/");
         my_webview.setWebViewClient(new WebViewClient());   //prevent opening in another browser instead of the app
 
+    }
+
+    private void openGallery(){
+        Intent album = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+        startActivityForResult(album, PICK_IMAGE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == RESULT_OK && requestCode == PICK_IMAGE){
+            imageUri = data.getData();
+            //this is where to insert code when photo from gallery has been selected
+            //Example from tutorial (https://www.youtube.com/watch?v=OPnusBmMQTw)
+            //imageView.setImageURI(imageUri);
+        }
     }
 
     /*
