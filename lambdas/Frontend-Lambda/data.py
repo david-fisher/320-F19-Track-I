@@ -16,3 +16,16 @@ def upload(options):
     def percent_cb(complete, total):
         sys.stdout.write('.')
         sys.stdout.flush()
+        
+def test_db(options):
+    sql = options[0]
+    print(sql)
+    rds_client = boto3.client('rds-data')
+    response = rds_client.execute_statement(
+        secretArn="arn:aws:secretsmanager:us-east-2:007372221023:secret:rds-db-credentials/cluster-BZEL6PSDLGVBVJB6BIDZGZQ4MI/admin320-fsoCse",
+        database="db320",
+        resourceArn="arn:aws:rds:us-east-2:007372221023:cluster:database320",
+        sql=sql
+    )
+    print(len(response))
+    return response
