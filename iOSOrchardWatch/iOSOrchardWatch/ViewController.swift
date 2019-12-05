@@ -12,6 +12,8 @@ class ViewController: UIViewController{
     
     @IBAction func loginButton(_ sender: Any) {
         performSegue(withIdentifier: "login", sender: self)
+        //send code to lambda. if good, go to next page. if not, stay on this page with popup saying invalid code
+        // /Frontend-Lambda/account/mobile/{code}
     }
     
     

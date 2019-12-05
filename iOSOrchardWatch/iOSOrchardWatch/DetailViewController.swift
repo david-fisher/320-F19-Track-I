@@ -49,11 +49,9 @@ UINavigationControllerDelegate{
         toolBar.trailingAnchor.constraint(equalTo: webView.trailingAnchor, constant: 0).isActive = true
     }
     @objc private func goBack() {
-        if webView.canGoBack {
-            webView.goBack()
-        } else {
-            self.dismiss(animated: true, completion: nil)
-        }
+        let myURL = URL(string:"https://www.umass.edu")
+        let myRequest = URLRequest(url: myURL!)
+        webView.load(myRequest)
     }
     
     @objc private func openCameraRoll() {
@@ -82,15 +80,15 @@ UINavigationControllerDelegate{
             fatalError("Expected a dictionary containing an image, but was provided the following: \(info)")
             }
         imagePicked.image = selectedImage
+        //upload image to the lambda
+        // PUT /picture/account_upload_picture/{token}/{image}
+        
+        //get results
+        // GET /classify/{image}/{model}
+        
+        let myURL = URL(string:"https://www.umass.edu")
+        let myRequest = URLRequest(url: myURL!)
+        webView.load(myRequest)
     }
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
+    
 }
