@@ -33,18 +33,17 @@ def test_db(options):
 
 # GET: Queries database for entries with a timestamp between start_time and end_time
 # Returns list of JSON objects containing requested fields
+# Test: print(data_download(0, '1970-01-01 00:00:01', '2038-01-19 03:14:07', ["wind", "temp"]))
 def data_download(token, start_time, end_time, field):
 
-    client = boto3.client('rds-data')
+    client = boto3.client('rds-data', region_name='us-east-2')
     
     # Prepared SQL Statement: Queries for entries where time column value is between start_time and end_time
-    sql_select_statement = "SELECT * FROM HoboData WHERE time BETWEEN {} AND {}"format(start_time, end_time)
-    
     query_results = client.execute_statement(
         secretArn = constants.SECRET_ARN, 
         database = constants.DB_NAME,
         resourceArn = constants.ARN,
-        sql = sql_select_statment
+        sql = "SELECT * FROM HoboData WHERE time BETWEEN {} AND {}".format(start_time, end_time)
         )
     
     # List to hold JSON objects
