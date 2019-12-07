@@ -1,0 +1,6 @@
+DB_CLUSTER = "database320"
+DB_NAME = "db320"
+MASTER_USERNAME = "admin320"
+MASTER_PASSWORD = "pwFor320"
+ARN = "arn:aws:rds:us-east-2:007372221023:cluster:database320"
+SECRET_ARN = "arn:aws:secretsmanager:us-east-2:007372221023:secret:rds-db-credentials/cluster-BZEL6PSDLGVBVJB6BIDZGZQ4MI/admin320-fsoCse"
