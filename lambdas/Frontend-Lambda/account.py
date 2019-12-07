@@ -25,7 +25,7 @@ def register(options):
         secretArn = "arn:aws:secretsmanager:us-east-2:007372221023:secret:rds-db-credentials/cluster-BZEL6PSDLGVBVJB6BIDZGZQ4MI/admin320-fsoCse", 
         database = "db320",
         resourceArn = "arn:aws:rds:us-east-2:007372221023:cluster:database320",
-        sql = "SELECT email FROM UserData WHERE email = given_email;")
+        sql = "SELECT email FROM UserData WHERE email = {};".format(given_email))
     if(existing_user != []):
         return{'statusCode': 403} #Forbidden
    
@@ -34,7 +34,7 @@ def register(options):
         secretArn = "arn:aws:secretsmanager:us-east-2:007372221023:secret:rds-db-credentials/cluster-BZEL6PSDLGVBVJB6BIDZGZQ4MI/admin320-fsoCse", 
         database = "db320",
         resourceArn = "arn:aws:rds:us-east-2:007372221023:cluster:database320",
-        sql = "INSERT INTO UserData (email, pass, type, name) VALUES (given_email,given_password,requested_token,given_email);")
+        sql = "INSERT INTO UserData (email, pass, type, name) VALUES ({},{},{},{});".format(given_email, given_password, requested_token, given_email))
 
     #Return success
     return {'statusCode': 200} #OK
@@ -52,7 +52,7 @@ def login(options):
         secretArn = "arn:aws:secretsmanager:us-east-2:007372221023:secret:rds-db-credentials/cluster-BZEL6PSDLGVBVJB6BIDZGZQ4MI/admin320-fsoCse", 
         database = "db320",
         resourceArn = "arn:aws:rds:us-east-2:007372221023:cluster:database320",
-        sql = "SELECT email FROM UserData WHERE email = given_email;")
+        sql = "SELECT email FROM UserData WHERE email = {};".format(given_email))
     if(existing_user == []):
         return{'statusCode': 403} #Forbidden
     
@@ -61,15 +61,16 @@ def login(options):
         secretArn = "arn:aws:secretsmanager:us-east-2:007372221023:secret:rds-db-credentials/cluster-BZEL6PSDLGVBVJB6BIDZGZQ4MI/admin320-fsoCse",
         database = "db320",
         resourceArn = "arn:aws:rds:us-east-2:007372221023:cluster:database320",
-        sql = "SELECT pass FROM UserData WHERE email == given_email;")
+        sql = "SELECT pass FROM UserData WHERE email = {};".format(given_email))
     if(existing_password != given_password):
         return {'statusCode': 403} #Forbidden
     
     #Return success
-    return{'statusCode': 200} #OK
+    return{'statusCode': 200, 'token': "blahblahblah", 'user':'grower/researcher/public'} #OK
     
 def update_password(options):
     given_email = options['email']
+    # Hashed and encrypted password
     given_password = options['pass']
     #First connect to the table 
     client = boto3.client('rds-data')
@@ -79,7 +80,7 @@ def update_password(options):
         secretArn = "arn:aws:secretsmanager:us-east-2:007372221023:secret:rds-db-credentials/cluster-BZEL6PSDLGVBVJB6BIDZGZQ4MI/admin320-fsoCse",
         database = "db320",
         resourceArn = "arn:aws:rds:us-east-2:007372221023:cluster:database320",
-        sql = "SELECT email FROM UserData WHERE email == given_email;")
+        sql = "SELECT email FROM UserData WHERE email = {};".format(given_email))
     if(existing_user == []):
         return {'statusCode': 403} #Forbidden  
 
@@ -88,7 +89,7 @@ def update_password(options):
         secretArn="arn:aws:secretsmanager:us-east-2:007372221023:secret:rds-db-credentials/cluster-BZEL6PSDLGVBVJB6BIDZGZQ4MI/admin320-fsoCse",
         database="db320",
         resourceArn="arn:aws:rds:us-east-2:007372221023:cluster:database320",
-        sql="UPDATE UserData SET pass = given_password WHERE email = given_email;")
+        sql="UPDATE UserData SET pass = given_password WHERE email = {};".format(given_email))
     
     #Return success
     return{'statusCode': 200}
@@ -105,7 +106,7 @@ def authorization_mobile(options):
         secretArn = "arn:aws:secretsmanager:us-east-2:007372221023:secret:rds-db-credentials/cluster-BZEL6PSDLGVBVJB6BIDZGZQ4MI/admin320-fsoCse",
         database = "db320",
         resourceArn = "arn:aws:rds:us-east-2:007372221023:cluster:database320",
-        sql = "SELECT code FROM AccessCodes WHERE UserID == given_ID;")
+        sql = "SELECT code FROM AccessCodes WHERE UserID = {};".format(given_ID))
     
     #If a code does not exist
     if(existing_code == []):
