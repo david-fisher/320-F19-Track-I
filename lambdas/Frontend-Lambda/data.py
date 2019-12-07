@@ -1,5 +1,6 @@
 #TODO implement functions
 import boto3
+import json
 
 def upload(options):
     print(options)
@@ -29,3 +30,27 @@ def test_db(options):
     )
     print(len(response))
     return response
+
+def data_download(token, start_time, end_time, field):
+
+    client = boto3.client('rds-data')
+
+    sql_select_statement = "SELECT * FROM HoboData WHERE time BETWEEN {} AND {}"format(start_time, end_time)
+
+    query_results = client.execute_statement(
+        secretArn = constants.SECRET_ARN, 
+        database = constants.DB_NAME,
+        resourceArn = constants.ARN,
+        sql = sql_select_statment
+        )
+
+    requested_data = []
+
+    for row in query_results:
+        data = { }
+        for each in field:
+            data[each] = row[each]
+
+        requested_data.append(data)
+
+    return requested_data
