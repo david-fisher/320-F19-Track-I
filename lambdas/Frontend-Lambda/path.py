@@ -3,7 +3,6 @@ import data
 import social
 import picture
 import ml
-
 import json
 
 def parse_path(path):
@@ -25,7 +24,9 @@ def route(options, body):
     
 def main(event, context):
     path = event['path']
-    body = json.loads(event['body'])
+    body = event['body']
+    #print("BODY", body)
+    body = json.loads(body)
     print(path)
     print(body, "TYPE", type(body))
     path = parse_path(path)

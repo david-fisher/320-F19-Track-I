@@ -1,5 +1,6 @@
 import boto3
 import uuid
+import create_token
 
 '''
  /account/register/{email}/{pass}/{permission_token}
@@ -70,7 +71,6 @@ def login(options):
     
 def update_password(options):
     given_email = options['email']
-    # Hashed and encrypted password
     given_password = options['pass']
     #First connect to the table 
     client = boto3.client('rds-data')
