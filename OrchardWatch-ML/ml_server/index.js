@@ -15,6 +15,7 @@ app.use(bodyParser.json());
 //Requires modelName and imageURL parameters
 //Returns prediction
 app.get('/predict', function (req, res) {
+	let functionFlag = 'predict'
 	let modelName = req.query.modelName
 	let imageURL = req.query.imageURL
 	if(modelName === undefined || imageURL === undefined) {
@@ -26,8 +27,8 @@ app.get('/predict', function (req, res) {
 	const spawn = require('child_process').spawn
 
 	var fs = require('fs');
-	//var path_f = path.join(__dirname, '../prediction/keras_model.py')
-	var path_f = path.join(__dirname, 'testPred.py')
+	var path_f = path.join(__dirname, '../prediction/model_manager.py')
+	//var path_f = path.join(__dirname, 'testPred.py')
 
 	// fs.readdir(path_f, function(err, items) {
  //    console.log(items);
@@ -37,7 +38,7 @@ app.get('/predict', function (req, res) {
  //    }
 	// });
 
-	var process = spawn('python',[path_f, modelName, imageURL]);
+	var process = spawn('python',[path_f, functionFlag, modelName, imageURL]);
 	console.log("spawned")
 	process.stdout.on('data', function(data) {
 		res.send(data.toString());
@@ -48,27 +49,85 @@ app.get('/predict', function (req, res) {
 //Function to handle model upload
 //Requires modelName parameter
 app.post('/upload/new', function (req, res) {
+	let functionFlag = 'upload'
+	let modelFileURL = req.query.modelFileURL
 	let modelName = req.query.modelName
-	if(modelName === undefined) {
+	let modelType = req.query.modelType
+	if(modelName === undefined || modelType === undefined || modelFileURL === undefined) {
 		res.status(412).send('Missing Parameter')
 		return;
 	}
 
-	res.send('Example: uploaded ' + modelName + ' model')
+	const spawn = require('child_process').spawn
+
+	var fs = require('fs');
+	var path_f = path.join(__dirname, '../prediction/model_manager.py')
+
+	var process = spawn('python',[path_f, functionFlag, modelFileURL, modelName, modelType]);
+
+	process.stdout.on('data', function(data) {
+		res.send(data.toString());
+	} );
 })
 
 //Function to handle model replacement
 app.put('/upload/replace', function (req, res) {
+	let functionFlag = 'upload'
+	let modelFileURL = req.query.modelFileURL
 	let modelName = req.query.modelName
-	if(modelName === undefined) {
+	let modelType = req.query.modelType
+	if(modelName === undefined || modelType === undefined || modelFileURL === undefined) {
 		res.status(412).send('Missing Parameter')
 		return;
 	}
-	res.send('Example: replaced existing model with ' + modelName + ' model')
+	const spawn = require('child_process').spawn
+
+	var fs = require('fs');
+	var path_f = path.join(__dirname, '../prediction/model_manager.py')
+
+	var process = spawn('python',[path_f, functionFlag, modelFileURL, modelName, modelType]);
+
+	process.stdout.on('data', function(data) {
+		res.send(data.toString());
+		return;
+	});
+
+
 })
 
 //Function handle sending back a list of models
+app.get('/models/list', function (req, res) {
+	/*
+	var fs = require('fs');
+	var models = [];
+	var path = path.join(__dirname, '../models');
+	
+	fs.readdir(path, function(err, items) {
+		models = items 
+		console.log(items);
+	
+		for (var i=0; i<items.length; i++) {
+			console.log(items[i]);
+		}
 
+		res.send(JSON.stringify(models));
+	});
+	*/
+	let functionFlag = 'list'
+
+	const spawn = require('child_process').spawn
+
+	var fs = require('fs');
+	var path_f = path.join(__dirname, '../prediction/model_manager.py')
+
+	var process = spawn('python',[path_f, functionFlag]);
+
+	process.stdout.on('data', function(data) {
+		res.send(data.toString());
+		return;
+	});
+
+})
 
 app.listen(port, () => console.log('Orchard Watch Machine Learning Service listening on port '+port+'!'))
 
