@@ -42,7 +42,14 @@ app.get('/predict', function (req, res) {
 	console.log("spawned")
 	process.stdout.on('data', function(data) {
 		res.send(data.toString());
+		return;
 	} );
+
+	process.stderr.on('data', (data) => {
+		console.error(`stderr: ${data}`);
+		res.send(`stderr: ${data}`);
+		return;
+	});
 
 })
 
@@ -67,7 +74,15 @@ app.post('/upload/new', function (req, res) {
 
 	process.stdout.on('data', function(data) {
 		res.send(data.toString());
+		return;
 	} );
+
+	process.stderr.on('data', (data) => {
+		console.error(`stderr: ${data}`);
+		res.send(`stderr: ${data}`);
+		return;
+	});
+
 })
 
 //Function to handle model replacement
@@ -92,7 +107,11 @@ app.put('/upload/replace', function (req, res) {
 		return;
 	});
 
-
+	process.stderr.on('data', (data) => {
+		console.error(`stderr: ${data}`);
+		res.send(`stderr: ${data}`);
+		return;
+	});
 })
 
 //Function handle sending back a list of models
@@ -124,6 +143,18 @@ app.get('/models/list', function (req, res) {
 
 	process.stdout.on('data', function(data) {
 		res.send(data.toString());
+		return;
+	});
+
+	process.stderr.on('data', (data) => {
+		console.error(`stderr: ${data}`);
+		res.send(`stderr: ${data}`);
+		return;
+	});
+
+	process.on('close', (code) => {
+		console.log(`child process exited with code ${code}`);
+		res.send(`child process exited with code ${code}`);
 		return;
 	});
 
