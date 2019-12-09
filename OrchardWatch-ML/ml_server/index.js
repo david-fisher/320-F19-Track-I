@@ -44,12 +44,11 @@ app.get('/predict', function (req, res) {
 		res.send(data.toString());
 		return;
 	} );
-
+	
 	process.stderr.on('data', (data) => {
 		console.error(`stderr: ${data}`);
-		res.send(`stderr: ${data}`);
-		return;
 	});
+
 
 })
 
@@ -71,17 +70,18 @@ app.post('/upload/new', function (req, res) {
 	var path_f = path.join(__dirname, '../prediction/model_manager.py')
 
 	var process = spawn('python',[path_f, functionFlag, modelFileURL, modelName, modelType]);
-
+	
 	process.stdout.on('data', function(data) {
 		res.send(data.toString());
 		return;
 	} );
-
+	
 	process.stderr.on('data', (data) => {
 		console.error(`stderr: ${data}`);
-		res.send(`stderr: ${data}`);
-		return;
+	//	res.send(`stderr: ${data}`);
+	//	return;
 	});
+	
 
 })
 
@@ -106,32 +106,17 @@ app.put('/upload/replace', function (req, res) {
 		res.send(data.toString());
 		return;
 	});
-
+	
 	process.stderr.on('data', (data) => {
 		console.error(`stderr: ${data}`);
-		res.send(`stderr: ${data}`);
-		return;
+	//	res.send(`stderr: ${data}`);
+	//	return;
 	});
+	
 })
 
 //Function handle sending back a list of models
 app.get('/models/list', function (req, res) {
-	/*
-	var fs = require('fs');
-	var models = [];
-	var path = path.join(__dirname, '../models');
-	
-	fs.readdir(path, function(err, items) {
-		models = items 
-		console.log(items);
-	
-		for (var i=0; i<items.length; i++) {
-			console.log(items[i]);
-		}
-
-		res.send(JSON.stringify(models));
-	});
-	*/
 	let functionFlag = 'list'
 
 	const spawn = require('child_process').spawn
@@ -145,19 +130,20 @@ app.get('/models/list', function (req, res) {
 		res.send(data.toString());
 		return;
 	});
-
+	
+	
 	process.stderr.on('data', (data) => {
 		console.error(`stderr: ${data}`);
-		res.send(`stderr: ${data}`);
-		return;
+	//	res.send(`stderr: ${data}`);
+	//	return;
 	});
 
 	process.on('close', (code) => {
 		console.log(`child process exited with code ${code}`);
-		res.send(`child process exited with code ${code}`);
-		return;
+	//	res.send(`child process exited with code ${code}`);
+	//	return;
 	});
-
+	
 })
 
 app.listen(port, () => console.log('Orchard Watch Machine Learning Service listening on port '+port+'!'))

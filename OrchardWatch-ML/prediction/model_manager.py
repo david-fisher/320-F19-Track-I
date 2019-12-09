@@ -12,11 +12,12 @@ def main():
 	# TODO: print expected arguments in case of error
 
 	# strings
-	dict_file = "model_dict"
-	types_file = "model_types"
+	cwd = os.getcwd()
+	dict_file = os.path.join(cwd, "../prediction/model_dict")
+	types_file = os.path.join(cwd, "../prediction/model_types")
 
 	# will need to be changed on diff filesystem
-	model_dir = "../models/"
+	model_dir = os.path.join(cwd, "../models/")
 
 	if not os.path.exists(types_file):
 		model_types = set(["keras", "pytorch"])
