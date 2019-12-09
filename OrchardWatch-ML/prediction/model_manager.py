@@ -8,20 +8,19 @@ from keras_model import *
 os.environ['KMP_DUPLICATE_LIB_OK']='True'
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
-# strings
-dict_file = "model_dict"
-types_file = "model_types"
-
-# will need to be changed on diff filesystem
-model_dir = "../models/"
-
-# comment after done once
-if not os.path.exists(types_file):
-	model_types = set(["keras", "pytorch"])
-	pickle.dump(model_types, open(types_file, "wb"))
-
 def main():
 	# TODO: print expected arguments in case of error
+
+	# strings
+	dict_file = "model_dict"
+	types_file = "model_types"
+
+	# will need to be changed on diff filesystem
+	model_dir = "../models/"
+
+	if not os.path.exists(types_file):
+		model_types = set(["keras", "pytorch"])
+		pickle.dump(model_types, open(types_file, "wb"))
 
 	funct_flag = sys.argv[1]
 
