@@ -13,7 +13,7 @@ dict_file = "model_dict"
 types_file = "model_types"
 
 # will need to be changed on diff filesystem
-model_dir = "/Users/dhruvilgala/Desktop/320-F19-Track-I/OrchardWatch-ML/models/"
+model_dir = "../models/"
 
 # comment after done once
 if not os.path.exists(types_file):
