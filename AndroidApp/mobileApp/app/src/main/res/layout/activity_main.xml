@@ -8,30 +8,38 @@
 
     <WebView
         android:id="@+id/webView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="16dp">
+        android:layout_width="414dp"
+        android:layout_height="680dp"
+        android:layout_marginBottom="48dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent">
 
-        <Button
-            android:id="@+id/camera"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_x="46dp"
-            android:layout_y="650dp"
-            android:background="@android:color/holo_green_dark"
-            android:textColor="@android:color/white"
-            android:text="Camera" />
-
-        <Button
-            android:id="@+id/gallery"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_x="205dp"
-            android:layout_y="650dp"
-            android:background="@android:color/holo_green_dark"
-            android:textColor="@android:color/white"
-            android:text="Gallery" />
     </WebView>
+
+    <Button
+        android:id="@+id/gallery"
+        android:layout_width="wrap_content"
+        android:layout_weight="0.5"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        android:background="@android:color/holo_green_dark"
+        android:text="Gallery"
+        android:textColor="@android:color/white"
+        app:layout_constraintStart_toStartOf="@+id/webView"
+        app:layout_constraintTop_toBottomOf="@+id/webView" />
+
+    <Button
+        android:id="@+id/camera"
+        android:layout_width="wrap_content"
+        android:layout_weight="0.5"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="3dp"
+        android:background="@android:color/holo_green_dark"
+        android:text="Camera"
+        android:textColor="@android:color/white"
+        app:layout_constraintEnd_toEndOf="@+id/webView"
+        app:layout_constraintTop_toBottomOf="@+id/webView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
