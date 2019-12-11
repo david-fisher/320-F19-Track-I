@@ -30,7 +30,7 @@ def register(options):
     )
     if(existing_user['records'] != []):
         print("User already exists")
-        return{'statusCode': 403} #Forbidden
+        return constants.respond(err=constants.USER_EXISTS, statusCode="403") #Forbidden #Forbidden
    
     #If they do not exist in the database, add them
     existing_user = client.execute_statement(
@@ -42,7 +42,7 @@ def register(options):
 
     #Return success
     print("Okay")
-    return {'statusCode': "200"} #OK
+    return respond(statusCode="200") #OK
     
 def login(options):
     print("OPTIONS", options)
@@ -60,7 +60,7 @@ def login(options):
         sql = "SELECT email FROM UserData WHERE email = '{}';".format(given_email))
     if(existing_user['records'] == []):
         print("User does not exist")
-        return{'statusCode': 403} #Forbidden
+        return constants.respond(err=constants.USER_DNE, statusCode="403") #Forbidden
     
     #Get password from existing user and if does not match return a 400 http
     existing_password = client.execute_statement(
@@ -120,7 +120,7 @@ def authorization_mobile(options):
     #If a code does not exist
     if(existing_code == []):
         return {'statusCode' : 403} #Forbidden
-    return{'statusCode' : 200} #OK
+    return constants.respond(statusCode= "200") #OK
 
 def test(options):
     print("we made it to the test")
