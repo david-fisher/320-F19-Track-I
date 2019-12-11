@@ -21,6 +21,7 @@ RESEARCHER='r'
 
 #AUTH
 SALT=b'89a9880855f7adf8eb780f800c2f756dd31f6f3dd901622e755f9432e93da028'
+
 def respond(err=None, res="{}", statusCode=None):
     return {
         'statusCode': statusCode if statusCode else '200',
