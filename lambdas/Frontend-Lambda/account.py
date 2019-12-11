@@ -2,7 +2,7 @@ import boto3
 import uuid
 import create_token
 import constants
-
+import auth
 '''
  /account/register/{email}/{pass}/{permission_token}
  /account/login/{email}/{password}
@@ -18,6 +18,7 @@ def register(options):
     given_email = options['email']
     given_password = options['pass']
     #HASH here
+    given_password = auth.hash_password(given_password)
     #First connect to the table 
     client = boto3.client('rds-data')
     print("SELECT email FROM UserData WHERE email = '{}';".format(given_email))
@@ -30,7 +31,7 @@ def register(options):
     )
     if(existing_user['records'] != []):
         print("User already exists")
-        return constants.respond(err=constants.USER_EXISTS, statusCode="403") #Forbidden #Forbidden
+        return constants.respond(err=constants.USER_EXISTS, statusCode="403")  #Forbidden
    
     #If they do not exist in the database, add them
     existing_user = client.execute_statement(
