@@ -42,7 +42,7 @@ def register(options):
 
     #Return success
     print("Okay")
-    return respond(statusCode="200") #OK
+    return constants.respond(statusCode="200") #OK
     
 def login(options):
     print("OPTIONS", options)
