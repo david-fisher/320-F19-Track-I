@@ -10,8 +10,17 @@ SECRET_ARN = "arn:aws:secretsmanager:us-east-2:007372221023:secret:rds-db-creden
 #errors:
 USER_EXISTS="An account has already been created with this email"
 USER_DNE   ="Email or password is incorrect"
+PASS_MISMATCH = "Email or password is incorrect"
 
 
+#USER TYPES
+PUBLIC_USER='p'
+GROWER='g'
+RESEARCHER='r'
+
+
+#AUTH
+SALT=b'89a9880855f7adf8eb780f800c2f756dd31f6f3dd901622e755f9432e93da028'
 def respond(err=None, res="{}", statusCode=None):
     return {
         'statusCode': statusCode if statusCode else '200',
