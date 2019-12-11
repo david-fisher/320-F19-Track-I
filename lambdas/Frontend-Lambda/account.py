@@ -49,7 +49,9 @@ def login(options):
     print("OPTIONS", options)
     given_email = options['email']
     given_password = options['pass']
+    print("UNHASHED", given_password)
     #HASH
+
     #Connect to the User Database
     client = boto3.client('rds-data')
 
@@ -69,13 +71,17 @@ def login(options):
         database = constants.DB_NAME,
         resourceArn = constants.ARN,
         sql = "SELECT pass FROM UserData WHERE email = '{}';".format(given_email))
-    if(existing_password['records'] != given_password):
+    print("EXISTING", existing_password)
+    if not auth.verify_password(existing_password['records'][0][0]['stringValue'], given_password):
         print("Password does not match")
-        return {'statusCode': 403} #Forbidden
+        return constants.respond(err=constants.PASS_MISMATCH, statusCode="403") #Forbidden
     
     #Return success
     print("Okay")
-    return{'statusCode': '200', 'token': "blahblahblah", 'user':'grower/researcher/public'} #OK
+    #TODO get user type from db?
+    user_type = constants.PUBLIC_USER
+    token = create_token.rand_token()
+    return constants.respond(statusCode='200', res= {'token': str(token), 'user':str(user_type)}) #OK
     
 def update_password(options):
     given_email = options['email']
