@@ -28,7 +28,8 @@ def register(options):
         resourceArn = constants.ARN,
         sql = "SELECT email FROM UserData WHERE email = '{}';".format(given_email)
     )
-    if(existing_user != []):
+    if(existing_user['records'] != []):
+        print("User already exists")
         return{'statusCode': 403} #Forbidden
    
     #If they do not exist in the database, add them
@@ -36,10 +37,12 @@ def register(options):
        secretArn = constants.SECRET_ARN, 
         database = constants.DB_NAME,
         resourceArn = constants.ARN,
-        sql = "INSERT INTO UserData (email, pass, type) VALUES ('{}','{}','{}');".format(given_email, given_password,0))
+        sql = "INSERT INTO UserData (email, pass, type, name) VALUES ('{}','{}','{}', '{}');".format(given_email, given_password,0, "chinmay")
+    )
 
     #Return success
-    return {'statusCode': 200} #OK
+    print("Okay")
+    return {'statusCode': "200"} #OK
     
 def login(options):
     print("OPTIONS", options)
@@ -55,7 +58,8 @@ def login(options):
         database = constants.DB_NAME,
         resourceArn = constants.ARN,
         sql = "SELECT email FROM UserData WHERE email = '{}';".format(given_email))
-    if(existing_user == []):
+    if(existing_user['records'] == []):
+        print("User does not exist")
         return{'statusCode': 403} #Forbidden
     
     #Get password from existing user and if does not match return a 400 http
@@ -64,11 +68,13 @@ def login(options):
         database = constants.DB_NAME,
         resourceArn = constants.ARN,
         sql = "SELECT pass FROM UserData WHERE email = '{}';".format(given_email))
-    if(existing_password != given_password):
+    if(existing_password['records'] != given_password):
+        print("Password does not match")
         return {'statusCode': 403} #Forbidden
     
     #Return success
-    return{'statusCode': 200, 'token': "blahblahblah", 'user':'grower/researcher/public'} #OK
+    print("Okay")
+    return{'statusCode': '200', 'token': "blahblahblah", 'user':'grower/researcher/public'} #OK
     
 def update_password(options):
     given_email = options['email']
@@ -82,7 +88,8 @@ def update_password(options):
         database = constants.DB_NAME,
         resourceArn = constants.ARN,
         sql = "SELECT email FROM UserData WHERE email = '{}';".format(given_email))
-    if(existing_user == []):
+    if(existing_user['records'] == []):
+        print("User does not exist")
         return {'statusCode': 403} #Forbidden  
 
     #Replace password in database
@@ -90,9 +97,10 @@ def update_password(options):
         secretArn = constants.SECRET_ARN, 
         database = constants.DB_NAME,
         resourceArn = constants.ARN,
-        sql="UPDATE UserData SET pass = given_password WHERE email = '{}';".format(given_email))
+        sql="UPDATE UserData SET pass = given_password WHERE email = '{}';".format(given_password))
     
     #Return success
+    print("Okay")
     return{'statusCode': 200}
     
 def authorization_mobile(options):
