@@ -37,7 +37,7 @@ def data_download(token, start_time, end_time, field):
     client = boto3.client('rds-data')
     
     # Prepared SQL Statement: Queries for entries where time column value is between start_time and end_time
-    sql_select_statement = "SELECT * FROM HoboData WHERE time BETWEEN {} AND {}".format(start_time, end_time)
+    sql_select_statement = "SELECT * FROM HoboData WHERE time BETWEEN %(startTime)s AND %(endTime)s",{'startTime':start_time, 'endTime':end_time}
     
     query_results = client.execute_statement(
         secretArn = constants.SECRET_ARN, 
