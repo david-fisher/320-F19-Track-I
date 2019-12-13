@@ -1,5 +1,6 @@
 #TODO implement functions
 import boto3
+import constants
 
 def upload(options):
     print(options)
@@ -32,12 +33,12 @@ def test_db(options):
 
 # GET: Queries database for entries with a timestamp between start_time and end_time
 # Returns list of JSON objects containing requested fields
-def data_download(token, start_time, end_time, field):
-
+def data_download(options):
+    token, start_time, end_time, field = list(options.values())
     client = boto3.client('rds-data')
     
     # Prepared SQL Statement: Queries for entries where time column value is between start_time and end_time
-    sql_select_statement = "SELECT * FROM HoboData WHERE time BETWEEN %(startTime)s AND %(endTime)s",{'startTime':start_time, 'endTime':end_time}
+    sql_select_statment = "SELECT * FROM HoboData"
     
     query_results = client.execute_statement(
         secretArn = constants.SECRET_ARN, 
@@ -45,7 +46,7 @@ def data_download(token, start_time, end_time, field):
         resourceArn = constants.ARN,
         sql = sql_select_statment
         )
-    
+    print("qeruyt", query_results)
     # List to hold JSON objects
     requested_data = []
 
@@ -61,10 +62,21 @@ def data_download(token, start_time, end_time, field):
         requested_data.append(data)
 
     return requested_data
+ 
+   
+def data_upload(options):
+    time = options["time"]
+    client = boto3.client('rds-data')
+    insert_query = client.execute_statement(
+        secretArn = constants.SECRET_ARN, 
+        database = constants.DB_NAME,
+        resourceArn = constants.ARN,
+        sql = "INSERT INTO HoboData (time) VALUES('{}')".format(time)
+    )
+    
+    print("INSERT", insert_query)
+    return {'statusCode':"200"}
+    
 
 def data_download_test():
-<<<<<<< HEAD
     print("This is a test")
-=======
-    print("This is a test")
->>>>>>> c0d3d9e8f7ad401bb6beee6159ea1609085483fe
