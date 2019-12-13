@@ -109,28 +109,53 @@ def update_password(options):
         resourceArn = constants.ARN,
         sql="UPDATE UserData SET pass = '{}' WHERE email = '{}';".format(given_password,given_email)
     )
+    
     #Return success
     print("Okay")
     return{'statusCode': 200}
     
 def authorization_mobile(options):
     given_ID = options['ID']
-    given_code = options['code']
+    given_code = int(options['code'])
 
     #First connect to the table
     client = boto3.client('rds-data')
+    
+    #Check that the ID exists
+    existing_ID = client.execute_statement(
+        secretArn = constants.SECRET_ARN, 
+        database = constants.DB_NAME,
+        resourceArn = constants.ARN,
+        sql = "SELECT userID FROM AccessCode WHERE userID = '{}';".format(given_ID)
+    )
+   
+    #If not throw 403
+    if(existing_ID['records'] == []):
+        print("User does not exist")
+        return {'statusCode': 403} #Forbidden  
 
-    #Check the table to see if the given_code matches anything in the database
+    #Check that the code exists
     existing_code = client.execute_statement(
         secretArn = constants.SECRET_ARN, 
         database = constants.DB_NAME,
         resourceArn = constants.ARN,
-        sql = "SELECT code FROM '{}' WHERE UserID = '{}';".format(given_code,given_ID)
+        sql = "SELECT code FROM AccessCode WHERE UserID = '{}';".format(given_ID)
     )
     
     #If a code does not exist
-    if(existing_code == []):
+    if(existing_code['records'] == []):
+        print("Code does not exist")
         return {'statusCode' : 403} #Forbidden
+    
+    #If codes do not match
+    if(existing_code['records'][0][0]['longValue'] != given_code):
+        print("given_code: ",given_code)
+        print("existing_code: ",existing_code)
+        print("Code does not match")
+        return {'statusCode': 403} #Forbidden
+    
+    #Else is okay
+    print("Code does exist")
     return constants.respond(statusCode= "200") #OK
 
 def test(options):
