@@ -125,7 +125,7 @@ def authorization_mobile(options):
         secretArn = constants.SECRET_ARN, 
         database = constants.DB_NAME,
         resourceArn = constants.ARN,
-        sql = "SELECT code FROM AccessCodes WHERE UserID = '{}';".format(given_ID)
+        sql = "SELECT code FROM '{}' WHERE UserID = '{}';".format(given_code,given_ID)
     )
     
     #If a code does not exist

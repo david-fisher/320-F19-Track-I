@@ -63,4 +63,8 @@ def data_download(token, start_time, end_time, field):
     return requested_data
 
 def data_download_test():
+<<<<<<< HEAD
     print("This is a test")
+=======
+    print("This is a test")
+>>>>>>> c0d3d9e8f7ad401bb6beee6159ea1609085483fe
