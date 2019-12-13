@@ -1,8 +1,8 @@
 import boto3
 import uuid
 import create_token
-
-
+import constants
+import auth
 '''
  /account/register/{email}/{pass}/{permission_token}
  /account/login/{email}/{password}
@@ -17,34 +17,39 @@ def register(options):
     #options: a list of variables
     given_email = options['email']
     given_password = options['pass']
-    requested_token = int(options['token']) or 0 #This will set the value of requested_token to either the parameter or 0 if it is not given (DONT KNOW IF THIS 'token' WHAT IS GIVEN)
-    
+    #HASH here
+    given_password = auth.hash_password(given_password)
     #First connect to the table 
     client = boto3.client('rds-data')
-    
     #Check if the user already exist in the database and throw a 400 statuscode if they do
     existing_user = client.execute_statement(
         secretArn = constants.SECRET_ARN, 
         database = constants.DB_NAME,
         resourceArn = constants.ARN,
-        sql = "SELECT email FROM UserData WHERE email = {};".format(given_email))
-    if(existing_user != []):
-        return{'statusCode': 403} #Forbidden
+        sql = "SELECT email FROM UserData WHERE email = '{}'".format(given_email)
+    )
+    if(existing_user['records'] != []):
+        print("User already exists")
+        return constants.respond(err=constants.USER_EXISTS, statusCode="403")  #Forbidden
    
     #If they do not exist in the database, add them
     existing_user = client.execute_statement(
-        secretArn = constants.SECRET_ARN, 
+       secretArn = constants.SECRET_ARN, 
         database = constants.DB_NAME,
         resourceArn = constants.ARN,
-        sql = "INSERT INTO UserData (email, pass, type, name) VALUES ({},{},{},{});".format(given_email, given_password, requested_token, given_email))
+        sql = "INSERT INTO UserData (email, pass, type, name) VALUES ('{}','{}','{}','{}')".format(given_email,given_password,0,given_email)
+    )
 
     #Return success
-    return {'statusCode': 200} #OK
+    print("Okay")
+    return constants.respond(statusCode="200") #OK
     
 def login(options):
     print("OPTIONS", options)
     given_email = options['email']
     given_password = options['pass']
+    print("UNHASHED", given_password)
+    #HASH
 
     #Connect to the User Database
     client = boto3.client('rds-data')
@@ -54,25 +59,35 @@ def login(options):
         secretArn = constants.SECRET_ARN, 
         database = constants.DB_NAME,
         resourceArn = constants.ARN,
-        sql = "SELECT email FROM UserData WHERE email = {};".format(given_email))
-    if(existing_user == []):
-        return{'statusCode': 403} #Forbidden
+        sql = "SELECT email FROM UserData WHERE email = '{}';".format(given_email)
+    )
+    if(existing_user['records'] == []):
+        print("User does not exist")
+        return constants.respond(err=constants.USER_DNE, statusCode="403") #Forbidden
     
     #Get password from existing user and if does not match return a 400 http
     existing_password = client.execute_statement(
         secretArn = constants.SECRET_ARN, 
         database = constants.DB_NAME,
         resourceArn = constants.ARN,
-        sql = "SELECT pass FROM UserData WHERE email = {};".format(given_email))
-    if(existing_password != given_password):
-        return {'statusCode': 403} #Forbidden
+        sql = "SELECT pass FROM UserData WHERE email = '{}';".format(given_email)
+    )
+    print("EXISTING", existing_password)
+    if not auth.verify_password(existing_password['records'][0][0]['stringValue'], given_password):
+        print("Password does not match")
+        return constants.respond(err=constants.PASS_MISMATCH, statusCode="403") #Forbidden
     
     #Return success
-    return{'statusCode': 200, 'token': "blahblahblah", 'user':'grower/researcher/public'} #OK
+    print("Okay")
+    #TODO get user type from db?
+    user_type = constants.PUBLIC_USER
+    token = create_token.rand_token()
+    return constants.respond(statusCode='200', res= {'token': str(token), 'user':str(user_type)}) #OK
     
 def update_password(options):
     given_email = options['email']
     given_password = options['pass']
+    given_password = auth.hash_password(given_password)
     #First connect to the table 
     client = boto3.client('rds-data')
  
@@ -81,8 +96,10 @@ def update_password(options):
         secretArn = constants.SECRET_ARN, 
         database = constants.DB_NAME,
         resourceArn = constants.ARN,
-        sql = "SELECT email FROM UserData WHERE email = {};".format(given_email))
-    if(existing_user == []):
+        sql = "SELECT email FROM UserData WHERE email = '{}';".format(given_email)
+    )
+    if(existing_user['records'] == []):
+        print("User does not exist")
         return {'statusCode': 403} #Forbidden  
 
     #Replace password in database
@@ -90,9 +107,10 @@ def update_password(options):
         secretArn = constants.SECRET_ARN, 
         database = constants.DB_NAME,
         resourceArn = constants.ARN,
-        sql="UPDATE UserData SET pass = given_password WHERE email = {};".format(given_email))
-    
+        sql="UPDATE UserData SET pass = '{}' WHERE email = '{}';".format(given_password,given_email)
+    )
     #Return success
+    print("Okay")
     return{'statusCode': 200}
     
 def authorization_mobile(options):
@@ -107,12 +125,13 @@ def authorization_mobile(options):
         secretArn = constants.SECRET_ARN, 
         database = constants.DB_NAME,
         resourceArn = constants.ARN,
-        sql = "SELECT code FROM AccessCodes WHERE UserID = {};".format(given_ID))
+        sql = "SELECT code FROM AccessCodes WHERE UserID = '{}';".format(given_ID)
+    )
     
     #If a code does not exist
     if(existing_code == []):
         return {'statusCode' : 403} #Forbidden
-    return{'statusCode' : 200} #OK
+    return constants.respond(statusCode= "200") #OK
 
 def test(options):
     print("we made it to the test")
