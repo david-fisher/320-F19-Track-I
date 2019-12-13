@@ -2,7 +2,8 @@ import boto3
 import urllib3
 import json
 from io import BytesIO
-
+import constants
+import time
 
 def upload_model(options):
 	model_name = options['modelName']
@@ -24,19 +25,24 @@ def classify(options):
 	#	model: (str) the model to classify with
 	
 	#TODO assert these are proper types
-	pic = options[0]
-	model=options[1]
+	pic_source = str(options["pic"])
+	model=str(options["model"])
 	
 	#TODO upload file and get pic path
-	pic_path = "/pic/to/classify.jpg"
+	now = str(time.now())
+	pic_path = "/ml/{}/unannotated_images/{}_{}.jpg".format(model, pic, now)
 	
+	#upload the file that was passed to the S3 bucket
+	s3 = boto3.resource("s3")
+    bucket_name = "0bucket2019"
+    s3.meta.client.upload_file(pic_source, bucket_name, pic_path)
 	#create a client to make requests to ml api
 	http = urllib3.PoolManager()
 	#TODO replace with actual request
 	r = http.request('GET', 'ec2-3-18-109-238.us-east-2.compute.amazonaws.com/predict?modelName={}&imageURL={}'.format(model, pic_path))
 	#resp stores the classifier prediction
 	resp = json.loads(r.data.decode('utf-8'))
-	return resp
+	return constants.respond(statusCode="200", res=resp)
 	
 def list(options):
 	http = urllib3.PoolManager()
