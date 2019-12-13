@@ -1,6 +1,5 @@
 #TODO implement functions
 import boto3
-import json
 
 def upload(options):
     print(options)
@@ -19,7 +18,7 @@ def upload(options):
         sys.stdout.flush()
         
 def test_db(options):
-    sql = options[0]
+    sql = options['sql']
     print(sql)
     rds_client = boto3.client('rds-data')
     response = rds_client.execute_statement(
@@ -33,17 +32,18 @@ def test_db(options):
 
 # GET: Queries database for entries with a timestamp between start_time and end_time
 # Returns list of JSON objects containing requested fields
-# Test: print(data_download(0, '1970-01-01 00:00:01', '2038-01-19 03:14:07', ["wind", "temp"]))
 def data_download(token, start_time, end_time, field):
 
-    client = boto3.client('rds-data', region_name='us-east-2')
+    client = boto3.client('rds-data')
     
     # Prepared SQL Statement: Queries for entries where time column value is between start_time and end_time
+    sql_select_statement = "SELECT * FROM HoboData WHERE time BETWEEN %(startTime)s AND %(endTime)s",{'startTime':start_time, 'endTime':end_time}
+    
     query_results = client.execute_statement(
         secretArn = constants.SECRET_ARN, 
         database = constants.DB_NAME,
         resourceArn = constants.ARN,
-        sql = "SELECT * FROM HoboData WHERE time BETWEEN {} AND {}".format(start_time, end_time)
+        sql = sql_select_statment
         )
     
     # List to hold JSON objects
@@ -61,3 +61,6 @@ def data_download(token, start_time, end_time, field):
         requested_data.append(data)
 
     return requested_data
+
+def data_download_test():
+    print("This is a test")
