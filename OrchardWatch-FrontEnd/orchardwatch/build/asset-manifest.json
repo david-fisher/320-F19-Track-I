@@ -1,0 +1,31 @@
+{
+  "files": {
+    "main.css": "/static/css/main.7642993b.chunk.css",
+    "main.js": "/static/js/main.96d29c8e.chunk.js",
+    "main.js.map": "/static/js/main.96d29c8e.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.79305791.js",
+    "runtime-main.js.map": "/static/js/runtime-main.79305791.js.map",
+    "static/js/2.a062ca2c.chunk.js": "/static/js/2.a062ca2c.chunk.js",
+    "static/js/2.a062ca2c.chunk.js.map": "/static/js/2.a062ca2c.chunk.js.map",
+    "index.html": "/index.html",
+    "precache-manifest.dbbb2661007d0fc593b2e155f025aac0.js": "/precache-manifest.dbbb2661007d0fc593b2e155f025aac0.js",
+    "service-worker.js": "/service-worker.js",
+    "static/css/main.7642993b.chunk.css.map": "/static/css/main.7642993b.chunk.css.map",
+    "static/media/HOBO1.jpeg": "/static/media/HOBO1.802b7307.jpeg",
+    "static/media/apple2.png": "/static/media/apple2.b448e6fe.png",
+    "static/media/apples1.jpg": "/static/media/apples1.e84004df.jpg",
+    "static/media/apples3.jpg": "/static/media/apples3.9fce83bf.jpg",
+    "static/media/burningtree.jpg": "/static/media/burningtree.f0488c2d.jpg",
+    "static/media/fisherpick.png": "/static/media/fisherpick.d93289b8.png",
+    "static/media/placehold.jpg": "/static/media/placehold.983cc8a1.jpg",
+    "static/media/sans_fisher.png": "/static/media/sans_fisher.16926fea.png",
+    "static/media/toopowerful.png": "/static/media/toopowerful.76905728.png",
+    "static/media/weliveinasociety.jpg": "/static/media/weliveinasociety.df69d05d.jpg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.79305791.js",
+    "static/js/2.a062ca2c.chunk.js",
+    "static/css/main.7642993b.chunk.css",
+    "static/js/main.96d29c8e.chunk.js"
+  ]
+}
