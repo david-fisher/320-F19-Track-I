@@ -38,30 +38,18 @@ def data_download(options):
     client = boto3.client('rds-data')
     
     # Prepared SQL Statement: Queries for entries where time column value is between start_time and end_time
-    sql_select_statment = "SELECT * FROM HoboData"
+    query = "SELECT * FROM HoboData WHERE time BETWEEN '%s' AND '%s';" % (start_time, end_time,)
     
     query_results = client.execute_statement(
         secretArn = constants.SECRET_ARN, 
         database = constants.DB_NAME,
         resourceArn = constants.ARN,
-        sql = sql_select_statment
+        sql = query
         )
-    print("qeruyt", query_results)
-    # List to hold JSON objects
-    requested_data = []
-
-    # Iterate through query results
-    for row in query_results:
-        data = { }
         
-        # JSON will contain values for each requested field
-        for each in field:
-            data[each] = row[each]
-            
-        # Add each JSON to return array
-        requested_data.append(data)
+    print("query", query_results)
 
-    return requested_data
+    return query_results['records']
  
    
 def data_upload(options):
