@@ -28,27 +28,34 @@ app.get('/predict', function (req, res) {
 
 	var fs = require('fs');
 	var path_f = path.join(__dirname, '../prediction/model_manager.py')
-	//var path_f = path.join(__dirname, 'testPred.py')
-
-	// fs.readdir(path_f, function(err, items) {
- //    console.log(items);
- 
- //    for (var i=0; i<items.length; i++) {
- //        console.log(items[i]);
- //    }
-	// });
+	
 
 	var process = spawn('python',[path_f, functionFlag, modelName, imageURL]);
+	var outputs = [];
+	var errors = [];
+
 	console.log("spawned")
 	process.stdout.on('data', function(data) {
-		res.send(data.toString());
-		return;
+		outputs.push(data.toString());
+		console.log(data.toString());
 	} );
 	
 	process.stderr.on('data', (data) => {
+		errors.push(data.toString());
 		console.error(`stderr: ${data}`);
 	});
+	
+	process.on('close', (code) => {
+                console.log(`child process exited with code ${code}`);
+		if(code == 0) {
+			res.send(outputs[outputs.length - 1]);
+		}
+		else {
+                	res.send(errors[errors.length - 1]);
+		}
+	});
 
+	
 
 })
 
