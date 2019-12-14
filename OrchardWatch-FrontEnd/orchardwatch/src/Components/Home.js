@@ -1,125 +1,95 @@
 import React from "react";
-import { Col, Row, Button } from "react-bootstrap";
-import GoogleMapReact from "google-map-react";
+import { Col, Row, Card, Accordion } from "react-bootstrap";
+import { Timeline } from "react-twitter-widgets";
 
 class Home extends React.Component {
   constructor() {
     super();
     this.state = {
-      activeVariable: "t"
+      description: "",
+      editting: false,
+      observations: []
     };
   }
 
+  componentDidMount() {
+    // fetch description from Lambdas?
+    this.setState({
+      description:
+        "OrchardWatch, defender of apples, slayer of apple scab, your friendly neighborhood hero!"
+    });
+    this.setState({
+      observations: [
+        {
+          title: "Some Announcement",
+          description: "Some Description"
+        },
+        {
+          title: "Another Announcement",
+          description: "Another Description"
+        },
+        {
+          title: "Yet Another Announcement",
+          description: "Yet Another Description"
+        },
+        {
+          title: "Some Random Announcement",
+          description: "blah, blah, blah\nblah\n\nblah"
+        }
+      ]
+    });
+  }
+
   render() {
-    var hobonetswitch = (
-      <Row>
-        <Col xs={1} />
-        <Col xs={2}>
-          <Button
-            onClick={() => {
-              this.setState({ activeVariable: "t " });
-            }}
-            block
-          >
-            Temperature
-          </Button>
-          <Button
-            onClick={() => {
-              this.setState({ activeVariable: "h" });
-            }}
-            block
-          >
-            Humidity
-          </Button>
-          <Button
-            onClick={() => {
-              this.setState({ activeVariable: "sr" });
-            }}
-            block
-          >
-            Solar Radiation
-          </Button>
-          <Button
-            onClick={() => {
-              this.setState({ activeVariable: "sm" });
-            }}
-            block
-          >
-            Soil Moisture
-          </Button>
-          <Button
-            onClick={() => {
-              this.setState({ activeVariable: "lw" });
-            }}
-            block
-          >
-            Leaf Wetness
-          </Button>
-          <Button
-            onClick={() => {
-              this.setState({ activeVariable: "r" });
-            }}
-            block
-          >
-            Rainfall
-          </Button>
-          <Button
-            onClick={() => {
-              this.setState({ activeVariable: "ws" });
-            }}
-            block
-          >
-            Wind Speed
-          </Button>
-          <Button
-            onClick={() => {
-              this.setState({ activeVariable: "wd" });
-            }}
-            block
-          >
-            Wind Direction
-          </Button>
-        </Col>
-        <Col>
-          <Map />
-        </Col>
-        <Col xs={1} />
-      </Row>
+    let description = this.state.description.split("\n").map((line, key) => {
+      return (
+        <span key={key}>
+          {line}
+          <br />
+        </span>
+      );
+    });
+    let tweets = (
+      <Timeline
+        dataSource={{
+          sourceType: "profile",
+          screenName: "iamdevloper"
+        }}
+        options={{
+          username: "iamdevloper",
+          height: "500",
+          width: "250"
+        }}
+      />
     );
-    return <div>{hobonetswitch}</div>;
-  }
-}
-
-const Test = ({ text }) => <div>{text}</div>;
-
-class Map extends React.Component {
-  static defaultProps = {
-    center: {
-      lat: 42.253659,
-      lng: -72.359804
-    },
-    zoom: 18
-  };
-  constructor() {
-    super();
-    this.state = {};
-  }
-
-  render() {
+    let list = this.state.observations.map((e, index) => {
+      let announcementDescription = e.description
+        .split("\n")
+        .map((line, key) => {
+          return (
+            <span key={key}>
+              {line}
+              <br />
+            </span>
+          );
+        });
+      return (
+        <Card key={index}>
+          <Card.Header>{e.title}</Card.Header>
+          <Card.Body>{announcementDescription}</Card.Body>
+        </Card>
+      );
+    });
     return (
-      <div style={{ height: "75vh", width: "100%" }}>
-        <GoogleMapReact
-          bootstrapURLKeys={{
-            key: "AIzaSyAtet06EefOdjCUF-YFsWceI6DMPUt54O4",
-            language: "en"
-          }}
-          defaultCenter={this.props.center}
-          defaultZoom={this.props.zoom}
-          onChildMouseEnter={this.onChildMouseEnter}
-          onChildMouseLeave={this.onChildMouseLeave}
-        >
-          <Test lat={42.253659} lng={-72.359804} text="My Marker" />
-        </GoogleMapReact>
+      <div>
+        <Row>
+          <Col md="8">
+            <p>{description}</p>
+            <br></br>
+            <Accordion>{list}</Accordion>
+          </Col>
+          <Col>{tweets}</Col>
+        </Row>
       </div>
     );
   }
