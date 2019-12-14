@@ -31,6 +31,7 @@ app.get('/predict', function (req, res) {
 	
 
 	var process = spawn('python',[path_f, functionFlag, modelName, imageURL]);
+	
 	var outputs = [];
 	var errors = [];
 
@@ -46,16 +47,14 @@ app.get('/predict', function (req, res) {
 	});
 	
 	process.on('close', (code) => {
-                console.log(`child process exited with code ${code}`);
+    	console.log(`child process exited with code ${code}`);
 		if(code == 0) {
 			res.send(outputs[outputs.length - 1]);
 		}
 		else {
-                	res.send(errors[errors.length - 1]);
+            res.send(errors[errors.length - 1]);
 		}
 	});
-
-	
 
 })
 
@@ -78,17 +77,29 @@ app.post('/upload/new', function (req, res) {
 
 	var process = spawn('python',[path_f, functionFlag, modelFileURL, modelName, modelType]);
 	
+	var outputs = [];
+	var errors = [];
+
+	console.log("spawned")
 	process.stdout.on('data', function(data) {
-		res.send(data.toString());
-		return;
+		outputs.push(data.toString());
+		console.log(data.toString());
 	} );
 	
 	process.stderr.on('data', (data) => {
+		errors.push(data.toString());
 		console.error(`stderr: ${data}`);
-	//	res.send(`stderr: ${data}`);
-	//	return;
 	});
 	
+	process.on('close', (code) => {
+    	console.log(`child process exited with code ${code}`);
+		if(code == 0) {
+			res.send(outputs[outputs.length - 1]);
+		}
+		else {
+            res.send(errors[errors.length - 1]);
+		}
+	});
 
 })
 
@@ -109,15 +120,28 @@ app.put('/upload/replace', function (req, res) {
 
 	var process = spawn('python',[path_f, functionFlag, modelFileURL, modelName, modelType]);
 
+	var outputs = [];
+	var errors = [];
+
+	console.log("spawned")
 	process.stdout.on('data', function(data) {
-		res.send(data.toString());
-		return;
-	});
+		outputs.push(data.toString());
+		console.log(data.toString());
+	} );
 	
 	process.stderr.on('data', (data) => {
+		errors.push(data.toString());
 		console.error(`stderr: ${data}`);
-	//	res.send(`stderr: ${data}`);
-	//	return;
+	});
+	
+	process.on('close', (code) => {
+    	console.log(`child process exited with code ${code}`);
+		if(code == 0) {
+			res.send(outputs[outputs.length - 1]);
+		}
+		else {
+            res.send(errors[errors.length - 1]);
+		}
 	});
 	
 })
@@ -133,22 +157,28 @@ app.get('/models/list', function (req, res) {
 
 	var process = spawn('python',[path_f, functionFlag]);
 
+	var outputs = [];
+	var errors = [];
+
+	console.log("spawned")
 	process.stdout.on('data', function(data) {
-		res.send(data.toString());
-		return;
-	});
-	
+		outputs.push(data.toString());
+		console.log(data.toString());
+	} );
 	
 	process.stderr.on('data', (data) => {
+		errors.push(data.toString());
 		console.error(`stderr: ${data}`);
-	//	res.send(`stderr: ${data}`);
-	//	return;
 	});
-
+	
 	process.on('close', (code) => {
-		console.log(`child process exited with code ${code}`);
-	//	res.send(`child process exited with code ${code}`);
-	//	return;
+    	console.log(`child process exited with code ${code}`);
+		if(code == 0) {
+			res.send(outputs[outputs.length - 1]);
+		}
+		else {
+            res.send(errors[errors.length - 1]);
+		}
 	});
 	
 })
