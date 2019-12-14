@@ -2,7 +2,6 @@ import React from "react";
 import logo from "./ow-logo.png";
 import "./App.css";
 import Home from "./Components/Home";
-import AboutUs from "./Components/AboutUs";
 import Orchards from "./Components/Orchards";
 import Data from "./Components/Data";
 import ImageGallery from "./Components/ImageGallery";
@@ -14,32 +13,29 @@ class App extends React.Component {
   constructor() {
     super();
     this.state = {
-      page: "",
-      user: "public",
-      authToken: null
+      page: "Home",
+      user: "guest"
     };
   }
 
   render() {
     console.log(this.state.user);
-    console.log(this.state.authToken);
     var page = this.pageRender();
-    var navBar;
+    var navBar = (
+      <div className="NavBar">
+        <button onClick={() => this.setState({ page: "Home" })}>Home</button>
+        <button onClick={() => this.setState({ page: "Data" })}>Data</button>
+        <button onClick={() => this.setState({ page: "Login" })}>Login</button>
+      </div>
+    );
     if (this.state.user === "grower" || this.state.user === "researcher") {
       navBar = (
         <div className="NavBar">
           <button onClick={() => this.setState({ page: "Home" })}>Home</button>
-          <button onClick={() => this.setState({ page: "About Us" })}>
-            About Us
-          </button>
-          <button onClick={() => this.setState({ page: "Orchards" })}>
-            Orchards
-          </button>
           <button onClick={() => this.setState({ page: "Data" })}>Data</button>
           <button onClick={() => this.setState({ page: "Gallery" })}>
             Gallery
           </button>
-          {/* login, observations, and askai should be based on user */}
           <button onClick={() => this.setState({ page: "Observations" })}>
             Observations
           </button>
@@ -55,16 +51,10 @@ class App extends React.Component {
           </button>
         </div>
       );
-    } else if (this.state.authToken !== null) {
+    } else if (this.state.user === "public") {
       navBar = (
         <div className="NavBar">
           <button onClick={() => this.setState({ page: "Home" })}>Home</button>
-          <button onClick={() => this.setState({ page: "About Us" })}>
-            About Us
-          </button>
-          <button onClick={() => this.setState({ page: "Orchards" })}>
-            Orchards
-          </button>
           <button onClick={() => this.setState({ page: "Data" })}>Data</button>
           <button
             onClick={() => {
@@ -72,22 +62,6 @@ class App extends React.Component {
             }}
           >
             Logout
-          </button>
-        </div>
-      );
-    } else {
-      navBar = (
-        <div className="NavBar">
-          <button onClick={() => this.setState({ page: "Home" })}>Home</button>
-          <button onClick={() => this.setState({ page: "About Us" })}>
-            About Us
-          </button>
-          <button onClick={() => this.setState({ page: "Orchards" })}>
-            Orchards
-          </button>
-          <button onClick={() => this.setState({ page: "Data" })}>Data</button>
-          <button onClick={() => this.setState({ page: "Login" })}>
-            Login
           </button>
         </div>
       );
@@ -112,8 +86,6 @@ class App extends React.Component {
     switch (this.state.page) {
       case "Home":
         return <Home user={this.state.user} />;
-      case "About Us":
-        return <AboutUs user={this.state.user} />;
       case "Orchards":
         return <Orchards user={this.state.user} />;
       case "Data":
