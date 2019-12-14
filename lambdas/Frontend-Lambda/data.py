@@ -38,31 +38,24 @@ def data_download(options):
     client = boto3.client('rds-data')
     
     # Prepared SQL Statement: Queries for entries where time column value is between start_time and end_time
-    sql_select_statment = "SELECT * FROM HoboData"
+    # debug_query = "SELECT * FROM HoboData"
+    # query = "SELECT * FROM HoboData WHERE time BETWEEN '{}' AND '{}'".format(start_time, end_time)
     
+    # Is this better? Still unsure about SQL Injection safety
+    better_query = "SELECT * FROM HoboData WHERE time BETWEEN '%s' AND '%s';" % (start_time, end_time,)
+    
+    # RDSDataService method for database querying
     query_results = client.execute_statement(
         secretArn = constants.SECRET_ARN, 
         database = constants.DB_NAME,
         resourceArn = constants.ARN,
-        sql = sql_select_statment
+        sql = better_query
         )
-    print("qeruyt", query_results)
-    # List to hold JSON objects
-    requested_data = []
-
-    # Iterate through query results
-    for row in query_results:
-        data = { }
-        
-        # JSON will contain values for each requested field
-        for each in field:
-            data[each] = row[each]
-            
-        # Add each JSON to return array
-        requested_data.append(data)
-
-    return requested_data
- 
+    
+    # Returns 'records' from query_result object
+    # 'records' is a list of lists, where each inner list represents a row
+    # Each row is a dictionary defining the value for the corresponding column
+    return query_results['records']
    
 def data_upload(options):
     time = options["time"]
@@ -79,4 +72,4 @@ def data_upload(options):
     
 
 def data_download_test():
-    print("This is a test")
+    result = data_download()
