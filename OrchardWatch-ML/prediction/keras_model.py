@@ -12,8 +12,8 @@ import sys
 import requests
 import io
 from PIL import Image
-import json
 import boto3
+import json
 
 os.environ['KMP_DUPLICATE_LIB_OK']='True'
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
@@ -48,24 +48,8 @@ def predict_keras(model_fname, img_url):
 	preds_json = json.dumps(preds)
 	print(preds_json)
 
-def load_keras(model_fname, img_url):
-	# load image from S3 bucket
-	s3 = boto3.resource('s3', region_name='us-east-2')
-	bucket = s3.Bucket('machine-learning2019')
-	object = bucket.Object(img_url)
-	file_stream = io.BytesIO()
-	object.download_fileobj(file_stream)
-	img = Image.open(file_stream)
+def load_keras(model_fname, img):
 	img = img.resize((224, 224))
-
-	# if img_url.startswith('http://') or img_url.startswith('https://') or img_url.startswith('ftp://'):
-	# 	response = requests.get(img_url)
-	# 	img = Image.open(io.BytesIO(response.content))
-	# 	img = img.resize((224, 224))
-	# else:
-	# 	# load an image in PIL format
-	# 	img = load_img(img_url, target_size=(224, 224))
-
 	# load  model
 	loaded_model = load_model(model_fname)
 	# convert the PIL image (width, height) to a NumPy array (height, width, channel)
