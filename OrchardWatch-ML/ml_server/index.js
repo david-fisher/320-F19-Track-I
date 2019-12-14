@@ -8,7 +8,7 @@ const path = require('path')
 const app = express()
 const port = 3000
 
-app.use(bodyParser.urlencoded({ extended:false}));
+app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json());
 
 //Function to handle Prediction
@@ -19,7 +19,7 @@ app.get('/predict', function (req, res) {
 	let modelName = req.query.modelName
 	let imageURL = req.query.imageURL
 	if(modelName === undefined || imageURL === undefined) {
-		res.status(412).send("Missing Parameter")
+		res.status(412).json({error: 'Missing Parameter'})
 		return;
 	}
 	console.log(modelName)
@@ -49,7 +49,7 @@ app.get('/predict', function (req, res) {
 	process.on('close', (code) => {
     	console.log(`child process exited with code ${code}`);
 		if(code == 0) {
-			res.send(outputs[outputs.length - 1]);
+			res.json(outputs[outputs.length - 1]);
 		}
 		else {
             res.send(errors[errors.length - 1]);
@@ -66,7 +66,7 @@ app.post('/upload/new', function (req, res) {
 	let modelName = req.query.modelName
 	let modelType = req.query.modelType
 	if(modelName === undefined || modelType === undefined || modelFileURL === undefined) {
-		res.status(412).send('Missing Parameter')
+		res.status(412).json({error: 'Missing Parameter'})
 		return;
 	}
 
@@ -110,7 +110,7 @@ app.put('/upload/replace', function (req, res) {
 	let modelName = req.query.modelName
 	let modelType = req.query.modelType
 	if(modelName === undefined || modelType === undefined || modelFileURL === undefined) {
-		res.status(412).send('Missing Parameter')
+		res.status(412).json({error: 'Missing Parameter'})
 		return;
 	}
 	const spawn = require('child_process').spawn
@@ -174,7 +174,7 @@ app.get('/models/list', function (req, res) {
 	process.on('close', (code) => {
     	console.log(`child process exited with code ${code}`);
 		if(code == 0) {
-			res.send(outputs[outputs.length - 1]);
+			res.json(outputs[outputs.length - 1]);
 		}
 		else {
             res.send(errors[errors.length - 1]);
@@ -183,5 +183,5 @@ app.get('/models/list', function (req, res) {
 	
 })
 
-app.listen(port, () => console.log('Orchard Watch Machine Learning Service listening on port '+port+'!'))
+app.listen(port, () => console.log('OrchardWatch Machine Learning Service listening on port '+port+'!'))
 
