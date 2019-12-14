@@ -53,6 +53,7 @@ Thumbs.db
 *.swp
 *.swo
 *.un~
+.Rhistory
 
 # Evil evil evil evil #
 node_modules/
