@@ -63,9 +63,9 @@ def upload_model(model_types, model_dict, model_url, model_name, model_type):
 	model_fname = shutil.copyfile(model_url, os.path.join(model_dir, model_name))
 	
 	if model_fname:
-		print("Model uploaded successfully to " + model_fname)
 		model_dict[model_name] = model_type
 		pickle.dump(model_dict, open(dict_file, "wb"))
+		get_models(model_dict)
 
 def get_models(model_dict):
 	if len(model_dict) == 0:
@@ -73,6 +73,14 @@ def get_models(model_dict):
 	else:
 		model_json = json.dumps(model_dict)
 		print(model_json)
+
+# def load_image(img_url):
+# 	s3 = boto3.resource('s3', region_name='us-east-2')
+# 	bucket = s3.Bucket('machine-learning2019')
+# 	object = bucket.Object(img_url)
+# 	file_stream = io.BytesIO()
+# 	object.download_fileobj(file_stream)
+# 	img = mpimg.imread(file_stream)
 
 
 if __name__== "__main__":
