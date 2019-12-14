@@ -40,7 +40,7 @@ def main():
 		model_name = sys.argv[3]
 		model_type = sys.argv[4]
 
-		upload_model(model_types, model_dict, model_url, model_name, model_type)
+		upload_model(model_dir, model_types, dict_file, model_dict, model_url, model_name, model_type)
 
 	elif funct_flag == "list":
 		get_models(model_dict)
@@ -59,7 +59,7 @@ def main():
 				predict_keras(os.path.join(model_dir, model_name), img)
 
 
-def upload_model(model_types, model_dict, model_url, model_name, model_type):
+def upload_model(model_dir, model_types, dict_file, model_dict, model_url, model_name, model_type):
 	if model_type not in model_types:
 		raise NameError("Please select either 'keras' or 'pytorch'.")
 
