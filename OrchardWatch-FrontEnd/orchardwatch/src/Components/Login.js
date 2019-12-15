@@ -5,23 +5,23 @@ class Login extends React.Component {
   constructor() {
     super();
     this.state = {
-      validated: false,
-      alert: { bool: false, message: "" }
+      alert: false,
+      message: ""
     };
   }
 
   render() {
     var alert = <div></div>;
-    if (this.state.alert.bool) {
+    if (this.state.alert) {
       alert = (
         <Alert
           variant="danger"
           onClose={() => {
-            this.setState({ alert: { bool: false, message: "" } });
+            this.setState({ alert: false, message: "" });
           }}
           dismissible
         >
-          {this.state.alert.message}
+          {this.state.message}
         </Alert>
       );
     }
@@ -33,6 +33,7 @@ class Login extends React.Component {
             {/* Register Form */}
             <Col>
               <h3>Register</h3>
+              <br></br>
               <Form onSubmit={this.validateRegister}>
                 <Form.Row>
                   <Col md="2"></Col>
@@ -79,22 +80,6 @@ class Login extends React.Component {
                 <Form.Row>
                   <Col md="2"></Col>
                   <Col>
-                    <Form.Group controlId="RegisterAccessKey">
-                      <Form.Control
-                        type="text"
-                        placeholder="Access Key"
-                        size="md"
-                      />
-                    </Form.Group>
-                  </Col>
-                  <Col md="2"></Col>
-                </Form.Row>
-                <div>Growers and researchers need a valid Access Key.</div>
-                <div>Public users can leave the 'Access Key' field blank.</div>
-                <br></br>
-                <Form.Row>
-                  <Col md="2"></Col>
-                  <Col>
                     <Button variant="primary" type="submit">
                       Register
                     </Button>
@@ -106,6 +91,7 @@ class Login extends React.Component {
             {/* Login Form */}
             <Col>
               <h3>Login</h3>
+              <br></br>
               <Form onSubmit={this.validateLogin}>
                 <Form.Row>
                   <Col md="2"></Col>
@@ -144,6 +130,21 @@ class Login extends React.Component {
                   </Col>
                   <Col md="2"></Col>
                 </Form.Row>
+                <br></br>
+                <Form.Row>
+                  <Col md="2"></Col>
+                  <Col>
+                    <Button
+                      variant="primary"
+                      onClick={() => {
+                        this.props.setPage("ForgotPassword");
+                      }}
+                    >
+                      Forgot Password
+                    </Button>
+                  </Col>
+                  <Col md="2"></Col>
+                </Form.Row>
               </Form>
             </Col>
           </Row>
@@ -153,67 +154,86 @@ class Login extends React.Component {
   }
 
   validateLogin = e => {
-    const validity = e.currentTarget.checkValidity();
-    if (validity && true) {
-      // replace true with check when sending to Lambdas and wait for authToken upon successful validation or ...
-      // receives boolean based on successful validation, type of user, and authToken if boolean == true
-      // wrong password
-      switch (document.getElementById("LoginEmail").value) {
-        case "public@gmail.com":
-          this.props.auth("public", "Authorized");
-          break;
-        case "grower@gmail.com":
-          this.props.auth("grower", "Authorized");
-          break;
-        case "researcher@gmail.com":
-          this.props.auth("researcher", "Authorized");
-          break;
-        default:
-          this.setState({
-            alert: { bool: true, message: "Wrong Email or Password" }
-          });
-          e.preventDefault();
-          e.stopPropagation();
-          break;
+    let email = document.getElementById("LoginEmail").value;
+    let password = document.getElementById("LoginPassword").value;
+    fetch(
+      "https://2a2glx2h08.execute-api.us-east-2.amazonaws.com/default/Frontend-Lambda/account/login/",
+      {
+        method: "GET"
       }
-    } else {
-      if (validity) {
-        this.setState({
-          alert: { bool: true, message: "Wrong Email or Password" }
-        });
-      }
-      e.preventDefault();
-      e.stopPropagation();
+    ).then(response => {
+      console.log(response);
+    });
+    if (email === "grower@gmail.com" && password === "grower") {
+      this.props.auth("grower");
+    } else if (email === "researcher@gmail.com" && password === "researcher") {
+      this.props.auth("researcher");
+    } else if (email === "public@gmail.com" && password === "public") {
+      this.props.auth("public");
     }
+    e.preventDefault();
+    e.stopPropagation();
+    // const validity = e.currentTarget.checkValidity();
+    // console.log(validity);
+    // if (validity && true) {
+    //   // replace true with check when sending to Lambdas and wait for authToken upon successful validation or ...
+    //   // receives boolean based on successful validation, type of user, and authToken if boolean == true
+    //   // wrong password
+    //   switch (document.getElementById("LoginEmail").value) {
+    //     case "public@gmail.com":
+    //       this.props.auth("public", "Authorized");
+    //       break;
+    //     case "grower@gmail.com":
+    //       this.props.auth("grower", "Authorized");
+    //       break;
+    //     case "researcher@gmail.com":
+    //       this.props.auth("researcher", "Authorized");
+    //       break;
+    //     default:
+    //       this.setState({
+    //         alert: true,
+    //         message: "Wrong Email or Password"
+    //       });
+    //       e.preventDefault();
+    //       e.stopPropagation();
+    //       break;
+    //   }
+    // } else {
+    //   if (validity) {
+    //     this.setState({
+    //       alert: true,
+    //       message: "Wrong Email or Password"
+    //     });
+    //   }
+    //   e.preventDefault();
+    //   e.stopPropagation();
+    // }
   };
 
   validateRegister = e => {
-    var validity = e.currentTarget.checkValidity();
-    if (validity) {
-      const p1 = document.getElementById("RegisterPassword").value;
-      const p2 = document.getElementById("RegisterConfirmPassword").value;
-      if (p1.length < 8) {
-        this.setState({
-          alert: {
-            bool: true,
-            message: "Your Password should have more than 8 characters"
-          }
-        });
-        validity = false;
-      } else if (p1 !== p2) {
-        this.setState({
-          alert: { bool: true, message: "The Passwords do not match" }
-        });
-        validity = false;
-      } else {
-        console.log("yes");
-        // send to lambdas
-      }
+    let email = document.getElementById("RegisterEmail").value;
+    let p1 = document.getElementById("RegisterPassword").value;
+    let p2 = document.getElementById("RegisterConfirmPassword").value;
+    if (p1.length < 8) {
+      this.setState({
+        alert: true,
+        message: "Your password should have more than 8 characters"
+      });
+    } else if (p1 !== p2) {
+      this.setState({
+        alert: true,
+        message: "The passwords do not match"
+      });
+    } else {
+      this.setState({ alert: false, message: "" });
+      fetch(
+        "https://2a2glx2h08.execute-api.us-east-2.amazonaws.com/default/Frontend-Lambda/account/register/"
+      ).then(response => {
+        console.log(response);
+      });
     }
-    if (!validity) {
-      e.preventDefault();
-      e.stopPropagation();
-    }
+    e.preventDefault();
+    e.stopPropagation();
   };
 }
 
