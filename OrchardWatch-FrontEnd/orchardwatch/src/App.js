@@ -8,13 +8,15 @@ import ImageGallery from "./Components/ImageGallery";
 import Login from "./Components/Login";
 import Observations from "./Components/Observations";
 import AskAI from "./Components/AskAI";
+import ForgotPassword from "./Components/ForgotPassword";
+import Dashboard from "./Components/Dashboard";
 
 class App extends React.Component {
   constructor() {
     super();
     this.state = {
       page: "Home",
-      user: "guest"
+      user: "researcher"
     };
   }
 
@@ -25,7 +27,8 @@ class App extends React.Component {
       <div className="NavBar">
         <button onClick={() => this.setState({ page: "Home" })}>Home</button>
         <button onClick={() => this.setState({ page: "Data" })}>Data</button>
-        <button onClick={() => this.setState({ page: "Login" })}>Login</button>
+        <button onClick={() => this.setState({ page: "Dashboard"})}>Dashboard</button>
+        <button onClick={() => this.setState({ page: "Login"})}>Login</button>
       </div>
     );
     if (this.state.user === "grower" || this.state.user === "researcher") {
@@ -44,7 +47,7 @@ class App extends React.Component {
           </button>
           <button
             onClick={() => {
-              this.setState({ page: "Home", user: "public", authToken: null });
+              this.setState({ page: "Home", user: "guest", authToken: null });
             }}
           >
             Logout
@@ -58,7 +61,7 @@ class App extends React.Component {
           <button onClick={() => this.setState({ page: "Data" })}>Data</button>
           <button
             onClick={() => {
-              this.setState({ page: "Home", user: "public", authToken: null });
+              this.setState({ page: "Home", user: "guest", authToken: null });
             }}
           >
             Logout
@@ -82,6 +85,10 @@ class App extends React.Component {
     this.setState({ page: "Home", user: user, authToken: token });
   }
 
+  setPage(page) {
+    this.setState({ page: page });
+  }
+
   pageRender() {
     switch (this.state.page) {
       case "Home":
@@ -98,11 +105,17 @@ class App extends React.Component {
       case "Gallery":
         return <ImageGallery user={this.state.user} />;
       case "Login":
-        return <Login user={this.state.user} auth={this.auth.bind(this)} />;
+        return <Login user={this.state.user} auth={this.auth.bind(this)} setPage={this.setPage.bind(this)} />;
       case "Observations":
         return <Observations user={this.state.user} />;
       case "AskAI":
         return <AskAI user={this.state.user} />;
+      case "Dashboard":
+        return <Dashboard />;
+      case "ForgotPassword":
+        return <ForgotPassword resetPass={false} />;
+      case "ResetPassword":
+        return <ForgotPassword resetPass={true} />;
       default:
         return <Home user={this.state.user} />;
     }

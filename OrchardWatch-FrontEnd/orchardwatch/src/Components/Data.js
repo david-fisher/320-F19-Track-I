@@ -65,6 +65,7 @@ class Data extends React.Component {
           <p>
             <b>Pick a date range to query for data</b>
           </p>
+          <p>{this.state.date.start.format("MM/DD/YYYY")} to {this.state.date.end.format("MM/DD/YYYY")}</p>
           <DateRangePicker
             value={this.state.date}
             onSelect={this.onSelect}
