@@ -91,6 +91,7 @@ class Login extends React.Component {
             {/* Login Form */}
             <Col>
               <h3>Login</h3>
+              <br></br>
               <Form onSubmit={this.validateLogin}>
                 <Form.Row>
                   <Col md="2"></Col>
@@ -158,11 +159,18 @@ class Login extends React.Component {
     fetch(
       "https://2a2glx2h08.execute-api.us-east-2.amazonaws.com/default/Frontend-Lambda/account/login/",
       {
-        method: "GET",
+        method: "GET"
       }
     ).then(response => {
       console.log(response);
     });
+    if (email === "grower@gmail.com" && password === "grower") {
+      this.props.auth("grower");
+    } else if (email === "researcher@gmail.com" && password === "researcher") {
+      this.props.auth("researcher");
+    } else if (email === "public@gmail.com" && password === "public") {
+      this.props.auth("public");
+    }
     e.preventDefault();
     e.stopPropagation();
     // const validity = e.currentTarget.checkValidity();

@@ -83,9 +83,13 @@ class Home extends React.Component {
     return (
       <div>
         <Row>
-          <Col md="8">
+          <Col>
             <p>{description}</p>
-            <br></br>
+          </Col>
+        </Row>
+        <br />
+        <Row>
+          <Col md="8">
             <Accordion>{list}</Accordion>
           </Col>
           <Col>{tweets}</Col>
