@@ -110,40 +110,19 @@ def update_password(options):
     return{'statusCode': 200}
     
 def authorization_mobile(options):
-    given_ID = options['ID']
     given_code = int(options['code'])
-
     #First connect to the table
     client = boto3.client('rds-data')
-    
     #Check that the ID exists
     existing_ID = client.execute_statement(
         secretArn = constants.SECRET_ARN, 
         database = constants.DB_NAME,
         resourceArn = constants.ARN,
-        sql = "SELECT userID FROM AccessCode WHERE userID = '%s';" % (given_ID)
+        sql = "SELECT userID FROM AccessCode WHERE code = '%s';" % (given_code)
     )
-   
     #If not throw 403
     if(existing_ID['records'] == []):
         return constants.respond(err=constants.MOBILE_NOT_AUTH, statusCode="403") #Forbidden
-
-    #Check that the code exists
-    existing_code = client.execute_statement(
-        secretArn = constants.SECRET_ARN, 
-        database = constants.DB_NAME,
-        resourceArn = constants.ARN,
-        sql = "SELECT code FROM AccessCode WHERE UserID = '%s';" % (given_ID)
-    )
-    
-    #If a code does not exist
-    if(existing_code['records'] == []):
-        return constants.respond(err = constants.MOBILE_NOT_AUTH, statusCode = "403") #Forbidden
-    
-    #If codes do not match
-    if(existing_code['records'][0][0]['longValue'] != given_code):
-        return constants.respond(err = constants.CODE_MISMATCH, statusCode = "403")
-    
     #Else is okay
     return constants.respond(statusCode= "200") #OK
 
