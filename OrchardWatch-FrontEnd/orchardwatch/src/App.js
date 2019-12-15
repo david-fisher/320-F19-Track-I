@@ -2,12 +2,13 @@ import React from "react";
 import logo from "./ow-logo.png";
 import "./App.css";
 import Home from "./Components/Home";
-import Orchards from "./Components/Orchards";
 import Data from "./Components/Data";
 import ImageGallery from "./Components/ImageGallery";
 import Login from "./Components/Login";
-import Observations from "./Components/Observations";
 import AskAI from "./Components/AskAI";
+import ForgotPassword from "./Components/ForgotPassword";
+import Dashboard from "./Components/Dashboard";
+import { Button } from "react-bootstrap";
 
 class App extends React.Component {
   constructor() {
@@ -20,49 +21,54 @@ class App extends React.Component {
 
   render() {
     console.log(this.state.user);
-    var page = this.pageRender();
-    var navBar = (
+    let page = this.pageRender();
+    let navBar = (
       <div className="NavBar">
-        <button onClick={() => this.setState({ page: "Home" })}>Home</button>
-        <button onClick={() => this.setState({ page: "Data" })}>Data</button>
-        <button onClick={() => this.setState({ page: "Login" })}>Login</button>
+        <Button onClick={() => this.setState({ page: "Home" })}>Home</Button>
+        <Button onClick={() => this.setState({ page: "Login" })}>Login</Button>
       </div>
     );
-    if (this.state.user === "grower" || this.state.user === "researcher") {
+    if (this.state.user === "public") {
       navBar = (
         <div className="NavBar">
-          <button onClick={() => this.setState({ page: "Home" })}>Home</button>
-          <button onClick={() => this.setState({ page: "Data" })}>Data</button>
-          <button onClick={() => this.setState({ page: "Gallery" })}>
-            Gallery
-          </button>
-          <button onClick={() => this.setState({ page: "Observations" })}>
-            Observations
-          </button>
-          <button onClick={() => this.setState({ page: "AskAI" })}>
-            Ask AI
-          </button>
-          <button
+          <Button onClick={() => this.setState({ page: "Home" })}>Home</Button>
+          <Button onClick={() => this.setState({ page: "Data" })}>Data</Button>
+          <Button onClick={() => this.setState({ page: "Dashboard" })}>
+            Dashboard
+          </Button>
+          <Button
             onClick={() => {
-              this.setState({ page: "Home", user: "public", authToken: null });
+              this.setState({ page: "Home", user: "guest", authToken: null });
             }}
           >
             Logout
-          </button>
+          </Button>
         </div>
       );
-    } else if (this.state.user === "public") {
+    } else if (
+      this.state.user === "grower" ||
+      this.state.user === "researcher"
+    ) {
       navBar = (
         <div className="NavBar">
-          <button onClick={() => this.setState({ page: "Home" })}>Home</button>
-          <button onClick={() => this.setState({ page: "Data" })}>Data</button>
-          <button
+          <Button onClick={() => this.setState({ page: "Home" })}>Home</Button>
+          <Button onClick={() => this.setState({ page: "Data" })}>Data</Button>
+          <Button onClick={() => this.setState({ page: "Gallery" })}>
+            Gallery
+          </Button>
+          <Button onClick={() => this.setState({ page: "AskAI" })}>
+            Ask AI
+          </Button>
+          <Button onClick={() => this.setState({ page: "Dashboard" })}>
+            Dashboard
+          </Button>
+          <Button
             onClick={() => {
-              this.setState({ page: "Home", user: "public", authToken: null });
+              this.setState({ page: "Home", user: "guest" });
             }}
           >
             Logout
-          </button>
+          </Button>
         </div>
       );
     }
@@ -78,16 +84,18 @@ class App extends React.Component {
     );
   }
 
-  auth(user, token) {
-    this.setState({ page: "Home", user: user, authToken: token });
+  auth(user) {
+    this.setState({ page: "Home", user: user });
+  }
+
+  setPage(page) {
+    this.setState({ page: page });
   }
 
   pageRender() {
     switch (this.state.page) {
       case "Home":
         return <Home user={this.state.user} />;
-      case "Orchards":
-        return <Orchards user={this.state.user} />;
       case "Data":
         return (
           <Data
@@ -98,11 +106,21 @@ class App extends React.Component {
       case "Gallery":
         return <ImageGallery user={this.state.user} />;
       case "Login":
-        return <Login user={this.state.user} auth={this.auth.bind(this)} />;
-      case "Observations":
-        return <Observations user={this.state.user} />;
+        return (
+          <Login
+            user={this.state.user}
+            auth={this.auth.bind(this)}
+            setPage={this.setPage.bind(this)}
+          />
+        );
       case "AskAI":
         return <AskAI user={this.state.user} />;
+      case "Dashboard":
+        return <Dashboard user={this.state.user} />;
+      case "ForgotPassword":
+        return <ForgotPassword resetPass={false} />;
+      case "ResetPassword":
+        return <ForgotPassword resetPass={true} />;
       default:
         return <Home user={this.state.user} />;
     }
