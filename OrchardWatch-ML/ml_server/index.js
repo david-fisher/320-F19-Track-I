@@ -49,7 +49,7 @@ app.get('/predict', function (req, res) {
 	process.on('close', (code) => {
     	console.log(`child process exited with code ${code}`);
 		if(code == 0) {
-			res.json(outputs[outputs.length - 1]);
+			res.send(outputs[outputs.length - 1]);
 		}
 		else {
             res.send(errors[errors.length - 1]);
