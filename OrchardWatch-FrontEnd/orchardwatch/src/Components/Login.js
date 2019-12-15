@@ -33,8 +33,6 @@ class Login extends React.Component {
             {/* Register Form */}
             <Col>
               <h3>Register</h3>
-              <div>Growers and researchers need a valid Access Key.</div>
-              <div>Public users can leave the 'Access Key' field blank.</div>
               <br></br>
               <Form onSubmit={this.validateRegister}>
                 <Form.Row>
@@ -82,19 +80,6 @@ class Login extends React.Component {
                 <Form.Row>
                   <Col md="2"></Col>
                   <Col>
-                    <Form.Group controlId="RegisterAccessKey">
-                      <Form.Control
-                        type="text"
-                        placeholder="Access Key"
-                        size="md"
-                      />
-                    </Form.Group>
-                  </Col>
-                  <Col md="2"></Col>
-                </Form.Row>
-                <Form.Row>
-                  <Col md="2"></Col>
-                  <Col>
                     <Button variant="primary" type="submit">
                       Register
                     </Button>
@@ -106,6 +91,7 @@ class Login extends React.Component {
             {/* Login Form */}
             <Col>
               <h3>Login</h3>
+              <br></br>
               <Form onSubmit={this.validateLogin}>
                 <Form.Row>
                   <Col md="2"></Col>
@@ -148,7 +134,14 @@ class Login extends React.Component {
                 <Form.Row>
                   <Col md="2"></Col>
                   <Col>
-                    <Button variant="primary">Forgot Password</Button>
+                    <Button
+                      variant="primary"
+                      onClick={() => {
+                        this.props.setPage("ForgotPassword");
+                      }}
+                    >
+                      Forgot Password
+                    </Button>
                   </Col>
                   <Col md="2"></Col>
                 </Form.Row>
@@ -164,8 +157,20 @@ class Login extends React.Component {
     let email = document.getElementById("LoginEmail").value;
     let password = document.getElementById("LoginPassword").value;
     fetch(
-      `https://2a2glx2h08.execute-api.us-east-2.amazonaws.com/default/Frontend-Lambda/account/login/${email}/${password}/`
-    ).then(response => console.log(response));
+      "https://2a2glx2h08.execute-api.us-east-2.amazonaws.com/default/Frontend-Lambda/account/login/",
+      {
+        method: "GET"
+      }
+    ).then(response => {
+      console.log(response);
+    });
+    if (email === "grower@gmail.com" && password === "grower") {
+      this.props.auth("grower");
+    } else if (email === "researcher@gmail.com" && password === "researcher") {
+      this.props.auth("researcher");
+    } else if (email === "public@gmail.com" && password === "public") {
+      this.props.auth("public");
+    }
     e.preventDefault();
     e.stopPropagation();
     // const validity = e.currentTarget.checkValidity();
@@ -209,21 +214,23 @@ class Login extends React.Component {
     let email = document.getElementById("RegisterEmail").value;
     let p1 = document.getElementById("RegisterPassword").value;
     let p2 = document.getElementById("RegisterConfirmPassword").value;
-    let access = document.getElementById("RegisterAccessKey").value;
     if (p1.length < 8) {
       this.setState({
         alert: true,
-        message: "Your Password should have more than 8 characters"
+        message: "Your password should have more than 8 characters"
       });
     } else if (p1 !== p2) {
       this.setState({
         alert: true,
-        message: "The Passwords do not match"
+        message: "The passwords do not match"
       });
     } else {
+      this.setState({ alert: false, message: "" });
       fetch(
-        `https://2a2glx2h08.execute-api.us-east-2.amazonaws.com/default/Frontend-Lambda/account/register/${email}/${p1}/${access}`
-      ).then(response => console.log(response));
+        "https://2a2glx2h08.execute-api.us-east-2.amazonaws.com/default/Frontend-Lambda/account/register/"
+      ).then(response => {
+        console.log(response);
+      });
     }
     e.preventDefault();
     e.stopPropagation();
