@@ -114,15 +114,15 @@ def authorization_mobile(options):
     #First connect to the table
     client = boto3.client('rds-data')
     #Check that the ID exists
-    existing_ID = client.execute_statement(
+    existing_code = client.execute_statement(
         secretArn = constants.SECRET_ARN, 
         database = constants.DB_NAME,
         resourceArn = constants.ARN,
-        sql = "SELECT userID FROM AccessCode WHERE code = '%s';" % (given_code)
+        sql = "SELECT code FROM AccessCode WHERE code = '%s';" % (given_code)
     )
     #If not throw 403
-    if(existing_ID['records'] == []):
-        return constants.respond(err=constants.MOBILE_NOT_AUTH, statusCode="403") #Forbidden
+    if(existing_code['records'] == []):
+        return constants.respond(err=constants.CODE_MISMATCH, statusCode="403") #Forbidden
     #Else is okay
     return constants.respond(statusCode= "200") #OK
 
