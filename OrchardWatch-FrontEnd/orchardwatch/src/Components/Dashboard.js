@@ -35,30 +35,38 @@ class Dashboard extends React.Component {
     if (this.props.user === "grower" || this.props.user === "researcher") {
       dashboard = (
         <Container>
-          <Card>
-            <Card.Header onClick={() => this.setState({ page: "profile" })}>
-              Profile
-            </Card.Header>
-          </Card>
-          <Card>
-            <Card.Header
-              onClick={() => this.setState({ page: "postAnnouncement" })}
-            >
-              Post Announcement
-            </Card.Header>
-          </Card>
-          <Card>
-            <Card.Header onClick={() => this.setState({ page: "uploadImage" })}>
-              Upload Image
-            </Card.Header>
-          </Card>
-          <Card>
-            <Card.Header
-              onClick={() => this.setState({ page: "systemStatus" })}
-            >
-              System Status
-            </Card.Header>
-          </Card>
+          <Button
+            variant="secondary"
+            size="lg"
+            block
+            onClick={() => this.setState({ page: "profile" })}
+          >
+            Profile
+          </Button>
+          <Button
+            variant="secondary"
+            size="lg"
+            block
+            onClick={() => this.setState({ page: "postAnnouncement" })}
+          >
+            Post Announcement
+          </Button>
+          <Button
+            variant="secondary"
+            size="lg"
+            block
+            onClick={() => this.setState({ page: "uploadImage" })}
+          >
+            Upload Image
+          </Button>
+          <Button
+            variant="secondary"
+            size="lg"
+            block
+            onClick={() => this.setState({ page: "systemStatus" })}
+          >
+            System Status
+          </Button>
         </Container>
       );
     }
