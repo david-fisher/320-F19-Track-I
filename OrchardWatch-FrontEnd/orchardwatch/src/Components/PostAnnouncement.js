@@ -1,5 +1,5 @@
 import React from "react";
-import { Form, Button, Container, Row, Col } from "react-bootstrap";
+import { Form, Button, Container, Col } from "react-bootstrap";
 
 class PostAnnouncements extends React.Component {
   constructor() {
