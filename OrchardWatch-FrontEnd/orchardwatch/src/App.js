@@ -15,7 +15,8 @@ class App extends React.Component {
     super();
     this.state = {
       page: 'Home',
-      user: 'guest'
+      user: 'guest',
+      authToken: null
     };
   }
 
@@ -84,8 +85,8 @@ class App extends React.Component {
     );
   }
 
-  auth(user) {
-    this.setState({ page: 'Home', user: user });
+  auth(user, token=null) {
+    this.setState({ page: 'Home', user: user, authToken: token });
   }
 
   setPage(page) {
@@ -104,7 +105,12 @@ class App extends React.Component {
           />
         );
       case 'Gallery':
-        return <ImageGallery user={this.state.user} />;
+        return (
+          <ImageGallery 
+            user={this.state.user} 
+            token={this.state.authToken}
+          />
+        );
       case 'Login':
         return (
           <Login
