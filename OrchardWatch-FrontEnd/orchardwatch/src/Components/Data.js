@@ -114,7 +114,7 @@ class Data extends React.Component {
       return (
         <div>
           {table}
-          <Button onClick={() => this.downloadData}>Download Data</Button>
+          <Button onClick={() => this.downloadData(this.state.data)}>Download Data</Button>
           <br></br>
           <br></br>
           <Button onClick={() => this.setState({select: true})}>Go Back</Button>
@@ -123,8 +123,11 @@ class Data extends React.Component {
     }
   }
 
-  downloadData(){
-    // turn json in this.state.data to csv
+  downloadData(data){
+    const { Parser } = require('json2csv');
+    const parser = new Parser({eol: ";"});
+    let csv = parser.parse(data);
+    console.log(csv);
   }
 }
 
