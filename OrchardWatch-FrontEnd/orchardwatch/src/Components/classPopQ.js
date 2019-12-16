@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from 'prop-types';
-import {Modal, Button, ButtonToolbar} from "react-bootstrap";
-
+import {Modal, Button, ButtonToolbar, Image} from "react-bootstrap";
+import "./classModal.css"
 function MyVerticallyCenteredModal(props) {
     return (
         <Modal
@@ -11,16 +11,21 @@ function MyVerticallyCenteredModal(props) {
             centered
         >
             <Modal.Header closeButton>
-                <Modal.Title id="contained-modal-title-vcenter">
-                    Modal heading
+                <Modal.Title style={{alignContent: 'center'}} id="contained-modal-title-vcenter">
+                    {
+                        props.title
+                    }
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
+            <div className= "imgWrappers">
+                <Image className="avatar"  src={props.imgSrc} alt="Card image cap"/>
+                <Image className="avatar2"  src={props.imgSrc} alt="Card image cap"/>
+            </div>
+
                 <h4>Centered Modal</h4>
                 <p>
-                    Cras mattis consectetur purus sit amet fermentum. Cras justo odio,
-                    dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac
-                    consectetur ac, vestibulum at eros.
+                    {props.desc}
                 </p>
             </Modal.Body>
             <Modal.Footer>
@@ -35,7 +40,10 @@ class ClassPopQ extends React.Component {
     constructor(props){
         super(props);
         this.state = {
+            imgSrc: props.imgSrc,
+            desc: props.desc,
             onHide: props.onHide,
+            title: props.title,
             show: props.show
         }
     }
@@ -46,8 +54,11 @@ class ClassPopQ extends React.Component {
         return (
             <ButtonToolbar>
                 <MyVerticallyCenteredModal
+                    imgSrc={this.state.imgSrc}
                     show={this.state.show}
                     onHide={this.state.onHide}
+                    title={this.state.title}
+                    desc = {this.state.desc}
                 />
             </ButtonToolbar>
         );
