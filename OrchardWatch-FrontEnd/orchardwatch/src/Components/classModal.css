@@ -1,0 +1,12 @@
+body {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.imgWrappers
+{
+    display: flex;
+    align-items: center;
+    align-content: space-around;
+    justify-content: space-around;
+    padding: 1rem;
+}
