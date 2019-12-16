@@ -2,42 +2,74 @@ import React from 'react';
 import {ClassDisp} from "./Classifier_Disp";
 import "./classPopQ";
 import ClassPopQ from "./classPopQ";
+import Api from '../api';
 
 class AskAI extends React.Component{
 
     constructor(props) {
         super(props);
         this.state = {
-            title: "Object Title",
-            show: false,
-            avatar: "https://ballparkdigest.com/wp-content/uploads/2018/11/Rocky-Mountain-Vibes-300x300.jpg",
-            desc: "Hello I'm testing the first line,\n" +
-                "                                        dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac\n" +
-                "                                        consectetur ac, vestibulum at eros.Cras mattis consectetur purus sit amet fermentum. Cras justo odio,\n" +
-                "                                        dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac\n" +
-                "                                        consectetur ac, vestibulum at eros.Cras mattis consectetur purus sit amet fermentum. Cras justo odio,\n" +
-                "                                        dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta alcapone\n" +
-                "                                        consectetur ac, vestibulum at eros"
+            classifiers: [],
+            currentModalId: null
         };
 
         this.setModalShow = this.setModalShow.bind(this);
     }
 
-    setModalShow(newShow){
-        this.setState({
-            ...this.state,
-            show: newShow
-        });
-        console.log(this.state);
+    setModalShow(isVisible, id) {
+        if(!isVisible) {
+            this.setState({
+                currentModalId: null
+            });
+            return;
+        }
 
+        const classifier = this.state.classifiers.find(x => x.id === id);
+        // .find() will be falsey if not found
+        if (!classifier) return;
+
+        this.setState({
+            currentModalId: classifier.id
+        });
+    }
+
+    removeClassifier(idToRemove) {
+        const newClassifiers = this.state.classifiers.filter(x => x.id !== idToRemove);
+        this.setState({
+            classifiers: newClassifiers
+        });
+
+        Api.setAIClassifiers(newClassifiers);
+    }
+
+    componentDidMount() {
+        // This should be handled by some state management but it'll do for now
+        const classifiers = Api.getAIClassifiers();
+        this.setState({
+            classifiers
+        });
     }
 
     render(){
+        const elements = this.state.classifiers.map(e =>
+                <div>
+                    <ClassPopQ onHide={() => this.setModalShow(false, e.id)}
+                               show={this.state.currentModalId === e.id}
+                               key={this.state.show}
+                               imgSrc={e.img}
+                               title={e.title}
+                               desc={e.desc} />
+                    <ClassDisp imgSrc={e.img}
+                               title={e.title}
+                               desc={e.desc}
+                               canDelete={this.state.classifiers.length > 1}
+                               onClick = {() => this.setModalShow(true, e.id)}
+                               onDelete = {() => this.removeClassifier(e.id)}/>
+                </div>
+        );
+
         return(
-            <div>
-                <ClassPopQ key={this.state.show} imgSrc = {this.state.avatar} desc = {this.state.desc}  title = {this.state.title} show={this.state.show} onHide={() => this.setModalShow(false)} />
-                <ClassDisp imgSrc = {this.state.avatar} title = {this.state.title} desc = {this.state.desc} onClick = {() => this.setModalShow(true)} />
-            </div>
+            elements
         );
     }
 
