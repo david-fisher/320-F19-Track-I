@@ -57,8 +57,11 @@ class ImageGallery extends React.Component {
       } else if (this.state.page == "Upload") {
         editGallery = (
           <div>
-            <UploadImage></UploadImage>
+            <UploadImage
+              token={this.props.token}
+            />
             <Button onClick={() => this.setState({ page: "" })}>Go Back</Button>
+            <br></br>
             <br></br>
           </div>
         );
