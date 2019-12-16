@@ -9,7 +9,7 @@ import auth
  /account/password_update/{email}/{passwd}
  /account/update_about/{token}/{field}/{update}
  /account/data_download/profile/{token}/{email}
-
+Note: Anything with an auth token is TBD
 '''
 
 def register(options):
@@ -28,8 +28,11 @@ def register(options):
         sql = "SELECT email FROM UserData WHERE email = '%s'" % (given_email)
     )
     if(existing_user['records'] != []):
-        return constants.respond(err=constants.USER_EXISTS, statusCode="403")  #Forbidden
-    #If they do not exist in the database, add them
+        print("user exists already")
+        constants.ERR = "User already exists"
+        constants.STATUS_CODE = 409
+        return    
+    
     existing_user = client.execute_statement(
        secretArn = constants.SECRET_ARN, 
         database = constants.DB_NAME,
@@ -126,8 +129,10 @@ def update_password(options):
         sql = "SELECT email FROM UserData WHERE email = '%s';" % (given_email)
     )
     if(existing_user['records'] == []):
-        return constants.respond(err=constants.USER_DNE, statusCode="403") #Forbidden
-
+        constants.ERR = "Password DNE"
+        constants.STATUS_CODE = 404
+        return
+    
     #Replace password in database
     client.execute_statement(
         secretArn = constants.SECRET_ARN, 
@@ -137,7 +142,7 @@ def update_password(options):
     )
     
     #Return success
-    return{'statusCode': 200}
+    return
     
 def authorization_mobile(options):
     given_code = int(options['code'])
@@ -152,9 +157,11 @@ def authorization_mobile(options):
     )
     #If not throw 403
     if(existing_code['records'] == []):
-        return constants.respond(err=constants.CODE_MISMATCH, statusCode="403") #Forbidden
+        constants.ERR = "Invalid auth token"
+        constants.STATUS_CODE = 403
+        return
     #Else is okay
-    return constants.respond(statusCode= "200") #OK
+    return 
 
 def test(options):
     print("we made it to the test")

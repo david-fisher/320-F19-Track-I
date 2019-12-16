@@ -30,14 +30,15 @@ def main(event, context):
 
     constants.ERR = None
     constants.STATUS_CODE = "200"
-    constants.RES = "stoopid i aint gonna let u get the chance"
+    constants.RES = "Success"
     
     path = event['path']
     httpType = event['httpMethod']
     path = parse_path(path)
     
-    if('' in path):
-        return constants.respond(err="Parse error, lambda reinvoked", statusCode = "403") 
+    # if('' in path):
+    #     print("lambda just tried to reinvoke itself. terminating")
+    #     return constants.respond(err="Parse error, lambda reinvoked", statusCode = "403") 
 
     
     print(path)
@@ -55,8 +56,8 @@ def main(event, context):
         try:
             body = json.loads(body)
         except ValueError as e:
-            print("body isnt json")
-            return constants.respond(err="BODY IS NOT JSON", statusCode = "400")
+            print("body error")
+            return constants.respond(err="BODY ERROR, CHECK FORMAT", statusCode = "400")
             
         route(path, body)
     

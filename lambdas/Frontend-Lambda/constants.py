@@ -10,7 +10,7 @@ SECRET_ARN = "arn:aws:secretsmanager:us-east-2:007372221023:secret:rds-db-creden
 #errors:
 ERR = None
 STATUS_CODE = "200"
-RES = "stoopid i aint gonna let u get the chance"
+RES = "Success"
 
 #USER TYPES
 PUBLIC_USER='p'
