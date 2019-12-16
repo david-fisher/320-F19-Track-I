@@ -1,11 +1,13 @@
 import React from "react";
 import { Form, Button, Row, Col, Container, Alert } from "react-bootstrap";
+import Cookies from "universal-cookie";
 
 class Login extends React.Component {
   constructor() {
     super();
     this.state = {
       alert: false,
+      success: false,
       message: ""
     };
   }
@@ -13,11 +15,15 @@ class Login extends React.Component {
   render() {
     var alert = <div></div>;
     if (this.state.alert) {
+      let alertVariant = "danger";
+      if (this.state.success) {
+        alertVariant = "success";
+      }
       alert = (
         <Alert
-          variant="danger"
+          variant={alertVariant}
           onClose={() => {
-            this.setState({ alert: false, message: "" });
+            this.setState({ alert: false, success: false, message: "" });
           }}
           dismissible
         >
@@ -154,23 +160,12 @@ class Login extends React.Component {
   }
 
   validateLogin = e => {
+    e.preventDefault();
+    e.stopPropagation();
     let email = document.getElementById("LoginEmail").value;
     let password = document.getElementById("LoginPassword").value;
     console.log(email);
     console.log(password);
-    fetch(
-      "https://2a2glx2h08.execute-api.us-east-2.amazonaws.com/default/Frontend-Lambda/account/login/",
-      {
-        method: "POST",
-        body: { email: email, pass: password }
-      }
-    )
-      .then(response => {
-        return response.json();
-      })
-      .then(result => {
-        console.log(result);
-      });
     if (email === "grower@gmail.com" && password === "grower") {
       this.props.auth("grower");
     } else if (email === "researcher@gmail.com" && password === "researcher") {
@@ -178,74 +173,93 @@ class Login extends React.Component {
     } else if (email === "public@gmail.com" && password === "public") {
       this.props.auth("public");
     }
-    e.preventDefault();
-    e.stopPropagation();
-    // const validity = e.currentTarget.checkValidity();
-    // console.log(validity);
-    // if (validity && true) {
-    //   // replace true with check when sending to Lambdas and wait for authToken upon successful validation or ...
-    //   // receives boolean based on successful validation, type of user, and authToken if boolean == true
-    //   // wrong password
-    //   switch (document.getElementById('LoginEmail').value) {
-    //     case 'public@gmail.com':
-    //       this.props.auth('public', 'Authorized');
-    //       break;
-    //     case 'grower@gmail.com':
-    //       this.props.auth('grower', 'Authorized');
-    //       break;
-    //     case 'researcher@gmail.com':
-    //       this.props.auth('researcher', 'Authorized');
-    //       break;
-    //     default:
-    //       this.setState({
-    //         alert: true,
-    //         message: 'Wrong Email or Password'
-    //       });
-    //       e.preventDefault();
-    //       e.stopPropagation();
-    //       break;
-    //   }
-    // } else {
-    //   if (validity) {
-    //     this.setState({
-    //       alert: true,
-    //       message: 'Wrong Email or Password'
-    //     });
-    //   }
-    //   e.preventDefault();
-    //   e.stopPropagation();
-    // }
+    fetch(
+      "https://2a2glx2h08.execute-api.us-east-2.amazonaws.com/default/Frontend-Lambda/account/login/",
+      {
+        method: "POST",
+        body: JSON.stringify({ email: email, pass: password })
+      }
+    )
+      .then(response => {
+        if (response.status === 200) {
+          return response.json();
+        } else if (response.status === 404) {
+          this.setState({
+            alert: true,
+            success: false,
+            message: "Wrong email or password"
+          });
+          return null;
+        } else {
+          console.log(response);
+          this.setState({
+            alert: true,
+            success: false,
+            message: "Something went wrong with Login"
+          });
+          return null;
+        }
+      })
+      .then(result => {
+        if (result === null) {
+          return;
+        }
+        const cookies = new Cookies();
+        cookies.set("authToken", result.token);
+        if (result.user === "p") {
+          this.props.auth("public");
+        } else if (result.user === "g") {
+          this.props.auth("grower");
+        } else if (result.user === "r") {
+          this.props.auth("researcher");
+        }
+      });
   };
 
   validateRegister = e => {
+    e.preventDefault();
+    e.stopPropagation();
     let email = document.getElementById("RegisterEmail").value;
     let p1 = document.getElementById("RegisterPassword").value;
     let p2 = document.getElementById("RegisterConfirmPassword").value;
     if (p1.length < 8) {
       this.setState({
         alert: true,
+        success: false,
         message: "Your password should have more than 8 characters"
       });
     } else if (p1 !== p2) {
       this.setState({
         alert: true,
+        success: false,
         message: "The passwords do not match"
       });
     } else {
-      this.setState({ alert: false, message: "" });
       fetch(
         "https://2a2glx2h08.execute-api.us-east-2.amazonaws.com/default/Frontend-Lambda/account/register/",
-        { method: "POST", body: { email: email, pass: p1 } }
-      )
-        .then(response => {
-          return response.json();
-        })
-        .then(result => {
-          console.log(result);
-        });
+        { method: "POST", body: JSON.stringify({ email: email, pass: p1 }) }
+      ).then(response => {
+        if (response.status === 200) {
+          this.setState({
+            alert: true,
+            success: true,
+            message: "Account registered successfully"
+          });
+        } else if (response.status === 409) {
+          this.setState({
+            alert: true,
+            success: false,
+            message: "An account already exists with this email"
+          });
+        } else {
+          this.setState({
+            alert: true,
+            success: false,
+            message: "Something went wrong for Registering"
+          });
+        }
+      });
     }
-    e.preventDefault();
-    e.stopPropagation();
   };
 }
 
