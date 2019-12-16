@@ -7,6 +7,7 @@ class Login extends React.Component {
     super();
     this.state = {
       alert: false,
+      success: false,
       message: ""
     };
   }
@@ -14,11 +15,15 @@ class Login extends React.Component {
   render() {
     var alert = <div></div>;
     if (this.state.alert) {
+      let alertVariant = "danger";
+      if (this.state.success) {
+        alertVariant = "success";
+      }
       alert = (
         <Alert
-          variant="danger"
+          variant={alertVariant}
           onClose={() => {
-            this.setState({ alert: false, message: "" });
+            this.setState({ alert: false, success: false, message: "" });
           }}
           dismissible
         >
@@ -163,10 +168,7 @@ class Login extends React.Component {
     console.log(password);
     if (email === "grower@gmail.com" && password === "grower") {
       this.props.auth("grower");
-    } else if (
-      email === "researcher@gmail.com" &&
-      password === "researcher"
-    ) {
+    } else if (email === "researcher@gmail.com" && password === "researcher") {
       this.props.auth("researcher");
     } else if (email === "public@gmail.com" && password === "public") {
       this.props.auth("public");
@@ -182,19 +184,24 @@ class Login extends React.Component {
         if (response.status === 200) {
           return response.json();
         } else if (response.status === 404) {
-          this.setState({ alert: true, message: "Wrong email or password" });
+          this.setState({
+            alert: true,
+            success: false,
+            message: "Wrong email or password"
+          });
           return null;
         } else {
           console.log(response);
           this.setState({
             alert: true,
+            success: false,
             message: "Something went wrong with Login"
           });
           return null;
         }
       })
       .then(result => {
-        if (result === null){
+        if (result === null) {
           return;
         }
         const cookies = new Cookies();
@@ -218,15 +225,16 @@ class Login extends React.Component {
     if (p1.length < 8) {
       this.setState({
         alert: true,
+        success: false,
         message: "Your password should have more than 8 characters"
       });
     } else if (p1 !== p2) {
       this.setState({
         alert: true,
+        success: false,
         message: "The passwords do not match"
       });
     } else {
-      this.setState({ alert: false, message: "" });
       fetch(
         "https://2a2glx2h08.execute-api.us-east-2.amazonaws.com/default/Frontend-Lambda/account/register/",
         { method: "POST", body: JSON.stringify({ email: email, pass: p1 }) }
@@ -234,16 +242,19 @@ class Login extends React.Component {
         if (response.status === 200) {
           this.setState({
             alert: true,
+            success: true,
             message: "Account registered successfully"
           });
         } else if (response.status === 409) {
           this.setState({
             alert: true,
+            success: false,
             message: "An account already exists with this email"
           });
         } else {
           this.setState({
             alert: true,
+            success: false,
             message: "Something went wrong for Registering"
           });
         }
