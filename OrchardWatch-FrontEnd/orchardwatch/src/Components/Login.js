@@ -162,7 +162,7 @@ class Login extends React.Component {
       "https://2a2glx2h08.execute-api.us-east-2.amazonaws.com/default/Frontend-Lambda/account/login/",
       {
         method: "POST",
-        body: { email: email, pass: password }
+        body: JSON.stringify({ email: email, pass: password })
       }
     )
       .then(response => {
@@ -170,6 +170,13 @@ class Login extends React.Component {
       })
       .then(result => {
         console.log(result);
+        if (result.user == "r") {
+          this.props.auth("researcher", result.token);
+        } else if (result.user == "g") {
+          this.props.auth("grower", result.token);
+        } else if (result.user == "p") {
+          this.props.auth("public", result.token);
+        }
       });
     if (email === "grower@gmail.com" && password === "grower") {
       this.props.auth("grower");
@@ -235,7 +242,7 @@ class Login extends React.Component {
       this.setState({ alert: false, message: "" });
       fetch(
         "https://2a2glx2h08.execute-api.us-east-2.amazonaws.com/default/Frontend-Lambda/account/register/",
-        { method: "POST", body: { email: email, pass: p1 } }
+        { method: "POST", body: JSON.stringify({ email: email, pass: p1 }) }
       )
         .then(response => {
           return response.json();
