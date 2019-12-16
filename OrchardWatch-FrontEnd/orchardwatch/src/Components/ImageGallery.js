@@ -11,6 +11,7 @@ import url8 from "./low-level-images/HOBO1.jpeg";
 import url9 from "./low-level-images/weliveinasociety.jpg";
 import url10 from "./low-level-images/placehold.jpg";
 import { Col, Row, Button } from "react-bootstrap";
+import UploadImage from "./UploadImage";
 
 
 let IMAGES = [url1, url3, url5, url6, url7, url4, url8, url9, url10, url2];
@@ -18,7 +19,7 @@ let IMAGES = [url1, url3, url5, url6, url7, url4, url8, url9, url10, url2];
 class ImageGallery extends React.Component {
   constructor() {
     super();
-    this.state = {};
+    this.state = { page: "" };
     this.processImages = this.processImages.bind(this);
   }
 
@@ -45,14 +46,24 @@ class ImageGallery extends React.Component {
     imageArr = this.processImages(IMAGES);
     let editGallery = <div></div>;
     if (this.props.user === "grower" || this.props.user === "researcher") {
-      editGallery = (
-        <div>
-          <Button>Add Images</Button>
-          <Button>Remove Images</Button>
-          <br></br>
-          <br></br>
-        </div>
-      );
+      if (this.state.page == "") {
+        editGallery = (
+          <div>
+            <Button onClick={() => this.setState({ page: "Upload" })}>Add Images</Button>
+            <br></br>
+            <br></br>
+          </div>
+        );
+      } else if (this.state.page == "Upload") {
+        editGallery = (
+          <div>
+            <UploadImage></UploadImage>
+            <Button onClick={() => this.setState({ page: "" })}>Go Back</Button>
+            <br></br>
+          </div>
+        );
+      } 
+      
     }
     return (
       <div>

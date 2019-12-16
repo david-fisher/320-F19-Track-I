@@ -1,9 +1,9 @@
-import React from "react";
-import { Table, Row, Col, Button } from "react-bootstrap";
-import DateRangePicker from "react-daterange-picker";
-import "react-daterange-picker/dist/css/react-calendar.css";
-import originalMoment from "moment";
-import { extendMoment } from "moment-range";
+import React from 'react';
+import { Table, Row, Col, Button } from 'react-bootstrap';
+import DateRangePicker from 'react-daterange-picker';
+import 'react-daterange-picker/dist/css/react-calendar.css';
+import originalMoment from 'moment';
+import { extendMoment } from 'moment-range';
 
 const moment = extendMoment(originalMoment);
 
@@ -15,7 +15,7 @@ class Data extends React.Component {
       date: moment.range(
         moment()
           .clone()
-          .subtract(7, "days"),
+          .subtract(7, 'days'),
         moment().clone()
       ),
       data: []
@@ -27,28 +27,28 @@ class Data extends React.Component {
     this.setState({
       data: [
         {
-          Date: "11/12/2018",
-          Time: "12:00",
-          "Tempertaure (F)": 84.32,
-          "Wind Speed": 1.5,
-          "Wetness (%)": 7.6,
-          "Rain (in.)": 0
+          Date: '11/12/2018',
+          Time: '12:00',
+          'Tempertaure (F)': 84.32,
+          'Wind Speed': 1.5,
+          'Wetness (%)': 7.6,
+          'Rain (in.)': 0
         },
         {
-          Date: "11/13/2018",
-          Time: "12:00",
-          "Tempertaure (F)": 83.24,
-          "Wind Speed": 0.7,
-          "Wetness (%)": 7.1,
-          "Rain (in.)": 0
+          Date: '11/13/2018',
+          Time: '12:00',
+          'Tempertaure (F)': 83.24,
+          'Wind Speed': 0.7,
+          'Wetness (%)': 7.1,
+          'Rain (in.)': 0
         },
         {
-          Date: "11/14/2018",
-          Time: "12:00",
+          Date: '11/14/2018',
+          Time: '12:00',
           Tempertaure: 84.95,
-          "Wind Speed": 3,
-          "Wetness (%)": 7.6,
-          "Rain (in.)": 0
+          'Wind Speed': 3,
+          'Wetness (%)': 7.6,
+          'Rain (in.)': 0
         }
       ]
     });
@@ -65,7 +65,7 @@ class Data extends React.Component {
           <p>
             <b>Pick a date range to query for data</b>
           </p>
-          <p>{this.state.date.start.format("MM/DD/YYYY")} to {this.state.date.end.format("MM/DD/YYYY")}</p>
+          <p>{this.state.date.start.format('MM/DD/YYYY')} to {this.state.date.end.format('MM/DD/YYYY')}</p>
           <DateRangePicker
             value={this.state.date}
             onSelect={this.onSelect}
@@ -83,7 +83,7 @@ class Data extends React.Component {
         </div>
       );
     } else {
-      // fetch(`https://2a2glx2h08.execute-api.us-east-2.amazonaws.com/default/Frontend-Lambda/data/data_download/{token}/${this.state.date.start.format("MM/DD/YYYY")}/${this.state.date.end.format("MM/DD/YYYY")}/{field}`)
+      // fetch(`https://2a2glx2h08.execute-api.us-east-2.amazonaws.com/default/Frontend-Lambda/data/data_download/{token}/${this.state.date.start.format('MM/DD/YYYY')}/${this.state.date.end.format('MM/DD/YYYY')}/{field}`)
       // .then(response => {console.log(response)});
       if (this.state.data.length === 0) {
         return <div>No Data Available</div>;
@@ -99,7 +99,7 @@ class Data extends React.Component {
       });
       let table = (
         <Row>
-          <Col md="2" />
+          <Col md='2' />
           <Col>
             <Table striped bordered hover>
               <thead>
@@ -107,18 +107,24 @@ class Data extends React.Component {
               </thead>
               <tbody>{data}</tbody>
             </Table>
-            <br></br>
           </Col>
-          <Col md="2" />
+          <Col md='2' />
         </Row>
       );
       return (
         <div>
           {table}
+          <Button onClick={() => this.downloadData}>Download Data</Button>
+          <br></br>
+          <br></br>
           <Button onClick={() => this.setState({select: true})}>Go Back</Button>
         </div>
       );
     }
+  }
+
+  downloadData(){
+    // turn json in this.state.data to csv
   }
 }
 
