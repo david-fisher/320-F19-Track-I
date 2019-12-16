@@ -204,8 +204,8 @@ class Login extends React.Component {
         if (result === null) {
           return;
         }
-        const cookies = new Cookies();
-        cookies.set("authToken", result.token);
+        this.props.cookie.set('email', email);
+        this.props.cookie.set("authToken", result.token);
         if (result.user === "p") {
           this.props.auth("public");
         } else if (result.user === "g") {
