@@ -124,7 +124,9 @@ class Data extends React.Component {
   }
 
   downloadData(){
-    // turn json in this.state.data to csv
+    let json2csv = require('json2csv');
+    let csv = json2csv.parse(this.state.data);
+    console.log(csv);
   }
 }
 
