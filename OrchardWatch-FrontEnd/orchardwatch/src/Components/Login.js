@@ -164,8 +164,6 @@ class Login extends React.Component {
     e.stopPropagation();
     let email = document.getElementById("LoginEmail").value;
     let password = document.getElementById("LoginPassword").value;
-    console.log(email);
-    console.log(password);
     if (email === "grower@gmail.com" && password === "grower") {
       this.props.auth("grower");
     } else if (email === "researcher@gmail.com" && password === "researcher") {
