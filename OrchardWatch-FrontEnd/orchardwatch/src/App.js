@@ -40,9 +40,10 @@ class App extends React.Component {
           </Button>
           <Button
             onClick={() => {
-              this.setState({ page: "Home" });
+              cookie.set("email", "");
               cookie.set("user", "guest");
               cookie.set("authToken", null);
+              this.setState({ page: "Home" });
             }}
           >
             Logout
@@ -68,7 +69,10 @@ class App extends React.Component {
           </Button>
           <Button
             onClick={() => {
-              this.setState({ page: "Home", user: "guest" });
+              cookie.set("user", "guest");
+              cookie.set("authToken", null);
+              cookie.set("email", "");
+              this.setState({ page: "Home" });
             }}
           >
             Logout
