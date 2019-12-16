@@ -23,9 +23,9 @@ def classify(options):
 	#options:
 	#	picture:(str) a picture to classify. path to file
 	#	model: (str) the model to classify with
-	
+	example = "test_images/dog.jpeg"
 	#TODO assert these are proper types
-	pic_source = str(options["pic"])
+	pic_source = example#str(options["pic"])
 	model=str(options["model"])
 	
 	#TODO upload file and get pic path
