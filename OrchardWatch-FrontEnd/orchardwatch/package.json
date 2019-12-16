@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "json2csv": "^4.5.4",
     "moment": "^2.24.0",
     "moment-range": "^4.0.2",
     "npm": "^6.13.4",
@@ -15,7 +16,8 @@
     "react-grid-gallery": "^0.5.5",
     "react-images-upload": "^1.2.7",
     "react-scripts": "3.2.0",
-    "react-twitter-widgets": "^1.7.1"
+    "react-twitter-widgets": "^1.7.1",
+    "universal-cookie": "^4.0.2"
   },
   "scripts": {
     "start": "react-scripts start",
