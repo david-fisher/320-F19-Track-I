@@ -3,12 +3,13 @@ import create_token
 import constants
 import auth
 '''
- /account/register/{email}/{pass}/{permission_token}
- /account/login/{email}/{password}
- /account/password_request/{email}
- /account/password_update/{email}/{passwd}
- /account/update_about/{token}/{field}/{update}
- /account/data_download/profile/{token}/{email}
+ post /account/register/ {email}/{pass} in body
+ post /account/authorization_mobile {code} in body
+ post /account/login/ {email}/{pass} in body
+ post /account/password_request/ {email} in body
+ post /account/password_update/ {email}/{passwd} in body
+ post /account/update_about/ {token}/{field}/{update} in body
+ post /account/data_download/profile/ {token}/{email} in body
 Note: Anything with an auth token is TBD
 '''
 
