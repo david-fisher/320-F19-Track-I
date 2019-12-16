@@ -8,10 +8,9 @@ ARN = "arn:aws:rds:us-east-2:007372221023:cluster:database320"
 SECRET_ARN = "arn:aws:secretsmanager:us-east-2:007372221023:secret:rds-db-credentials/cluster-BZEL6PSDLGVBVJB6BIDZGZQ4MI/admin320-fsoCse"
 
 #errors:
-USER_EXISTS="An account has already been created with this email"
-USER_DNE   ="Email or password is incorrect"
-PASS_MISMATCH = "Email or password is incorrect"
-
+ERR = None
+STATUS_CODE = "200"
+RES = "stoopid i aint gonna let u get the chance"
 
 #USER TYPES
 PUBLIC_USER='p'
@@ -30,6 +29,7 @@ def respond(err=None, res="{}", statusCode=None):
             'Content-Type': 'application/json',
             'X-Content-Type-Options': 'nosniff',
             'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Headers': '*'
+            'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token',
+            'Access-Control-Allow-Methods': '*'
         },
     }

@@ -40,10 +40,24 @@ def register(options):
     return constants.respond(statusCode="200") #OK
     
 def login(options):
+    print("Attempting to login:");
+    print(options)
+    
+    if 'email' not in options:
+        print("no email")
+    if 'pass' not in options:
+        print("no pass")   
+    
     given_email = options['email']
     given_password = options['pass']
+
+    
+    print(given_email)
+    print(given_password)
+
     #Connect to the User Database
     client = boto3.client('rds-data')
+    print("Connecting to table...")
     #Check if the user does not exist in the database
     existing_user = client.execute_statement(
         secretArn = constants.SECRET_ARN, 
@@ -51,24 +65,37 @@ def login(options):
         resourceArn = constants.ARN,
         sql = "SELECT email FROM UserData WHERE email = '%s';" % (given_email)
     )
+    print("Checking if user exists...")
     if(existing_user['records'] == []):
-        return constants.respond(err=constants.USER_DNE, statusCode="403") #Forbidden
+        print("user DNE")
+        constants.ERR = "User DNE"
+        constants.STATUS_CODE = 404
+        return
+
+
     #Get password from existing user and if does not match return a 400 http
+    print("User exists! Acquiring password...")
     existing_password = client.execute_statement(
         secretArn = constants.SECRET_ARN, 
         database = constants.DB_NAME,
         resourceArn = constants.ARN,
         sql = "SELECT pass FROM UserData WHERE email = '%s';" % (given_email)
     )
+    print("Checking password...")
     if not auth.verify_password(existing_password['records'][0][0]['stringValue'], given_password):
-        return constants.respond(err=constants.PASS_MISMATCH, statusCode="403") #Forbidden
+        constants.ERR = "Password DNE"
+        constants.STATUS_CODE = 404
+        return    
+    
     #Get user type from Database
+    print("Password verified. Checking perms...")
     user_type = client.execute_statement(
         secretArn = constants.SECRET_ARN, 
         database = constants.DB_NAME,
         resourceArn = constants.ARN,
         sql = "SELECT type FROM UserData WHERE email = '%s';" % (given_email)
     )
+    
     user_type = user_type['records'][0][0]['longValue']
     if user_type == 1:
         user_type = constants.GROWER
@@ -77,9 +104,12 @@ def login(options):
     else:
         user_type = constants.PUBLIC_USER
     token = create_token.rand_token()
-    #Return success
-    return constants.respond(statusCode='200', res= {'token': str(token), 'user':str(user_type)}) #OK
     
+    #Return success
+    print("Done!")
+    constants.RES = {'token': str(token), 'user':str(user_type)}
+    return   
+
 def update_password(options):
     given_email = options['email']
     given_password = options['pass']
