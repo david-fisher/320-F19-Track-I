@@ -164,15 +164,13 @@ class Login extends React.Component {
     e.stopPropagation();
     let email = document.getElementById("LoginEmail").value;
     let password = document.getElementById("LoginPassword").value;
-    console.log(email);
-    console.log(password);
     if (email === "grower@gmail.com" && password === "grower") {
       this.props.auth("grower");
     } else if (email === "researcher@gmail.com" && password === "researcher") {
       this.props.auth("researcher");
     } else if (email === "public@gmail.com" && password === "public") {
       this.props.auth("public");
-    }
+    } else {
     fetch(
       "https://2a2glx2h08.execute-api.us-east-2.amazonaws.com/default/Frontend-Lambda/account/login/",
       {
@@ -204,8 +202,8 @@ class Login extends React.Component {
         if (result === null) {
           return;
         }
-        const cookies = new Cookies();
-        cookies.set("authToken", result.token);
+        this.props.cookie.set('email', email);
+        this.props.cookie.set("authToken", result.token);
         if (result.user === "p") {
           this.props.auth("public");
         } else if (result.user === "g") {
@@ -214,6 +212,7 @@ class Login extends React.Component {
           this.props.auth("researcher");
         }
       });
+    }
   };
 
   validateRegister = e => {

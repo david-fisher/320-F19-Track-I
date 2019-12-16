@@ -65,7 +65,7 @@ class Profile extends React.Component {
       <div>
         {alert}
         <h3>Profile</h3>
-        <p>Email: </p>
+        <p>Email: {this.props.cookie.get("email")}</p>
         {changePassword}
         <br></br>
         <br></br>
