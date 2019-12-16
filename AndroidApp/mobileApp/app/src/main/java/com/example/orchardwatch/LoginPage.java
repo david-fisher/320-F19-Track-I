@@ -10,6 +10,17 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONObject;
+//import adroid.widget.R
+
 public class LoginPage extends AppCompatActivity {
 
     private EditText authenKey_txt;
@@ -43,6 +54,33 @@ public class LoginPage extends AppCompatActivity {
      */
     private void validate(String key){
         String valid_key = "1234";//(key GET from lambda)
+        final TextView textView = (TextView) findViewById(R.id.text);
+
+        RequestQueue queue = Volley.newRequestQueue(this);
+        String url ="https://2a2glx2h08.execute-api.us-east-2.amazonaws.com/default/Frontend-Lambda/account/mobile_authentication";
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                textView.setText(response.toString());
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error){
+                textView.setText("oops");
+            }
+
+        });
+
+
+//        StringRequest req = new StringRequest(Request.Method.POST, url,
+//                new Response.Listener<String>() {
+//            @Override
+//            public void onResponse(String response) {
+//                textView.setText(response.toString());
+//            }
+//        });
+
         if(key.equals(valid_key)){
             //Used to move from one activity to another activity
             Intent intent = new Intent(LoginPage.this, MainActivity.class);

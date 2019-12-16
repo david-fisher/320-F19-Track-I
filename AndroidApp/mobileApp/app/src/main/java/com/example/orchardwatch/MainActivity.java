@@ -19,7 +19,6 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 public class MainActivity extends AppCompatActivity {
-// make it so the buttons dont move when you scroll and make it save camera image
     private WebView my_webview;
     Button camera;
     Button gallery;
