@@ -156,14 +156,21 @@ class Login extends React.Component {
   validateLogin = e => {
     let email = document.getElementById("LoginEmail").value;
     let password = document.getElementById("LoginPassword").value;
+    console.log(email);
+    console.log(password);
     fetch(
       "https://2a2glx2h08.execute-api.us-east-2.amazonaws.com/default/Frontend-Lambda/account/login/",
       {
-        method: "GET"
+        method: "POST",
+        body: { email: email, pass: password }
       }
-    ).then(response => {
-      console.log(response);
-    });
+    )
+      .then(response => {
+        return response.json();
+      })
+      .then(result => {
+        console.log(result);
+      });
     if (email === "grower@gmail.com" && password === "grower") {
       this.props.auth("grower");
     } else if (email === "researcher@gmail.com" && password === "researcher") {
@@ -179,20 +186,20 @@ class Login extends React.Component {
     //   // replace true with check when sending to Lambdas and wait for authToken upon successful validation or ...
     //   // receives boolean based on successful validation, type of user, and authToken if boolean == true
     //   // wrong password
-    //   switch (document.getElementById("LoginEmail").value) {
-    //     case "public@gmail.com":
-    //       this.props.auth("public", "Authorized");
+    //   switch (document.getElementById('LoginEmail').value) {
+    //     case 'public@gmail.com':
+    //       this.props.auth('public', 'Authorized');
     //       break;
-    //     case "grower@gmail.com":
-    //       this.props.auth("grower", "Authorized");
+    //     case 'grower@gmail.com':
+    //       this.props.auth('grower', 'Authorized');
     //       break;
-    //     case "researcher@gmail.com":
-    //       this.props.auth("researcher", "Authorized");
+    //     case 'researcher@gmail.com':
+    //       this.props.auth('researcher', 'Authorized');
     //       break;
     //     default:
     //       this.setState({
     //         alert: true,
-    //         message: "Wrong Email or Password"
+    //         message: 'Wrong Email or Password'
     //       });
     //       e.preventDefault();
     //       e.stopPropagation();
@@ -202,7 +209,7 @@ class Login extends React.Component {
     //   if (validity) {
     //     this.setState({
     //       alert: true,
-    //       message: "Wrong Email or Password"
+    //       message: 'Wrong Email or Password'
     //     });
     //   }
     //   e.preventDefault();
@@ -227,10 +234,15 @@ class Login extends React.Component {
     } else {
       this.setState({ alert: false, message: "" });
       fetch(
-        "https://2a2glx2h08.execute-api.us-east-2.amazonaws.com/default/Frontend-Lambda/account/register/"
-      ).then(response => {
-        console.log(response);
-      });
+        "https://2a2glx2h08.execute-api.us-east-2.amazonaws.com/default/Frontend-Lambda/account/register/",
+        { method: "POST", body: { email: email, pass: p1 } }
+      )
+        .then(response => {
+          return response.json();
+        })
+        .then(result => {
+          console.log(result);
+        });
     }
     e.preventDefault();
     e.stopPropagation();
