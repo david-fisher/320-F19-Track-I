@@ -1,5 +1,32 @@
 body {
+    box-sizing: border-box;
     font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.modalBase
+{
+    background-color: rgba(51,51,51,.5);
+}
+
+.modHead
+{
+    background-color: #333333;
+    justify-content: space-around;
+}
+.modTitle
+{
+    color: white;
+}
+
+.classAvatar, .uploadBase
+{
+    width: 300px;
+    height: 300px;
+    border-width: 3px;
+    border-style: solid;
+    border-color: rgba(32,34,37,.8);
+    border-radius: 15px;
+
 }
 
 .imgWrappers
@@ -8,5 +35,6 @@ body {
     align-items: center;
     align-content: space-around;
     justify-content: space-around;
-    padding: 1rem;
+    padding-top: 1rem;
+    padding-bottom: 2rem;
 }

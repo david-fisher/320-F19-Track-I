@@ -4,9 +4,9 @@ import ImageUploader from "react-images-upload";
 
 class UploadImage extends React.Component {
   constructor() {
-    super();
-    this.state = {};
-    this.onDrop = this.onDrop.bind(this);
+      super();
+      this.state = {};
+      this.onDrop = this.onDrop.bind(this);
   }
 
   onDrop(picture) {
