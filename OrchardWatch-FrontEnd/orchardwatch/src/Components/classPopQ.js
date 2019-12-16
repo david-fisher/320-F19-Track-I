@@ -2,6 +2,9 @@ import React from "react";
 import PropTypes from 'prop-types';
 import {Modal, Button, ButtonToolbar, Image} from "react-bootstrap";
 import "./classModal.css"
+import camGraphic from "./PrettyEricGraphics/classificationUpload.png";
+
+
 function MyVerticallyCenteredModal(props) {
     return (
         <Modal
@@ -9,9 +12,10 @@ function MyVerticallyCenteredModal(props) {
             size="lg"
             aria-labelledby="contained-modal-title-vcenter"
             centered
+            className = "modalBase"
         >
-            <Modal.Header closeButton>
-                <Modal.Title style={{alignContent: 'center'}} id="contained-modal-title-vcenter">
+            <Modal.Header className = "modHead">
+                <Modal.Title className = "modTitle" style={{alignContent: 'center'}} id="contained-modal-title-vcenter">
                     {
                         props.title
                     }
@@ -19,8 +23,10 @@ function MyVerticallyCenteredModal(props) {
             </Modal.Header>
             <Modal.Body>
             <div className= "imgWrappers">
-                <Image className="avatar"  src={props.imgSrc} alt="Card image cap"/>
-                <Image className="avatar2"  src={props.imgSrc} alt="Card image cap"/>
+                <Image className="classAvatar"  src={props.imgSrc} alt="Card image cap"/>
+                <div className= "button">
+                    <input type='file'   onChange={props.onChange} />
+                </div>
             </div>
 
                 <h4>Centered Modal</h4>

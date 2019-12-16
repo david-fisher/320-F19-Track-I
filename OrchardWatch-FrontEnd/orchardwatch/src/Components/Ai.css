@@ -1,6 +1,7 @@
 body {
     font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
+html{box-sizing: border-box;}
 
 .ai_card{
     background-color: white;
@@ -47,6 +48,7 @@ body {
 
 .ai_card > .RowWrap > .cardClassDetails {
     height: inherit;
+    width: inherit;
     text-align: left;
     align-content: flex-start;
     align-self: flex-start;
@@ -54,7 +56,19 @@ body {
     margin: 1rem 1rem 1rem 2rem;
 }
 
-.ai_card > .RowWrap > .cardClassDetails > .classifierTitle
+.cardClassDetails > .classifierHeader
+{
+
+    width: inherit;
+    display: flex;
+    justify-content: space-between;
+}
+
+.Del
+{
+}
+
+.ai_card > .RowWrap > .cardClassDetails > .classifierHeader> .classifierTitle
 {
     font-size: 275%;
     font-weight: 400;
