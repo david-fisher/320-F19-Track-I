@@ -89,10 +89,15 @@ class ForgotPassword extends React.Component {
   requestPasswordReset = e => {
     let email = document.getElementById("email").value;
     fetch(
-      "https://2a2glx2h08.execute-api.us-east-2.amazonaws.com/default/Frontend-Lambda/account/password_request/"
-    ).then(response => {
-      console.log(response);
-    });
+      "https://2a2glx2h08.execute-api.us-east-2.amazonaws.com/default/Frontend-Lambda/account/password_request/",
+      { method: "POST", body: { email: email } }
+    )
+      .then(response => {
+        return response.json();
+      })
+      .then(result => {
+        console.log(result);
+      });
     e.preventDefault();
     e.stopPropagation();
   };
