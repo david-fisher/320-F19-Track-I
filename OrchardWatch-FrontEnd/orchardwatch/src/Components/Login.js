@@ -163,14 +163,11 @@ class Login extends React.Component {
     console.log(password);
     if (email === "grower@gmail.com" && password === "grower") {
       this.props.auth("grower");
-    } else if (
-      email === "researcher@gmail.com" &&
-      password === "researcher"
-    ) {
+    } else if (email === "researcher@gmail.com" && password === "researcher") {
       this.props.auth("researcher");
     } else if (email === "public@gmail.com" && password === "public") {
       this.props.auth("public");
-    }
+    } else {
     fetch(
       "https://2a2glx2h08.execute-api.us-east-2.amazonaws.com/default/Frontend-Lambda/account/login/",
       {
@@ -207,6 +204,7 @@ class Login extends React.Component {
           this.props.auth("researcher");
         }
       });
+    }
   };
 
   validateRegister = e => {
