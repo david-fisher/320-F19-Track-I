@@ -2,7 +2,7 @@ const uuid = require('uuid/v4');
 
 let classifiersToReturn = [];
 
-for(let i = 0; i < 20; i += 1) {
+for(let i = 0; i < 2; i += 1) {
   classifiersToReturn.push({
     id: uuid(),
     img: 'https://ballparkdigest.com/wp-content/uploads/2018/11/Rocky-Mountain-Vibes-300x300.jpg',
