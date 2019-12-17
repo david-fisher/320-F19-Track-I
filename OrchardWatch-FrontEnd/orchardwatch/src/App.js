@@ -10,6 +10,7 @@ import ForgotPassword from "./Components/ForgotPassword";
 import Dashboard from "./Components/Dashboard";
 import { Button } from "react-bootstrap";
 import Cookies from "universal-cookie";
+import GoogleMap from "./Components/GoogleMap"
 
 const cookie = new Cookies();
 
