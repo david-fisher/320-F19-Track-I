@@ -44,6 +44,7 @@ class ImageGallery extends React.Component {
   render() {
     let imageArr = [];
     imageArr = this.processImages(IMAGES);
+    /*
     let editGallery = <div></div>;
     if (this.props.user === "grower" || this.props.user === "researcher") {
       if (this.state.page == "") {
@@ -64,16 +65,17 @@ class ImageGallery extends React.Component {
             <br></br>
           </div>
         );
-      } 
-      
+      }
     }
+    */
+    
     return (
       <div>
         <div className="gallery">
           <Row>
             <Col md="2" />
             <Col>
-              {editGallery}
+              
               <Gallery images={imageArr} />
             </Col>
             <Col md="2" />
