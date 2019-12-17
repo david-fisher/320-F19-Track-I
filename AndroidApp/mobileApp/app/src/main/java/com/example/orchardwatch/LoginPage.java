@@ -55,7 +55,8 @@ public class LoginPage extends AppCompatActivity {
         SharedPreferences prefs = getSharedPreferences("UserData", MODE_PRIVATE);
         String code = prefs.getString("code","");
         if(!code.equals("")){
-            validate(code);
+            Intent intent = new Intent(LoginPage.this, MainActivity.class);
+            startActivity(intent);
         }
         login_btn.setOnClickListener(new View.OnClickListener() {
             @Override
