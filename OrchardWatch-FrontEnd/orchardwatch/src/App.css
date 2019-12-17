@@ -1,28 +1,6 @@
-.App {
-  text-align: center;
-  align-content: center;
-  align-self: center;
-  text-align-last: center;
-  background-image: linear-gradient(#f4eeea, #afb1ce);
-  height: 100vh;
-}
-
-.App-logo {
-  height: 40vmin;
-}
-
-.App-header {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-  background-image: linear-gradient(#f4eeea, #afb1ce);
-
-
-
+:root {
+    --bgColorOne:  #f4eeea;
+    --bgColorTwo:  #afb1ce;
 }
 
 
@@ -42,14 +20,36 @@ body
     background-size: cover;
     background: white;
     background-repeat:no-repeat;
-    background: -webkit-linear-gradient( #f4eeea, #afb1ce);
-    background: -moz-linear-gradient(  #f4eeea, #afb1ce);
-    background: -ms-linear-gradient(  #f4eeea, #afb1ce);
-    background: -o-linear-gradient(  #f4eeea, #afb1ce) ;
-    background: linear-gradient(  #f4eeea, #afb1ce);
+    background: -webkit-linear-gradient(var(--bgColorOne), var(--bgColorTwo));
+    background: -moz-linear-gradient(var(--bgColorOne), var(--bgColorTwo));
+    background: -ms-linear-gradient(var(--bgColorOne), var(--bgColorTwo));
+    background: -o-linear-gradient(var(--bgColorOne), var(--bgColorTwo)) ;
+    background: linear-gradient(var(--bgColorOne), var(--bgColorTwo));
     background-repeat: no-repeat;
     background-attachment: fixed;
 }
+
+.App {
+  text-align: center;
+  align-content: center;
+  align-self: center;
+  text-align-last: center;
+}
+
+.App-logo {
+  height: 40vmin;
+}
+
+.App-header {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+}
+
+
 .App-link {
   color: #09d3ac;
 }
