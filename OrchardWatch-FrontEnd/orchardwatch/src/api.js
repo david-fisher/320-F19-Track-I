@@ -1,8 +1,11 @@
 const uuid = require('uuid/v4');
-
 let classifiersToReturn = [];
-
-for(let i = 0; i < 20; i += 1) {
+console.log("HERE")
+fetch('http://ec2-3-18-109-238.us-east-2.compute.amazonaws.com:3000/models/list', {method:"GET"})
+    .then(response => response.json())
+    .then(json => console.log(json))
+console.log("HERE")
+for(let i = 0; i < 2; i += 1) {
   classifiersToReturn.push({
     id: uuid(),
     img: 'https://ballparkdigest.com/wp-content/uploads/2018/11/Rocky-Mountain-Vibes-300x300.jpg',

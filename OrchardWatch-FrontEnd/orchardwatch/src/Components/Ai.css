@@ -1,3 +1,9 @@
+:root
+{
+    --navColOne: #16271c;
+    --navColTwo: #0e3628;
+}
+
 body {
     font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
@@ -22,10 +28,13 @@ html{box-sizing: border-box;}
 .ai_card > .RowWrap > .imgExtraBorder {
     height: 335px;
     display: inherit;
-    background-color: white;
-    border-width: thin;
-    border-style: solid;
-    border-color: rgba(32,34,37,.5);
+    background-repeat:no-repeat;
+    background: -webkit-linear-gradient(var(--navColOne), var(--navColTwo));
+    background: -moz-linear-gradient(var(--navColOne), var(--navColTwo));
+    background: -ms-linear-gradient(var(--navColOne), var(--navColTwo));
+    background: -o-linear-gradient(var(--navColOne), var(--navColTwo));
+    background: linear-gradient(var(--navColOne), var(--navColTwo));
+    background-repeat: no-repeat;
     border-radius: 15px;
 }
 .ai_card > .RowWrap > .imgExtraBorder > .img-square-wrapper {
@@ -56,6 +65,19 @@ html{box-sizing: border-box;}
     margin: 1rem 1rem 1rem 2rem;
 }
 
+
+.ai_card > .RowWrap > .newClassDetails{
+    height: inherit;
+    width: inherit;
+    text-align: center;
+    align-items: center;
+    align-content: flex-start;
+    align-self: flex-start;
+    text-align-last: left;
+    margin: 1rem 1rem 1rem 2rem;
+    font-size: 275%;
+    font-weight: 400;
+}
 .cardClassDetails > .classifierHeader
 {
 
@@ -68,7 +90,7 @@ html{box-sizing: border-box;}
 {
 }
 
-.ai_card > .RowWrap > .cardClassDetails > .classifierHeader> .classifierTitle
+.ai_card > .RowWrap > .cardClassDetails > .classifierHeader> .classifierTitle,.newClassDetails
 {
     font-size: 275%;
     font-weight: 400;
