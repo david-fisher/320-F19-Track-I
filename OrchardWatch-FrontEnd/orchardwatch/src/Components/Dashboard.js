@@ -91,7 +91,7 @@ class Dashboard extends React.Component {
   }
 
   resetDashboard() {
-    this.setState({ page: "" });
+    this.setState({ page: "dashboard" });
   }
 }
 

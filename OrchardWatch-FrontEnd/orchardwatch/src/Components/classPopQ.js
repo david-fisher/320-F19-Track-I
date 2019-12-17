@@ -4,6 +4,8 @@ import {Modal, Button, ButtonToolbar, Image} from "react-bootstrap";
 import camGraphic from './PrettyEricGraphics/classificationUpload.png';
 import "./classModal.css"
 
+
+// We are ""
 function MyVerticallyCenteredModal(props) {
     console.log(props);
     return (

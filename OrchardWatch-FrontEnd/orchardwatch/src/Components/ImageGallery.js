@@ -60,8 +60,6 @@ class ImageGallery extends React.Component {
             <UploadImage
               token={this.props.token}
             />
-            <Button onClick={() => this.setState({ page: "" })}>Go Back</Button>
-            <br></br>
             <br></br>
           </div>
         );
