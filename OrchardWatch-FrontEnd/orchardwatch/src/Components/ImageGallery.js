@@ -50,6 +50,7 @@ class ImageGallery extends React.Component {
         editGallery = (
           <div>
             <Button onClick={() => this.setState({ page: "Upload" })}>Add Images</Button>
+            <Button onClick={() => this.downloadImages()}> Download Images</Button>
             <br></br>
             <br></br>
           </div>
@@ -64,8 +65,8 @@ class ImageGallery extends React.Component {
             <br></br>
           </div>
         );
-      } 
-      
+      }
+
     }
     return (
       <div>
@@ -85,6 +86,10 @@ class ImageGallery extends React.Component {
 
   resetPage() {
     this.setState({ page: "" });
+  }
+
+  downloadImages(){
+
   }
 
 }
