@@ -2,6 +2,7 @@ package com.example.orchardwatch;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.accounts.Account;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,7 +16,11 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -35,9 +40,6 @@ public class LoginPage extends AppCompatActivity {
     private EditText authenKey_txt;
     private Button login_btn;
     private TextView invalid_txt;
-
-    private static HttpURLConnection connection;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,11 +66,8 @@ public class LoginPage extends AppCompatActivity {
      * @param key
      */
     private void validate(String key) {
-        String valid_key = "200";//(key GET from lambda)
-//        int valid_key = -1;
-//        String json = "{ \"code\" : " + key + " }";
-        final TextView textView = (TextView) findViewById(R.id.text);
-        JSONObject jsonObject = new JSONObject();
+        String url = "https://2a2glx2h08.execute-api.us-east-2.amazonaws.com/default/Frontend-Lambda/account/authorization_mobile";
+        final JSONObject jsonObject = new JSONObject();
 
         try {
             jsonObject.put("code", key);
@@ -77,57 +76,43 @@ public class LoginPage extends AppCompatActivity {
         }
 
         RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-        String url = "https://2a2glx2h08.execute-api.us-east-2.amazonaws.com/default/Frontend-Lambda/account/authorization_mobile";
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, jsonObject, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                if(response.toString().equals("{}")){
-                    textView.setText(response.toString());
-                }
-            }
-        }, new Response.ErrorListener() {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        processResponse(response);
+                    }
+                }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e("tag","error="+error);
+                NetworkResponse response = error.networkResponse;
+                if (response != null) {
+                    Log.d("tag", "error code: " + response.statusCode);
+                }
+            }
+        }) {
+            @Override
+            public byte[] getBody() throws AuthFailureError {
+                return jsonObject.toString().getBytes();
             }
 
-        });
-        queue.add(jsonObjectRequest);
+            @Override
+            public String getBodyContentType() {
+                return "application/json";
+            }
 
-//        //java.net.HttpURLConnection
-//        try{
-//            URL url = new URL("https://2a2glx2h08.execute-api.us-east-2.amazonaws.com/default/Frontend-Lambda/account/authorization_mobile");
-//            connection = (HttpURLConnection)url.openConnection();
-//
-//            Log.e("one", "before POST");
-//            //Request set-up
-//            connection.setRequestMethod("POST");
-//            //connection.setConnectTimeout(5000);
-//            connection.setDoOutput(true);
-////            connection.setReadTimeout(5000);
-//
-//            Log.e("two", "before output");
-//            OutputStream os = connection.getOutputStream();
-//            os.write(json.getBytes("UTF-8"));
-//            os.close();
-//
-//            Log.e("three", "before response code");
-//            valid_key = connection.getResponseCode();
-//
-//        } catch (MalformedURLException e){
-//            e.printStackTrace();
-//        } catch (IOException e){
-//            e.printStackTrace();
-//        } finally {
-//            connection.disconnect();
-//        }
+        };
 
+        queue.add(stringRequest);
+    }
 
-        if (key.equals(valid_key)){         //(valid_key == 200){
-            //Used to move from one activity to another activity
+    private void processResponse(String response) {
+        Log.d("tag", response);
+        if(response.equals("\"success\"")){
             Intent intent = new Intent(LoginPage.this, MainActivity.class);
             startActivity(intent);
-        } else {
+        }
+        else{
             invalid_txt.setText("Invalid Key");
         }
     }
