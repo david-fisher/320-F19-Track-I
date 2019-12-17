@@ -17,7 +17,8 @@
     "react-images-upload": "^1.2.7",
     "react-scripts": "3.2.0",
     "react-twitter-widgets": "^1.7.1",
-    "universal-cookie": "^4.0.2"
+    "universal-cookie": "^4.0.2",
+    "uuid": "^3.3.3"
   },
   "scripts": {
     "start": "react-scripts start",

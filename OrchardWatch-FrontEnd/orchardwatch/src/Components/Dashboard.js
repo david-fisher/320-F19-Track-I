@@ -1,21 +1,16 @@
-import React from 'react';
-import { Button, Form, Container, Card } from 'react-bootstrap';
-import PostAnnouncement from './PostAnnouncement';
-import UploadImage from './UploadImage';
-import SystemStatus from './SystemStatus';
-import Profile from './Profile';
+import React from "react";
+import { Button, Form, Container, Card } from "react-bootstrap";
+import PostAnnouncement from "./PostAnnouncement";
+import UploadImage from "./UploadImage";
+import SystemStatus from "./SystemStatus";
+import Profile from "./Profile";
 
 class Dashboard extends React.Component {
   constructor() {
     super();
     this.state = {
-      user: 'guest',
-      page: 'dashboard'
+      page: "dashboard"
     };
-  }
-
-  componentDidMount() {
-    this.setState({ user: this.props.user });
   }
 
   render() {
@@ -25,45 +20,51 @@ class Dashboard extends React.Component {
   pageRender() {
     let dashboard = (
       <Container>
-        <Card>
-          <Card.Header onClick={() => this.setState({ page: 'profile' })}>
-            Profile
-          </Card.Header>
-        </Card>
+        <Button
+          variant="secondary"
+          size="lg"
+          block
+          onClick={() => this.setState({ page: "profile" })}
+        >
+          Profile
+        </Button>
       </Container>
     );
-    if (this.props.user === 'grower' || this.props.user === 'researcher') {
+    if (
+      this.props.cookie.get("user") === "grower" ||
+      this.props.cookie.get("user") === "researcher"
+    ) {
       dashboard = (
         <Container>
           <Button
-            variant='secondary'
-            size='lg'
+            variant="secondary"
+            size="lg"
             block
-            onClick={() => this.setState({ page: 'profile' })}
+            onClick={() => this.setState({ page: "profile" })}
           >
             Profile
           </Button>
           <Button
-            variant='secondary'
-            size='lg'
+            variant="secondary"
+            size="lg"
             block
-            onClick={() => this.setState({ page: 'postAnnouncement' })}
+            onClick={() => this.setState({ page: "postAnnouncement" })}
           >
             Post Announcement
           </Button>
           <Button
-            variant='secondary'
-            size='lg'
+            variant="secondary"
+            size="lg"
             block
-            onClick={() => this.setState({ page: 'uploadImage' })}
+            onClick={() => this.setState({ page: "uploadImage" })}
           >
             Upload Image
           </Button>
           <Button
-            variant='secondary'
-            size='lg'
+            variant="secondary"
+            size="lg"
             block
-            onClick={() => this.setState({ page: 'systemStatus' })}
+            onClick={() => this.setState({ page: "systemStatus" })}
           >
             System Status
           </Button>
@@ -71,13 +72,18 @@ class Dashboard extends React.Component {
       );
     }
     switch (this.state.page) {
-      case 'profile':
-        return <Profile dashboard={this.resetDashboard.bind(this)} />;
-      case 'postAnnouncement':
+      case "profile":
+        return (
+          <Profile
+            dashboard={this.resetDashboard.bind(this)}
+            cookie={this.props.cookie}
+          />
+        );
+      case "postAnnouncement":
         return <PostAnnouncement dashboard={this.resetDashboard.bind(this)} />;
-      case 'uploadImage':
+      case "uploadImage":
         return <UploadImage dashboard={this.resetDashboard.bind(this)} />;
-      case 'systemStatus':
+      case "systemStatus":
         return <SystemStatus dashboard={this.resetDashboard.bind(this)} />;
       default:
         return <div>{dashboard}</div>;
@@ -85,7 +91,7 @@ class Dashboard extends React.Component {
   }
 
   resetDashboard() {
-    this.setState({ page: '' });
+    this.setState({ page: "dashboard" });
   }
 }
 

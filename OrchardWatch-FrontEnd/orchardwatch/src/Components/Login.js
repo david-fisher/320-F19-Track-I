@@ -164,8 +164,6 @@ class Login extends React.Component {
     e.stopPropagation();
     let email = document.getElementById("LoginEmail").value;
     let password = document.getElementById("LoginPassword").value;
-    console.log(email);
-    console.log(password);
     if (email === "grower@gmail.com" && password === "grower") {
       this.props.auth("grower");
     } else if (email === "researcher@gmail.com" && password === "researcher") {
@@ -204,8 +202,8 @@ class Login extends React.Component {
         if (result === null) {
           return;
         }
-        const cookies = new Cookies();
-        cookies.set("authToken", result.token);
+        this.props.cookie.set('email', email);
+        this.props.cookie.set("authToken", result.token);
         if (result.user === "p") {
           this.props.auth("public");
         } else if (result.user === "g") {

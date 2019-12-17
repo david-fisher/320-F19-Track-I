@@ -65,7 +65,7 @@ class Profile extends React.Component {
       <div>
         {alert}
         <h3>Profile</h3>
-        <p>Email: </p>
+        <p>Email: {this.props.cookie.get("email")}</p>
         {changePassword}
         <br></br>
         <br></br>
@@ -89,7 +89,20 @@ class Profile extends React.Component {
     } else {
       this.setState({ alert: false, message: "" });
       let oldPassword = document.getElementById("oldPassword");
-      // fetch
+      console.log(JSON.stringify({ email: this.props.cookie.get("email"), pass: p1 }));
+      fetch(
+        "https://2a2glx2h08.execute-api.us-east-2.amazonaws.com/default/Frontend-Lambda/account/update_password/", 
+        {
+          method: "PUT",
+          body: JSON.stringify({ email: this.props.cookie.get("email"), pass: p1 })
+        }
+      )
+        .then(response => {
+          return response.json();
+        })
+        .then(result => {
+          console.log(result);
+        })
     }
     e.stopPropagation();
     e.preventDefault();
