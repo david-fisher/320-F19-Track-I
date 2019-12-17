@@ -59,6 +59,7 @@ class ImageGallery extends React.Component {
           <div>
             <UploadImage
               token={this.props.token}
+              dashboard={this.resetPage.bind(this)}
             />
             <br></br>
           </div>
@@ -81,5 +82,10 @@ class ImageGallery extends React.Component {
       </div>
     );
   }
+
+  resetPage() {
+    this.setState({ page: "" });
+  }
+
 }
 export default ImageGallery;
