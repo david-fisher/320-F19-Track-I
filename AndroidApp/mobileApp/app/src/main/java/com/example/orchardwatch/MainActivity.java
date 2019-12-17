@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
         WebSettings web_settings = my_webview.getSettings();
         web_settings.setJavaScriptEnabled(true);
 
-        my_webview.loadUrl("https://www.umass.edu/"); //http://d3gvvf4yx7ay63.cloudfront.net/
+        my_webview.loadUrl("http://d3gvvf4yx7ay63.cloudfront.net/"); //http://d3gvvf4yx7ay63.cloudfront.net/
         my_webview.setWebViewClient(new WebViewClient());   //prevent opening in another browser instead of the app
 
     }
