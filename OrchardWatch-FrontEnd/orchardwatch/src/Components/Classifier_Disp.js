@@ -36,7 +36,7 @@ export class ClassDisp extends React.Component
                                                 Delete
                                             </Button>
                                         }
-                                </div>
+                                    </div>
                                     <p clasName= "classifierDesc" onClick={this.props.onClick}>{this.props.desc}</p>
                                 </div>
                             </div>
