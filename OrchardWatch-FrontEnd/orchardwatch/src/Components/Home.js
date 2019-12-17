@@ -1,6 +1,7 @@
 import React from 'react';
 import { Col, Row, Card, Accordion } from 'react-bootstrap';
 import { Timeline } from 'react-twitter-widgets';
+import GoogleMap from './GoogleMap';
 
 class Home extends React.Component {
   constructor() {
@@ -90,7 +91,7 @@ class Home extends React.Component {
         <br />
         <Row>
           <Col md='8'>
-            <Accordion>{list}</Accordion>
+            <GoogleMap></GoogleMap>
           </Col>
           <Col>{tweets}</Col>
         </Row>
