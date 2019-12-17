@@ -1,6 +1,12 @@
 :root {
-    --bgColorOne:  #f4eeea;
-    --bgColorTwo:  #afb1ce;
+    //--bgColorOne:  #f4eeea;
+    //--bgColorTwo:  #afb1ce;
+    --bgColorOne: #75B863;
+    --bgColorTwo:  #40593B;
+
+    --navColOne: #232725;
+    --navColTwo: #1e211f;
+
 }
 
 
@@ -18,12 +24,11 @@ body
     -moz-background-size: cover;
     -o-background-size: cover;
     background-size: cover;
-    background: white;
     background-repeat:no-repeat;
     background: -webkit-linear-gradient(var(--bgColorOne), var(--bgColorTwo));
     background: -moz-linear-gradient(var(--bgColorOne), var(--bgColorTwo));
     background: -ms-linear-gradient(var(--bgColorOne), var(--bgColorTwo));
-    background: -o-linear-gradient(var(--bgColorOne), var(--bgColorTwo)) ;
+    background: -o-linear-gradient(var(--bgColorOne), var(--bgColorTwo));
     background: linear-gradient(var(--bgColorOne), var(--bgColorTwo));
     background-repeat: no-repeat;
     background-attachment: fixed;
@@ -49,7 +54,37 @@ body
   font-size: calc(10px + 2vmin);
 }
 
+.controlledBorder
+{
+    display: flex;
+    background-color: #333333;
+    height: 5px;
+}
 
+.navbar-dark .navbar-nav .nav-link
+{
+    color: #fff;
+}
+
+.NavBar{
+    height: 9vh;
+    font-size: x-large;
+    color: #c4c4c4;
+    background-repeat:no-repeat;
+    background: -webkit-linear-gradient(var(--navColOne), var(--navColTwo));
+    background: -moz-linear-gradient(var(--navColOne), var(--navColTwo));
+    background: -ms-linear-gradient(var(--navColOne), var(--navColTwo));
+    background: -o-linear-gradient(var(--navColOne), var(--navColTwo));
+    background: linear-gradient(var(--navColOne), var(--navColTwo));
+    background-repeat: no-repeat;
+}
+
+.justify-content-center
+{
+    display: compact;
+    align-content: space-around;
+    justify-content: center!important;
+}
 .App-link {
   color: #09d3ac;
 }
