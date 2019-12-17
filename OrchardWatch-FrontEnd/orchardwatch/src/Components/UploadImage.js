@@ -13,10 +13,10 @@ class UploadImage extends React.Component {
     //put lambda call here
     //token is under this.props.token
     fetch(
-      "https://2a2glx2h08.execute-api.us-east-2.amazonaws.com/default/Frontend-Lambda/picture/account_upload_picture/",
+      "https://2a2glx2h08.execute-api.us-east-2.amazonaws.com/default/Frontend-Lambda/ml/dl_unannotated_imgs/",
       {
         method: "PUT",
-        body: JSON.stringify({ token: this.props.token, image: picture })
+        body: JSON.stringify({ num_pics: "100", modelName: "resnet" })
       }
     )
       .then(response => {
@@ -38,6 +38,8 @@ class UploadImage extends React.Component {
           imgExtension={['.jpg', '.gif', '.png']}
           maxFileSize={5242880}
         />
+        <br></br>
+        <Button onClick={() => this.props.dashboard()}>Go Back</Button>
         <br></br>
       </div>
     );
