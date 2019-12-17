@@ -27,7 +27,7 @@ UINavigationControllerDelegate{
 
         setToolBar()
         
-        let myURL = URL(string:"https://www.umass.edu")
+        let myURL = URL(string:"http://d3gvvf4yx7ay63.cloudfront.net/")
         let myRequest = URLRequest(url: myURL!)
         webView.load(myRequest)
         
@@ -49,7 +49,7 @@ UINavigationControllerDelegate{
         toolBar.trailingAnchor.constraint(equalTo: webView.trailingAnchor, constant: 0).isActive = true
     }
     @objc private func goBack() {
-        let myURL = URL(string:"https://www.umass.edu")
+        let myURL = URL(string:"http://d3gvvf4yx7ay63.cloudfront.net/")
         let myRequest = URLRequest(url: myURL!)
         webView.load(myRequest)
     }
@@ -80,15 +80,17 @@ UINavigationControllerDelegate{
             fatalError("Expected a dictionary containing an image, but was provided the following: \(info)")
             }
         imagePicked.image = selectedImage
-        //upload image to the lambda
-        // PUT /picture/account_upload_picture/{token}/{image}
         
-        //get results
-        // GET /classify/{image}/{model}
         
         let myURL = URL(string:"https://www.umass.edu")
         let myRequest = URLRequest(url: myURL!)
         webView.load(myRequest)
     }
     
+}
+
+public func  convertImageToBase64String(image : UIImage ) -> String
+{
+    let strBase64 =  image.pngData()?.base64EncodedString()
+    return strBase64!
 }
