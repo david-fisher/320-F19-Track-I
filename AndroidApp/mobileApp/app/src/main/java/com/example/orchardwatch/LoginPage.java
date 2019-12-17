@@ -10,6 +10,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -29,6 +35,8 @@ public class LoginPage extends AppCompatActivity {
     private EditText authenKey_txt;
     private Button login_btn;
     private TextView invalid_txt;
+
+    private static HttpURLConnection connection;
 
 
     @Override
@@ -57,6 +65,8 @@ public class LoginPage extends AppCompatActivity {
      */
     private void validate(String key) {
         String valid_key = "200";//(key GET from lambda)
+//        int valid_key = -1;
+//        String json = "{ \"code\" : " + key + " }";
         final TextView textView = (TextView) findViewById(R.id.text);
         JSONObject jsonObject = new JSONObject();
 
@@ -84,8 +94,36 @@ public class LoginPage extends AppCompatActivity {
         });
         queue.add(jsonObjectRequest);
 
+//        //java.net.HttpURLConnection
+//        try{
+//            URL url = new URL("https://2a2glx2h08.execute-api.us-east-2.amazonaws.com/default/Frontend-Lambda/account/authorization_mobile");
+//            connection = (HttpURLConnection)url.openConnection();
+//
+//            Log.e("one", "before POST");
+//            //Request set-up
+//            connection.setRequestMethod("POST");
+//            //connection.setConnectTimeout(5000);
+//            connection.setDoOutput(true);
+////            connection.setReadTimeout(5000);
+//
+//            Log.e("two", "before output");
+//            OutputStream os = connection.getOutputStream();
+//            os.write(json.getBytes("UTF-8"));
+//            os.close();
+//
+//            Log.e("three", "before response code");
+//            valid_key = connection.getResponseCode();
+//
+//        } catch (MalformedURLException e){
+//            e.printStackTrace();
+//        } catch (IOException e){
+//            e.printStackTrace();
+//        } finally {
+//            connection.disconnect();
+//        }
 
-        if(key.equals(valid_key)){
+
+        if (key.equals(valid_key)){         //(valid_key == 200){
             //Used to move from one activity to another activity
             Intent intent = new Intent(LoginPage.this, MainActivity.class);
             startActivity(intent);
