@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "google-map-react": "^1.1.5",
     "json2csv": "^4.5.4",
     "moment": "^2.24.0",
     "moment-range": "^4.0.2",
