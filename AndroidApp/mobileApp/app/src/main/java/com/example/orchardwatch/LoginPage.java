@@ -87,6 +87,7 @@ public class LoginPage extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
                 NetworkResponse response = error.networkResponse;
                 if (response != null) {
+                    invalid_txt.setText("Invalid Key");
                     Log.d("tag", "error code: " + response.statusCode);
                 }
             }
@@ -111,9 +112,6 @@ public class LoginPage extends AppCompatActivity {
         if(response.equals("\"success\"")){
             Intent intent = new Intent(LoginPage.this, MainActivity.class);
             startActivity(intent);
-        }
-        else{
-            invalid_txt.setText("Invalid Key");
         }
     }
 
