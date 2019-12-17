@@ -12,7 +12,6 @@
 }
 
 .App-header {
-  background-color: #282c34;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -21,8 +20,36 @@
   font-size: calc(10px + 2vmin);
   color: white;
   background-image: linear-gradient(#f4eeea, #afb1ce);
+
+
+
 }
 
+
+html{
+    margin: 0;
+    min-height: 100%;
+}
+
+body
+{
+    min-height: 100%;
+    margin: 0;
+
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    background: white;
+    background-repeat:no-repeat;
+    background: -webkit-linear-gradient( #f4eeea, #afb1ce);
+    background: -moz-linear-gradient(  #f4eeea, #afb1ce);
+    background: -ms-linear-gradient(  #f4eeea, #afb1ce);
+    background: -o-linear-gradient(  #f4eeea, #afb1ce) ;
+    background: linear-gradient(  #f4eeea, #afb1ce);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
 .App-link {
   color: #09d3ac;
 }
