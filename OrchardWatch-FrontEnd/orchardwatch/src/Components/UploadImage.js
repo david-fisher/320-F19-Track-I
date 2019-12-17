@@ -15,7 +15,7 @@ class UploadImage extends React.Component {
     fetch(
       "https://2a2glx2h08.execute-api.us-east-2.amazonaws.com/default/Frontend-Lambda/ml/dl_unannotated_imgs/",
       {
-        method: "PUT",
+        method: "POST",
         body: JSON.stringify({ num_pics: "100", modelName: "resnet" })
       }
     )
