@@ -74,38 +74,38 @@ class Data extends React.Component {
         .then(result => {
           if (result.length !== 0) {
             console.log(result["0"]);
-            this.setState({
-              data: [
-                {
-                  Date: "11/12/2018",
-                  Time: "12:00",
-                  "Tempertaure (F)": 84.32,
-                  "Wind Speed": 1.5,
-                  "Wetness (%)": 7.6,
-                  "Rain (in.)": 0
-                },
-                {
-                  Date: "11/13/2018",
-                  Time: "12:00",
-                  "Tempertaure (F)": 83.24,
-                  "Wind Speed": 0.7,
-                  "Wetness (%)": 7.1,
-                  "Rain (in.)": 0
-                },
-                {
-                  Date: "11/14/2018",
-                  Time: "12:00",
-                  Tempertaure: 84.95,
-                  "Wind Speed": 3,
-                  "Wetness (%)": 7.6,
-                  "Rain (in.)": 0
-                }
-              ]
-            });
           }
           this.setState({ search: false });
         });
     }
+    this.setState({
+      data: [
+        {
+          Date: "11/12/2018",
+          Time: "12:00",
+          "Tempertaure (F)": 84.32,
+          "Wind Speed": 1.5,
+          "Wetness (%)": 7.6,
+          "Rain (in.)": 0
+        },
+        {
+          Date: "11/13/2018",
+          Time: "12:00",
+          "Tempertaure (F)": 83.24,
+          "Wind Speed": 0.7,
+          "Wetness (%)": 7.1,
+          "Rain (in.)": 0
+        },
+        {
+          Date: "11/14/2018",
+          Time: "12:00",
+          Tempertaure: 84.95,
+          "Wind Speed": 3,
+          "Wetness (%)": 7.6,
+          "Rain (in.)": 0
+        }
+      ]
+    });
     if (this.state.data.length === 0) {
       return <div>No Data Available</div>;
     }
