@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.accounts.Account;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -51,7 +52,11 @@ public class LoginPage extends AppCompatActivity {
         invalid_txt = (TextView)findViewById(R.id.invalid_view);
 
         invalid_txt.setText("Enter Key");
-
+        SharedPreferences prefs = getSharedPreferences("UserData", MODE_PRIVATE);
+        String code = prefs.getString("code","");
+        if(!code.equals("")){
+            validate(code);
+        }
         login_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -66,6 +71,10 @@ public class LoginPage extends AppCompatActivity {
      * @param key
      */
     private void validate(String key) {
+        SharedPreferences prefs = getSharedPreferences("UserData", MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString("code", key);
+        editor.commit();
         String url = "https://2a2glx2h08.execute-api.us-east-2.amazonaws.com/default/Frontend-Lambda/account/authorization_mobile";
         final JSONObject jsonObject = new JSONObject();
 
