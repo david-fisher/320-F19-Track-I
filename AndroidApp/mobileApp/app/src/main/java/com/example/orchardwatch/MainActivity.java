@@ -1,9 +1,13 @@
 package com.example.orchardwatch;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -17,6 +21,15 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
+
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 public class MainActivity extends AppCompatActivity {
     private WebView my_webview;
@@ -87,7 +100,34 @@ public class MainActivity extends AppCompatActivity {
             //this is where to insert code when photo from gallery has been selected
             //Example from tutorial (https://www.youtube.com/watch?v=OPnusBmMQTw)
             //imageView.setImageURI(imageUri);
+
+            //compressing picture to string example: https://stackoverflow.com/questions/4830711/how-to-convert-a-image-into-base64-string
+            String imagePath = imageUri.getPath();
+            String str64 = convertFileToByte(imagePath);
+            Log.e("hi", "Base64 decoded--------");
         }
+    }
+
+    /**
+     *
+     * @param filePath - path of file from 'imageUri'
+     * @return Base64 String of file from 'filePath'
+     */
+    public static String convertFileToByte(String filePath){
+        Bitmap bmp = null;
+        ByteArrayOutputStream bos = null;
+        byte[] bt = null;
+        String encodeString = null;
+        try{
+            bmp = BitmapFactory.decodeFile(filePath);
+            bos = new ByteArrayOutputStream();
+            bmp.compress(Bitmap.CompressFormat.JPEG, 100, bos);
+            bt = bos.toByteArray();
+            encodeString = Base64.encodeToString(bt, Base64.DEFAULT);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return encodeString;
     }
 
     /*
