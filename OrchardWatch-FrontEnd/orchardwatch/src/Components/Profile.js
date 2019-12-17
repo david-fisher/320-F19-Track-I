@@ -93,7 +93,7 @@ class Profile extends React.Component {
       fetch(
         "https://2a2glx2h08.execute-api.us-east-2.amazonaws.com/default/Frontend-Lambda/account/update_password/", 
         {
-          method: "PUT",
+          method: "POST",
           body: JSON.stringify({ email: this.props.cookie.get("email"), pass: p1 })
         }
       )
