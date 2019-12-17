@@ -27,7 +27,7 @@ UINavigationControllerDelegate{
 
         setToolBar()
         
-        let myURL = URL(string:"http://d3gvvf4yx7ay63.cloudfront.net/")
+        let myURL = URL(string:"https://coldspringorchard.com/")
         let myRequest = URLRequest(url: myURL!)
         webView.load(myRequest)
         
@@ -49,7 +49,7 @@ UINavigationControllerDelegate{
         toolBar.trailingAnchor.constraint(equalTo: webView.trailingAnchor, constant: 0).isActive = true
     }
     @objc private func goBack() {
-        let myURL = URL(string:"http://d3gvvf4yx7ay63.cloudfront.net/")
+        let myURL = URL(string:"https://coldspringorchard.com/")
         let myRequest = URLRequest(url: myURL!)
         webView.load(myRequest)
     }
@@ -79,10 +79,10 @@ UINavigationControllerDelegate{
         guard let selectedImage = info[.originalImage] as? UIImage else {
             fatalError("Expected a dictionary containing an image, but was provided the following: \(info)")
             }
-        imagePicked.image = selectedImage
         
+        self.dismiss(animated: true, completion: nil)
         
-        let myURL = URL(string:"https://www.umass.edu")
+        let myURL = URL(string:"https://coldspringorchard.com/")
         let myRequest = URLRequest(url: myURL!)
         webView.load(myRequest)
     }
