@@ -14,6 +14,14 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkResponse;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,6 +32,9 @@ import androidx.navigation.ui.NavigationUI;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -104,7 +115,58 @@ public class MainActivity extends AppCompatActivity {
             //compressing picture to string example: https://stackoverflow.com/questions/4830711/how-to-convert-a-image-into-base64-string
             String imagePath = imageUri.getPath();
             String str64 = convertFileToByte(imagePath);
-            Log.e("hi", "Base64 decoded--------");
+
+            //sending Base64 string of image to Lambda
+            String url = "https://2a2glx2h08.execute-api.us-east-2.amazonaws.com/default/Frontend-Lambda/ml/mobile_classify";
+            final JSONObject jsonObject = new JSONObject();
+
+            try {
+                jsonObject.put("model", "resnet_keras.h5");
+                jsonObject.put("pic", str64);
+            } catch (JSONException e){
+                Log.d("tag", "json put error: " + e.toString());
+            }
+
+            RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            processResponse(response);
+                        }
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    NetworkResponse response = error.networkResponse;
+                    if (response != null) {
+                        //invalid_txt.setText("Invalid Key");
+                        Log.d("tag", "error code: " + response.statusCode);
+                    }
+                }
+            }) {
+                @Override
+                public byte[] getBody() throws AuthFailureError {
+                    return jsonObject.toString().getBytes();
+                }
+
+                @Override
+                public String getBodyContentType() {
+                    return "application/json";
+                }
+
+            };
+
+            queue.add(stringRequest);
+
+
+        }
+    }
+
+    private void processResponse(String response) {
+        Log.d("tag", response);
+        if(response.equals("\"success\"")){
+            Log.d("response", "response retrieved");
+            //This is where we should display the ML result
         }
     }
 
