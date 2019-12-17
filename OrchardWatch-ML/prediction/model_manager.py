@@ -4,6 +4,7 @@ import pickle
 import shutil
 import json
 from keras_model import *
+from pytorch_model import *
 import io
 from PIL import Image
 import boto3
@@ -57,6 +58,10 @@ def main():
 			if model_type == "keras":
 				img = load_image(img_url)
 				predict_keras(os.path.join(model_dir, model_name), img)
+			elif model_type == "pytorch":
+				img = load_image(img_url)
+				predict_pytorch(os.path.join(model_dir, model_name), img)
+
 
 
 def upload_model(model_dir, model_types, dict_file, model_dict, model_url, model_name, model_type):
