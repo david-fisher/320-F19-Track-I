@@ -19,9 +19,9 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.net.HttpURLConnection;
 //import adroid.widget.R
 
 public class LoginPage extends AppCompatActivity {
@@ -55,41 +55,35 @@ public class LoginPage extends AppCompatActivity {
      * Checks if the entered authentication key matches with that retrieved from Lambda function
      * @param key
      */
-    private void validate(String key){
-        String valid_key = "1234";//(key GET from lambda)
+    private void validate(String key) {
+        String valid_key = "200";//(key GET from lambda)
         final TextView textView = (TextView) findViewById(R.id.text);
+        JSONObject jsonObject = new JSONObject();
 
-        //Log.d("hello", "UMASS 320------------");
-        RequestQueue queue = Volley.newRequestQueue(this);
-        String url ="https://2a2glx2h08.execute-api.us-east-2.amazonaws.com/default/Frontend-Lambda/account/mobile_authentication";
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
+        try {
+            jsonObject.put("code", key);
+        } catch (JSONException e){
+            Log.d("tag", "json put error: " + e.toString());
+        }
+
+        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+        String url = "https://2a2glx2h08.execute-api.us-east-2.amazonaws.com/default/Frontend-Lambda/account/authorization_mobile";
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, jsonObject, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-//                String id = response.getString("statusCode");
-                String status_code = "";
-//                try{
-//                    status_code = response.get("statusCode");
-//                }
-                Log.d("hello", "UMASS 320------------");
-                textView.setText(response.toString());
-
+                if(response.toString().equals("{}")){
+                    textView.setText(response.toString());
+                }
             }
         }, new Response.ErrorListener() {
             @Override
-            public void onErrorResponse(VolleyError error){
-                textView.setText("oops");
+            public void onErrorResponse(VolleyError error) {
+                Log.e("tag","error="+error);
             }
 
         });
         queue.add(jsonObjectRequest);
 
-//        StringRequest req = new StringRequest(Request.Method.POST, url,
-//                new Response.Listener<String>() {
-//            @Override
-//            public void onResponse(String response) {
-//                textView.setText(response.toString());
-//            }
-//        });
 
         if(key.equals(valid_key)){
             //Used to move from one activity to another activity
