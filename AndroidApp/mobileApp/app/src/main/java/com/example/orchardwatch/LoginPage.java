@@ -14,11 +14,14 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.HttpResponse;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONObject;
+
+import java.net.HttpURLConnection;
 //import adroid.widget.R
 
 public class LoginPage extends AppCompatActivity {
@@ -56,11 +59,18 @@ public class LoginPage extends AppCompatActivity {
         String valid_key = "1234";//(key GET from lambda)
         final TextView textView = (TextView) findViewById(R.id.text);
 
+        //Log.d("hello", "UMASS 320------------");
         RequestQueue queue = Volley.newRequestQueue(this);
         String url ="https://2a2glx2h08.execute-api.us-east-2.amazonaws.com/default/Frontend-Lambda/account/mobile_authentication";
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
+//                String id = response.getString("statusCode");
+                String status_code = "";
+//                try{
+//                    status_code = response.get("statusCode");
+//                }
+                Log.d("hello", "UMASS 320------------");
                 textView.setText(response.toString());
 
             }
