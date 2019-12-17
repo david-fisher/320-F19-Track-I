@@ -77,6 +77,8 @@ body
     background: -o-linear-gradient(var(--navColOne), var(--navColTwo));
     background: linear-gradient(var(--navColOne), var(--navColTwo));
     background-repeat: no-repeat;
+    position: relative;
+    z-index: 1;
 }
 
 
