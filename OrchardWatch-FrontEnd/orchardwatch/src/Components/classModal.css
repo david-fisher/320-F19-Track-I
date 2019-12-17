@@ -29,6 +29,12 @@ body {
 
 }
 
+.classForm
+{
+    justify-content: space-around;
+    justify-items: center;
+}
+
 .imgWrappers
 {
     display: flex;

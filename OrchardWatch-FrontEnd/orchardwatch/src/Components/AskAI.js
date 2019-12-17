@@ -1,16 +1,20 @@
 import React from 'react';
 import {ClassDisp} from "./Classifier_Disp";
 import "./classPopQ";
+import {NewClassDisp} from "./NewClassDisp";
+import NewClassMod from "./NewClassMod";
 import ClassPopQ from "./classPopQ";
 import Api from '../api';
 
+const newClassifierId = -42;
 class AskAI extends React.Component{
 
     constructor(props) {
         super(props);
         this.state = {
             classifiers: [],
-            currentModalId: null
+            currentModalId: null,
+
         };
 
         this.setModalShow = this.setModalShow.bind(this);
@@ -23,10 +27,17 @@ class AskAI extends React.Component{
             });
             return;
         }
-
+        //Hardcoding singular newClassifierID
+        if (id === newClassifierId)
+        {
+            this.setState({
+                currentModalId: newClassifierId
+            });
+        }
         const classifier = this.state.classifiers.find(x => x.id === id);
-        // .find() will be falsey if not found
-        if (!classifier) return;
+        // .find() will be false if not found
+        if (!classifier)
+            return;
 
         this.setState({
             currentModalId: classifier.id
@@ -66,10 +77,30 @@ class AskAI extends React.Component{
                                onClick = {() => this.setModalShow(true, e.id)}
                                onDelete = {() => this.removeClassifier(e.id)}/>
                 </div>
+
+        );
+        const newClassifer = (
+            <div>
+                <NewClassMod
+                    onHide={() => this.setModalShow(false, newClassifierId)}
+                    key={this.state.show}
+                    show={this.state.currentModalId === newClassifierId}/>
+
+                <NewClassDisp
+                    onClick = {()=> this.setModalShow(true, newClassifierId)}/>
+            </div>
         );
 
+
         return(
-            elements
+            <div>
+                <div>
+                    {elements}
+                </div>
+                <div>
+                    {newClassifer}
+                </div>
+            </div>
         );
     }
 
