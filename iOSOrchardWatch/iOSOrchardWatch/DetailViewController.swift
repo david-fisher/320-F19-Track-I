@@ -27,7 +27,7 @@ UINavigationControllerDelegate{
 
         setToolBar()
         
-        let myURL = URL(string:"https://coldspringorchard.com/")
+        let myURL = URL(string:"https://tinyurl.com/orchardwatch")
         let myRequest = URLRequest(url: myURL!)
         webView.load(myRequest)
         
