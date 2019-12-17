@@ -40,8 +40,7 @@ function MyVerticallyCenteredModal(props) {
                 <div className= "classForm">
                 <InputGroup>
                     <FormControl
-                        placeholder="Recipient's username"
-                        aria-label="Recipient's username"
+                        placeholder=""
                         aria-describedby="basic-addon2"
                     />
 
