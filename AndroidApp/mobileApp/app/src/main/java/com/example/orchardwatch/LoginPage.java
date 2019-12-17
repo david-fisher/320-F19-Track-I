@@ -81,7 +81,7 @@ public class LoginPage extends AppCompatActivity {
             }
 
         });
-
+        queue.add(jsonObjectRequest);
 
 //        StringRequest req = new StringRequest(Request.Method.POST, url,
 //                new Response.Listener<String>() {
