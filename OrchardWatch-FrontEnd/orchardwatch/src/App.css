@@ -79,12 +79,7 @@ body
     background-repeat: no-repeat;
 }
 
-.justify-content-center
-{
-    display: compact;
-    align-content: space-around;
-    justify-content: center!important;
-}
+
 .App-link {
   color: #09d3ac;
 }
