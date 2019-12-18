@@ -20,7 +20,7 @@ class Data extends React.Component {
           .subtract(3, "days"),
         moment().clone()
       ),
-      data: [{ loading: true }]
+      data: [{ 'loading...': true }]
     };
   }
 
@@ -114,7 +114,7 @@ class Data extends React.Component {
         <div>
           <p className="WhiteDescription">{message}</p>
           <br></br>
-          <Button onClick={() => this.setState({ select: true })}>
+          <Button onClick={() => this.setState({ select: true, data:[{ 'loading...': true }] })}>
             Go Back
           </Button>
         </div>
