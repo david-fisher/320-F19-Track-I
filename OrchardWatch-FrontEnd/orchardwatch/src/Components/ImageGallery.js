@@ -87,7 +87,7 @@ class ImageGallery extends React.Component {
         editGallery = (
           <div>
             <Button onClick={() => this.setState({ page: "Upload" })}>Add Images</Button>
-            <Button onClick={() => this.downloadImages()}> Download Images</Button>
+            <Button onClick={this.downloadImages(imageArr).then((content) => {saveAs(content, "images.zip")})}> Download Images</Button>
             <br></br>
             <br></br>
             <Gallery images={imageArr} />
