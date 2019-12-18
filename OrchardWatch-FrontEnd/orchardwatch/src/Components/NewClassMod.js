@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from 'prop-types';
-import {Modal, Button, ButtonToolbar, Image, FormControl, Form, Dropdown, DropdownButton, InputGroup} from "react-bootstrap";
+import {Modal, Button, ButtonToolbar, Image, FormControl, Form, Dropdown, DropdownButton, InputGroup, Input} from "react-bootstrap";
 import camGraphic from './PrettyEricGraphics/newClassificationUpload.png';
 import confGraphic from './PrettyEricGraphics/pictureCheck.png';
 import "./classModal.css"
@@ -41,32 +41,36 @@ function MyVerticallyCenteredModal(props) {
                 <InputGroup>
                     <FormControl
                         placeholder=""
-                        aria-describedby="basic-addon2"
+                        controlId = "className"
+                        onChange = {(e) => props.handleTitleChange(e)}
                     />
-
                     <DropdownButton
                         as={InputGroup.Append}
                         variant="outline-secondary"
                         title="File Extension"
                         id="input-group-dropdown-2"
                     >
-                        <Dropdown.Item href="#">Action</Dropdown.Item>
-                        <Dropdown.Item href="#">Another action</Dropdown.Item>
-                        <Dropdown.Item href="#">Something else here</Dropdown.Item>
-                        <Dropdown.Divider />
-                        <Dropdown.Item href="#">Separated link</Dropdown.Item>
+                        <Dropdown.Item href="#">.py</Dropdown.Item>
+                        <Dropdown.Item href="#">.h5</Dropdown.Item>
                     </DropdownButton>
 
                 </InputGroup>
+                <div className="input-group mb-3">
+                    <div className="custom-file">
+                        <input type="file" className="custom-file-input" id="inputGroupFile01" ></input>
+                        <label className="custom-file-label" htmlFor="inputGroupFile01">Choose file</label>
+                    </div>
+                </div>
                 <InputGroup>
                     <InputGroup.Prepend>
                         <InputGroup.Text>Classifer Description</InputGroup.Text>
                     </InputGroup.Prepend>
-                    <FormControl as="textarea" aria-label="Classifer Description" />
+                    <FormControl as="textarea" controlId="classiferDescription" onChange={(e) => props.handleDescChange(e)} />
                 </InputGroup>
                 </div>
             </Modal.Body>
             <Modal.Footer>
+                <Button onClick={e => props.submitClass(e)}> Submit </Button>
                 <Button onClick={props.onHide}>Close</Button>
             </Modal.Footer>
         </Modal>
@@ -79,7 +83,12 @@ class ClassPopQ extends React.Component {
         super(props);
         this.openFilePicker = (e) => this.onOpenFilePicker(e);
         this.handleClick = (e) =>  this.onChangeFile(e);
+        this.handleDescChange = this.handleDescChange.bind(this);
+        this.handleTitleChange = this.handleTitleChange.bind(this);
+        this.submitClass = this.submitClass.bind(this);
         this.state = {
+            file: null,
+            fileName: null,
             imgSrc: props.imgSrc,
             desc: props.desc,
             onHide: props.onHide,
@@ -87,23 +96,43 @@ class ClassPopQ extends React.Component {
             imgPreview: null
         }
     }
-
-    onOpenFilePicker(e) {
+    stopBreaking(e)
+    {
         e.stopPropagation();
         e.preventDefault();
-        // Can possible use React refs
+    }
+
+    onOpenFilePicker(e) {
+        this.stopBreaking(e)
         const picker = document.getElementById('filePicker');
         picker.click();
     }
+    handleDescChange(e){
+        this.stopBreaking(e)
+        this.setState({desc: e.target.value});
+    }
+
+    handleTitleChange(e){
+        this.stopBreaking(e)
+        this.setState({title: e.target.value});
+        ///console.log(this.state.title);
+    }
+    submitClass(e){
+        this.stopBreaking(e)
+        console.log(this.state.title);
+        console.log(this.state.desc);
+    }
+    modelUpload(e){
+
+    }
 
     onChangeFile(e) {
-        e.stopPropagation();
-        e.preventDefault();
+        this.stopBreaking(e)
         let file = e.target.files[0];
         console.log(file);
         this.setState({
             imgPreview: URL.createObjectURL(file)
-        }); /// if you want to upload latter
+        });
     }
     render() {
 
@@ -118,6 +147,9 @@ class ClassPopQ extends React.Component {
                     desc   ={this.state.desc}
                     upload ={this.handleClick}
                     openFilePicker = {this.openFilePicker}
+                    handleDescChange = {this.handleDescChange}
+                    handleTitleChange = {this.handleTitleChange}
+                    submitClass = {this.submitClass}
                 />
             </ButtonToolbar>
         );

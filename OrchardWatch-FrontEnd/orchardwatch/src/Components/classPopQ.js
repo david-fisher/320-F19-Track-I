@@ -76,9 +76,9 @@ class ClassPopQ extends React.Component {
         e.stopPropagation();
         e.preventDefault();
         let file = e.target.files[0];
-        console.log(file);
+        let imgUrl = URL.createObjectURL(file);
         this.setState({
-            imgPreview: URL.createObjectURL(file)
+            imgPreview: imgUrl
         }); /// if you want to upload latter
     }
     render() {
