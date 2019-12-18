@@ -85,7 +85,7 @@ class Home extends React.Component {
       <div>
         <Row>
           <Col>
-            <p className="HomeDescription">
+            <p className="WhiteDescription">
               <b>{description}</b>
             </p>
           </Col>
