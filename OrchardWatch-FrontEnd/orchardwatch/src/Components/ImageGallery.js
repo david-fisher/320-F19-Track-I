@@ -48,7 +48,7 @@ class ImageGallery extends React.Component {
     @output parameters: images, an array of image objects that react-grid-gallery can use
     */
   processImages(url) {
-    console.log(url);
+    // console.log(url);
     let imageArr = [];
 
     // fetch images here
@@ -85,7 +85,6 @@ class ImageGallery extends React.Component {
   }
 
   componentDidMount() {
-
   }
 
   render() {
@@ -161,7 +160,7 @@ class ImageGallery extends React.Component {
     let reader = new FileReader();
     var this2 = this;
     reader.addEventListener("loadend", function () {
-      console.log(reader.result)
+      // console.log(reader.result)
       IMAGES.push(reader.result + "")
       this2.setState({page: ""});
     }, false);
