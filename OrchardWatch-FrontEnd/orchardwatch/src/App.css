@@ -108,3 +108,23 @@ body
 .HomeDescription {
   color: white;
 }
+
+.rdt {
+  position: relative;
+  align-self: center;
+  align-content: center;
+  justify-content: center;
+  align-items: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.rdtPicker {
+  position: relative;
+  align-self: center;
+  align-content: center;
+  justify-content: center;
+  align-items: center;
+  margin-left: auto;
+  margin-right: auto;
+}
