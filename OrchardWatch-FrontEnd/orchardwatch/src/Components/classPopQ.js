@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 import {Modal, Button, ButtonToolbar, Image} from "react-bootstrap";
 import camGraphic from './PrettyEricGraphics/classificationUpload.png';
 import "./classModal.css"
+import axios from 'axios';
 
 
 // We are ""
 function MyVerticallyCenteredModal(props) {
-    console.log(props);
     return (
         <Modal
             {...props}
@@ -79,7 +79,9 @@ class ClassPopQ extends React.Component {
         let imgUrl = URL.createObjectURL(file);
         this.setState({
             imgPreview: imgUrl
-        }); /// if you want to upload latter
+        });
+
+
     }
     render() {
 
