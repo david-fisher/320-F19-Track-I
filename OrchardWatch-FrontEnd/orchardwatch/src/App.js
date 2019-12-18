@@ -6,6 +6,7 @@ import Data from "./Components/Data";
 import ImageGallery from "./Components/ImageGallery";
 import Login from "./Components/Login";
 import AskAI from "./Components/AskAI";
+import Annotations from "./Components/Annotations";
 import ForgotPassword from "./Components/ForgotPassword";
 import Dashboard from "./Components/Dashboard";
 import { Button, Navbar, Nav } from "react-bootstrap";
@@ -139,6 +140,10 @@ class App extends React.Component {
                 {" "}
                 Ask AI{" "}
               </Nav.Link>
+              <Nav.Link onClick={() => this.setState({ page: "Annotations" })}>
+                {" "}
+                Annotations{" "}
+              </Nav.Link>
               <Nav.Link onClick={() => this.setState({ page: "Dashboard" })}>
                 {" "}
                 Dashboard{" "}
@@ -202,6 +207,8 @@ class App extends React.Component {
         );
       case "AskAI":
         return <AskAI user={cookie.get("user")} />;
+      case "Annotations":
+        return <Annotations />;
       case "Dashboard":
         return <Dashboard cookie={cookie} />;
       case "ForgotPassword":
