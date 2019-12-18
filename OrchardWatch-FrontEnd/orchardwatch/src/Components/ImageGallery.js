@@ -12,6 +12,7 @@ import url9 from "./low-level-images/weliveinasociety.jpg";
 import url10 from "./low-level-images/placehold.jpg";
 import { Col, Row, Button } from "react-bootstrap";
 import UploadImage from "./UploadImage";
+import ReactImageUploadComponent from "react-images-upload";
 
 
 let IMAGES = [url1, url3, url5, url6, url7, url4, url8, url9, url10, url2];
@@ -28,8 +29,12 @@ class ImageGallery extends React.Component {
     @input parameters: url, an array of image URLs (strings) that is to be processed
     @output parameters: images, an array of image objects that react-grid-gallery can use
     */
+
   processImages(url) {
     let imageArr = [];
+
+    // fetch images here
+
     for (let i = 0; i < url.length; i++) {
       imageArr.push({
         src: url[i],
@@ -41,9 +46,29 @@ class ImageGallery extends React.Component {
     return imageArr;
   }
 
+  componentDidMount() {
+    fetch(
+      "https://2a2glx2h08.execute-api.us-east-2.amazonaws.com/default/Frontend-Lambda/ml/dl_unannotated_imgs/",
+      {
+        method: "GET",
+      }
+    )
+      .then(response => {
+        return response.json();
+      }) 
+      .then(result => {
+        let image = "data:image/jpeg;base64," + result.img1;
+        this.setState({ image: image });
+        console.log(this.state.image);
+      })
+  }
+
   render() {
     let imageArr = [];
     imageArr = this.processImages(IMAGES);
+    //const B64ToImage = ({ text }) => <img src={"${text}"} />;
+    
+
     /*
     let editGallery = <div></div>;
     if (this.props.user === "grower" || this.props.user === "researcher") {
@@ -68,14 +93,20 @@ class ImageGallery extends React.Component {
       }
     }
     */
-    
+
     return (
       <div>
         <div className="gallery">
           <Row>
             <Col md="2" />
             <Col>
-              
+              <img src={this.state.image} height="100%" width="40%" />
+            </Col>
+            <Col md="2" />
+          </Row>
+          <Row>
+            <Col md="2" />
+            <Col>
               <Gallery images={imageArr} />
             </Col>
             <Col md="2" />
