@@ -13,6 +13,9 @@ import url10 from "./low-level-images/placehold.jpg";
 import { Col, Row, Button } from "react-bootstrap";
 import UploadImage from "./UploadImage";
 import ReactImageUploadComponent from "react-images-upload";
+import JSZip from "jszip";
+import JSZipUtils from "jszip-utils";
+import { saveAs } from "file-saver";
 
 
 let IMAGES = [url1, url3, url5, url6, url7, url4, url8, url9, url10, url2];
@@ -66,8 +69,6 @@ class ImageGallery extends React.Component {
   render() {
     let imageArr = [];
     imageArr = this.processImages(IMAGES);
-    //const B64ToImage = ({ text }) => <img src={"${text}"} />;
-    
 
     /*
     let editGallery = <div></div>;
@@ -112,6 +113,15 @@ class ImageGallery extends React.Component {
             </Col>
             <Col md="2" />
           </Row>
+          <Row>
+            <Col md="2" />
+            <Col>
+              <Button onClick={this.downloadImages(imageArr).then((content) => {saveAs(content, "images.zip")})} >
+                Download Images
+              </Button>
+            </Col>
+            <Col md="2" />
+          </Row>
         </div>
       </div>
     );
@@ -121,8 +131,15 @@ class ImageGallery extends React.Component {
     this.setState({ page: "" });
   }
 
-  downloadImages(){
-
+  downloadImages(imgArr){
+    let zip = new JSZip();
+    imgArr.forEach(element => {
+      let url = element.src;
+      console.log(url);
+      let file = document.getElementById(url);
+      zip.file("image", file);
+    });
+    return zip.generateAsync({ type: "blob" });
   }
 
 }
