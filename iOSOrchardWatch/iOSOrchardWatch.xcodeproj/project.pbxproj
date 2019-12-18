@@ -33,7 +33,7 @@
 		4F82D0D32374A0D70066F447 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		4F82D0D52374A0D80066F447 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4F82D0D82374A0D80066F447 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		4F82D0DA2374A0D80066F447 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4F82D0DA2374A0D80066F447 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = iOSOrchardWatch/Info.plist; sourceTree = SOURCE_ROOT; };
 		4F82D0DF2374A0D80066F447 /* iOSOrchardWatchTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = iOSOrchardWatchTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F82D0E32374A0D80066F447 /* iOSOrchardWatchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iOSOrchardWatchTests.swift; sourceTree = "<group>"; };
 		4F82D0E52374A0D80066F447 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };

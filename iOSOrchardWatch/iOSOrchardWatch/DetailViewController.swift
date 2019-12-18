@@ -27,7 +27,7 @@ UINavigationControllerDelegate{
 
         setToolBar()
         
-        let myURL = URL(string:"https://tinyurl.com/orchardwatch")
+        let myURL = URL(string:"d3gvvf4yx7ay63.cloudfront.net")
         let myRequest = URLRequest(url: myURL!)
         webView.load(myRequest)
         
@@ -79,6 +79,34 @@ UINavigationControllerDelegate{
         guard let selectedImage = info[.originalImage] as? UIImage else {
             fatalError("Expected a dictionary containing an image, but was provided the following: \(info)")
             }
+        /*imagePicked.image? = selectedImage
+        let url = URL(string: "https://2a2glx2h08.execute-api.us-east-2.amazonaws.com/default/Frontend-Lambda/ml/mobile_classify")!
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        let data = convertImageToBase64String(image: selectedImage)
+        let json: [String: Any] = ["model": "resnet_keras.h5", "pic": data]
+        var status = 0;
+        let jsonData = try? JSONSerialization.data(withJSONObject: json)
+        request.httpBody = jsonData
+        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+            if let error = error {
+                print("error: \(error)")
+            } else {
+                if let response = response as? HTTPURLResponse {
+                    status = response.statusCode
+                    print("statusCode: \(response.statusCode)")
+                }
+                print(data)
+                if status == 200{
+                    print("success")
+                }
+                else{
+                    //throw ValidationError("Invalid access code")
+                }
+            }
+        }
+        task.resume()
+        */
         
         self.dismiss(animated: true, completion: nil)
         
@@ -94,3 +122,6 @@ public func  convertImageToBase64String(image : UIImage ) -> String
     let strBase64 =  image.pngData()?.base64EncodedString()
     return strBase64!
 }
+
+
+
