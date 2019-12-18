@@ -1,9 +1,9 @@
 :root {
-    --bgColorOne:  #f4eeea;
-    --bgColorTwo:  #afb1ce;
+    //--bgColorOne:  #f4eeea;
+    //--bgColorTwo:  #afb1ce;
     --bgColorOne: #75B863;
     --bgColorTwo:  #40593B;
-
+    --textColor: #c4c4c4;
     --navColOne: #232725;
     --navColTwo: #1e211f;
 
@@ -17,6 +17,7 @@ html{
 
 body
 {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
     min-height: 100%;
     margin: 0;
 
@@ -41,6 +42,21 @@ body
   text-align-last: center;
 }
 
+.colorButton
+{
+    font-weight: 600;
+    width: 10rem;
+    height: 4rem;
+    border-color: var(--navColTwo);
+    color: var(--textColor);
+    background:linear-gradient(var(--navColOne), var(--navColTwo));
+}
+
+.colorButton:hover
+{
+    border-color: var(--bgColorOne);
+}
+
 .App-logo {
   height: 40vmin;
 }
@@ -61,18 +77,43 @@ body
     height: 5px;
 }
 
-.navbar-dark .navbar-nav .nav-link
+.instructions
 {
-    color: #fff;
-    background-color: #0e3628;
-    position: relative;
-    z-index: 100000;
+    color: black;
+    border-color: var(--navColTwo);
+    border-style: solid;
+    display: compact;
+    background: rgb(146, 200, 126);
+    border-radius: 30px;
+    padding: 20px;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    font-size: larger;
+    font-weight: bolder;
+    text-align: left;
+    margin-left:  150px;
+    margin-right: 150px;
 }
+
+.navbar-collapse
+{
+    flex-basis: 100%;
+    align-items: center;
+    border-radius: 30px;
+    color: var(--textColor);
+    background: -webkit-linear-gradient(var(--navColOne), var(--navColTwo));
+    background: -moz-linear-gradient(var(--navColOne), var(--navColTwo));
+    background: -ms-linear-gradient(var(--navColOne), var(--navColTwo));
+    background: -o-linear-gradient(var(--navColOne), var(--navColTwo));
+    background: linear-gradient(var(--navColOne), var(--navColTwo));
+    z-index: 1000;
+}
+
+
 
 .NavBar{
     height: 9vh;
     font-size: x-large;
-    color: #c4c4c4;
+    color: var(--textColor);
     background-repeat:no-repeat;
     background: -webkit-linear-gradient(var(--navColOne), var(--navColTwo));
     background: -moz-linear-gradient(var(--navColOne), var(--navColTwo));
@@ -81,7 +122,6 @@ body
     background: linear-gradient(var(--navColOne), var(--navColTwo));
     background-repeat: no-repeat;
     position: relative;
-    z-index: 100000;
 }
 
 
@@ -103,28 +143,4 @@ body
 
 .select {
   text-align-last: center;
-}
-
-.WhiteDescription {
-  color: white;
-}
-
-.rdt {
-  position: relative;
-  align-self: center;
-  align-content: center;
-  justify-content: center;
-  align-items: center;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.rdtPicker {
-  position: relative;
-  align-self: center;
-  align-content: center;
-  justify-content: center;
-  align-items: center;
-  margin-left: auto;
-  margin-right: auto;
 }
