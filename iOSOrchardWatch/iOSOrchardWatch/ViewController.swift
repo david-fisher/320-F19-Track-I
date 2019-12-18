@@ -10,7 +10,9 @@ import UIKit
 
 class ViewController: UIViewController{
     @IBOutlet weak var codeinput: UITextField!
-   
+    @IBOutlet var code_label: UILabel!
+    
+    
     @IBAction func loginButton(_ sender: Any) {
 
         //send code to lambda. if good, go to next page. if not, stay on this page with popup saying invalid code
@@ -39,7 +41,8 @@ class ViewController: UIViewController{
                     Cache<String, String>();
                 }
                 else{
-                    DispatchQueue.main.async { self.codeinput.text = "Invalid access code"}
+//                    DispatchQueue.main.async { self.codeinput.text = "Invalid access code"}
+                    DispatchQueue.main.async { self.code_label.text = "Invalid Key"}
                 }
             }
         }
