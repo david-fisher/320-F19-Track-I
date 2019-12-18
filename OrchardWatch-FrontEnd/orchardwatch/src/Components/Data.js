@@ -20,7 +20,8 @@ class Data extends React.Component {
           .subtract(3, "days"),
         moment().clone()
       ),
-      data: [{ 'loading...': true }]
+      data: [{ 'loading...': true }],
+      csv: ''
     };
   }
 
@@ -92,8 +93,8 @@ class Data extends React.Component {
           return null;
         })
         .then(newData => {
-          this.setState({ data: newData });
-          this.setState({ search: false });
+          this.setState({ data: newData, search: false });
+          this.downloadData(this.state.data);
         });
     }
     if (this.state.data === null || this.state.data.length === 0) {
@@ -155,7 +156,7 @@ class Data extends React.Component {
           </Col>
           <Col>
             <Button
-              href={this.downloadData(this.state.data)}
+              href={this.state.csv}
               download="data.csv"
             >
               Download Data
@@ -171,7 +172,7 @@ class Data extends React.Component {
 
   downloadData(data) {
     let csv = encodeURI("data:text/csv;charset=utf-8," + parser.parse(data));
-    return csv;
+    this.setState({ csv: csv });
   }
 }
 
