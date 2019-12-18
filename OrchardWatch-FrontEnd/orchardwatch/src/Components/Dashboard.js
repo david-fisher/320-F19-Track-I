@@ -1,6 +1,5 @@
 import React from "react";
 import { Button, Form, Container, Card } from "react-bootstrap";
-import PostAnnouncement from "./PostAnnouncement";
 import UploadImage from "./UploadImage";
 import SystemStatus from "./SystemStatus";
 import Profile from "./Profile";
@@ -48,14 +47,6 @@ class Dashboard extends React.Component {
             variant="secondary"
             size="lg"
             block
-            onClick={() => this.setState({ page: "postAnnouncement" })}
-          >
-            Post Announcement
-          </Button>
-          <Button
-            variant="secondary"
-            size="lg"
-            block
             onClick={() => this.setState({ page: "uploadImage" })}
           >
             Upload Image
@@ -79,8 +70,6 @@ class Dashboard extends React.Component {
             cookie={this.props.cookie}
           />
         );
-      case "postAnnouncement":
-        return <PostAnnouncement dashboard={this.resetDashboard.bind(this)} />;
       case "uploadImage":
         return <UploadImage dashboard={this.resetDashboard.bind(this)} />;
       case "systemStatus":
