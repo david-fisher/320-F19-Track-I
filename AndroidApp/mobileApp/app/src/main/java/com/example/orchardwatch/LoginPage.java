@@ -72,10 +72,7 @@ public class LoginPage extends AppCompatActivity {
      * @param key
      */
     private void validate(String key) {
-        SharedPreferences prefs = getSharedPreferences("UserData", MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putString("code", key);
-        editor.commit();
+
         String url = "https://2a2glx2h08.execute-api.us-east-2.amazonaws.com/default/Frontend-Lambda/account/authorization_mobile";
         final JSONObject jsonObject = new JSONObject();
 
@@ -120,6 +117,10 @@ public class LoginPage extends AppCompatActivity {
     private void processResponse(String response) {
         Log.d("tag", response);
         if(response.contains("success")){
+            SharedPreferences prefs = getSharedPreferences("UserData", MODE_PRIVATE);
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putString("code", "aaa");
+            editor.commit();
             Intent intent = new Intent(LoginPage.this, MainActivity.class);
             startActivity(intent);
         }

@@ -24,6 +24,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -93,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
         WebSettings web_settings = my_webview.getSettings();
         web_settings.setJavaScriptEnabled(true);
 
-        my_webview.loadUrl("http://d3gvvf4yx7ay63.cloudfront.net/"); //http://d3gvvf4yx7ay63.cloudfront.net/
+        my_webview.loadUrl("https://www.orchardwatch.org"); //http://d3gvvf4yx7ay63.cloudfront.net/
         my_webview.setWebViewClient(new WebViewClient());   //prevent opening in another browser instead of the app
 
     }
@@ -111,7 +112,11 @@ public class MainActivity extends AppCompatActivity {
             //this is where to insert code when photo from gallery has been selected
             //Example from tutorial (https://www.youtube.com/watch?v=OPnusBmMQTw)
             //imageView.setImageURI(imageUri);
-
+            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+            builder.setCancelable(true);
+            builder.setTitle("Classification Result:");
+            builder.setMessage("home theater, home theatre");
+            builder.show();
             //compressing picture to string example: https://stackoverflow.com/questions/4830711/how-to-convert-a-image-into-base64-string
             String imagePath = imageUri.getPath();
             String str64 = convertFileToByte(imagePath);
