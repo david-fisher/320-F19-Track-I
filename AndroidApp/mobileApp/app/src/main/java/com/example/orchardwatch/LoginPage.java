@@ -119,7 +119,7 @@ public class LoginPage extends AppCompatActivity {
 
     private void processResponse(String response) {
         Log.d("tag", response);
-        if(response.equals("\"success\"")){
+        if(response.contains("success")){
             Intent intent = new Intent(LoginPage.this, MainActivity.class);
             startActivity(intent);
         }
