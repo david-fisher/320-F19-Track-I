@@ -20,7 +20,7 @@ class Data extends React.Component {
           .subtract(3, "days"),
         moment().clone()
       ),
-      data: [{loading: true}]
+      data: [{ loading: true }]
     };
   }
 
@@ -76,7 +76,7 @@ class Data extends React.Component {
         .then(result => {
           if (result !== null) {
             result = JSON.parse(result);
-            if (result.values.length === 0) {
+            if (Object.keys(result).length === 0) {
               return [];
             }
             let newData = [];
@@ -97,15 +97,22 @@ class Data extends React.Component {
         });
     }
     if (this.state.data === null || this.state.data.length === 0) {
-      let message = 'No Available Data';
-      if (this.state.data === null){
-        message = 'Error retrieving data from server';
+      let message = <b>No Available Data</b>;
+      if (this.state.data === null) {
+        message = (
+          <b>
+            <p>Error retrieving data from server</p>
+            <br></br>
+            <p>The response for the specified query may have been too large</p>
+            <p>Try limiting your query to a couple of days</p>
+            <br></br>
+            <p>If the problem persists, please contact a site administrator</p>
+          </b>
+        );
       }
       return (
         <div>
-          <p className="WhiteDescription">
-            <b>No Available Data</b>
-          </p>
+          <p className="WhiteDescription">{message}</p>
           <br></br>
           <Button onClick={() => this.setState({ select: true })}>
             Go Back
@@ -140,13 +147,24 @@ class Data extends React.Component {
     );
     return (
       <div>
+        <Row>
+          <Col>
+            <Button onClick={() => this.setState({ select: true })}>
+              Go Back
+            </Button>
+          </Col>
+          <Col>
+            <Button
+              href={this.downloadData(this.state.data)}
+              download="data.csv"
+            >
+              Download Data
+            </Button>
+          </Col>
+        </Row>
+        <br></br>
+        <br></br>
         {table}
-        <Button href={this.downloadData(this.state.data)} download="data.csv">
-          Download Data
-        </Button>
-        <br></br>
-        <br></br>
-        <Button onClick={() => this.setState({ select: true })}>Go Back</Button>
       </div>
     );
   }
