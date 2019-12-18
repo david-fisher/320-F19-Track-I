@@ -20,6 +20,7 @@ import { saveAs } from "file-saver";
 
 
 var IMAGES = [url1, url3, url5, url6, url7, url4, url8, url9, url10, url2];
+let ImageURLs = ["./low-level-images/burningtree.jpg", "./low-level-images/sans_fisher.jpg", "./low-level-images/toopowerful.jpg", "./low-level-images/fisherpick.jpg", "./low-level-images/apples1.jpg", "./low-level-images/apple2.png", "./low-level-images/apples3.jpg", "./low-level-images/HOBO1.jpeg", "./low-level-images/weliveinasociety.jpg", "./low-level-images/placehold.jpg"];
 
 class ImageGallery extends React.Component {
   constructor() {
@@ -71,7 +72,20 @@ class ImageGallery extends React.Component {
   }
 
   componentDidMount() {
-
+    fetch(
+      "https://2a2glx2h08.execute-api.us-east-2.amazonaws.com/default/Frontend-Lambda/ml/dl_unannotated_imgs/",
+      {
+        method: "GET",
+      }
+    )
+      .then(response => {
+        return response.json();
+      }) 
+      .then(result => {
+        let image = "data:image/jpeg;base64," + result.img1;
+        this.setState({ image: image });
+        console.log(this.state.image);
+      })
   }
 
   render() {
@@ -89,6 +103,7 @@ class ImageGallery extends React.Component {
             <Button onClick={() => this.setState({ page: "Upload" })}>Add Images</Button>
             <Button onClick={() => this.downloadImages()}> Download Images</Button>
             <br></br>
+            <img src={this.state.image} height="100%" width="40%" />
             <br></br>
             <Gallery images={imageArr} />
           </div>
@@ -106,6 +121,7 @@ class ImageGallery extends React.Component {
               <Button onClick={() => this.setState({page: ""})}>Go Back</Button>
               <br></br>
             </div>
+            <img src={this.state.image} height="100%" width="40%" />
             <br></br>
             <Gallery images={imageArr} />
           </div>
@@ -158,10 +174,10 @@ class ImageGallery extends React.Component {
 
   }
 
-  downloadImages(imgArr){
+  downloadImages(ImageURLs){
     let zip = new JSZip();
-    imgArr.forEach(element => {
-      let url = element.src;
+    ImageURLs.forEach(element => {
+      let url = element;
       console.log(url);
       let file = document.getElementById(url);
       zip.file("image", file);
