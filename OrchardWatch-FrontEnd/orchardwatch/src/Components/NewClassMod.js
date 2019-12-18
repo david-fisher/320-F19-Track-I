@@ -57,7 +57,7 @@ function MyVerticallyCenteredModal(props) {
                 </InputGroup>
                 <div className="input-group mb-3">
                     <div className="custom-file">
-                        <input type="file" className="custom-file-input" id="inputGroupFile01" ></input>
+                        <input type="file" className="custom-file-input" id="inputGroupFile01" onChange={(e) => props.handleModelUpload(e)} ></input>
                         <label className="custom-file-label" htmlFor="inputGroupFile01">Choose file</label>
                     </div>
                 </div>
@@ -83,6 +83,7 @@ class ClassPopQ extends React.Component {
         super(props);
         this.openFilePicker = (e) => this.onOpenFilePicker(e);
         this.handleClick = (e) =>  this.onChangeFile(e);
+        this.modelUpload = this.modelUpload.bind(this)
         this.handleDescChange = this.handleDescChange.bind(this);
         this.handleTitleChange = this.handleTitleChange.bind(this);
         this.submitClass = this.submitClass.bind(this);
@@ -140,12 +141,13 @@ class ClassPopQ extends React.Component {
             <ButtonToolbar>
                 <MyVerticallyCenteredModal
                     imgSrc ={this.state.imgSrc}
-                    imgPreview = {this.state.imgPreview}
+                    imgPreview ={this.state.imgPreview}
                     show   ={this.props.show}
                     onHide ={this.state.onHide}
                     title  ={this.state.title}
                     desc   ={this.state.desc}
                     upload ={this.handleClick}
+                    handleModelUpload = {this.modelUpload}
                     openFilePicker = {this.openFilePicker}
                     handleDescChange = {this.handleDescChange}
                     handleTitleChange = {this.handleTitleChange}
