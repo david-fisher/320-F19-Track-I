@@ -1,7 +1,6 @@
 import React from "react";
 import { Button, Form, Container, Card } from "react-bootstrap";
 import UploadImage from "./UploadImage";
-import SystemStatus from "./SystemStatus";
 import Profile from "./Profile";
 
 class Dashboard extends React.Component {
@@ -51,14 +50,6 @@ class Dashboard extends React.Component {
           >
             Upload Image
           </Button>
-          <Button
-            variant="secondary"
-            size="lg"
-            block
-            onClick={() => this.setState({ page: "systemStatus" })}
-          >
-            System Status
-          </Button>
         </Container>
       );
     }
@@ -72,8 +63,6 @@ class Dashboard extends React.Component {
         );
       case "uploadImage":
         return <UploadImage dashboard={this.resetDashboard.bind(this)} />;
-      case "systemStatus":
-        return <SystemStatus dashboard={this.resetDashboard.bind(this)} />;
       default:
         return <div>{dashboard}</div>;
     }

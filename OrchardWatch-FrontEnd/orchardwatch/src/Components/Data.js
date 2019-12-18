@@ -1,10 +1,11 @@
 import React from "react";
-import { Table, Row, Col, Button } from "react-bootstrap";
-import DateRangePicker from "react-daterange-picker";
-import "react-daterange-picker/dist/css/react-calendar.css";
+import { Table, Row, Col, Button, Container } from "react-bootstrap";
+import DatetimeRangePicker from "react-datetime-range-picker";
 import originalMoment from "moment";
 import { extendMoment } from "moment-range";
 
+const { Parser } = require("json2csv");
+const parser = new Parser();
 const moment = extendMoment(originalMoment);
 
 class Data extends React.Component {
@@ -16,36 +17,34 @@ class Data extends React.Component {
       date: moment.range(
         moment()
           .clone()
-          .subtract(7, "days"),
+          .subtract(3, "days"),
         moment().clone()
       ),
-      data: []
+      data: [{ 'loading...': true }]
     };
   }
 
-  onSelect = (date, states) => {
-    this.setState({ date, states });
+  onSelect = e => {
+    this.setState({ date: moment.range(e.start, e.end) });
   };
 
   render() {
     if (this.state.select) {
       return (
         <div>
+          <h3>Data</h3>
+          <br></br>
           <p>
             <b>Pick a date range to query for data</b>
           </p>
-          <p>
-            {this.state.date.start.format("MM/DD/YYYY")} to{" "}
-            {this.state.date.end.format("MM/DD/YYYY")}
-          </p>
-          <DateRangePicker
-            value={this.state.date}
-            onSelect={this.onSelect}
-            singleDateRange={true}
-          />
+          <Container>
+            <DatetimeRangePicker
+              startDate={this.state.date.start}
+              endDate={this.state.date.end}
+              onChange={this.onSelect}
+            />
+          </Container>
           <br></br>
-          <br></br>
-          <p>Note: Only a max of 1000 entries can be queried at once.</p>
           <Button
             onClick={() => {
               this.setState({ select: false, search: true });
@@ -56,59 +55,70 @@ class Data extends React.Component {
         </div>
       );
     } else if (this.state.search) {
-      let data = fetch(
-        // `https://2a2glx2h08.execute-api.us-east-2.amazonaws.com/default/Frontend-Lambda/data/data_download/${this.state.date.start.format(
-        //   "YYYY-MM-DD"
-        // )}/${this.state.date.end.format("YYYY-MM-DD")}`,
-        `https://2a2glx2h08.execute-api.us-east-2.amazonaws.com/default/Frontend-Lambda/data/data_download/1970-01-01/2000-12-20`,
+      fetch(
+        `https://2a2glx2h08.execute-api.us-east-2.amazonaws.com/default/Frontend-Lambda/data/data_download/${this.state.date.start.format(
+          "YYYY-MM-DD+h:mm:ss"
+        )}/${this.state.date.end.format("YYYY-MM-DD+h:mm:ss")}`,
         {
           method: "GET"
         }
       )
         .then(response => {
+          console.log(response);
           if (response.status === 200) {
             return response.json();
+          } else if (response.status === 400) {
+            return null;
           } else {
-            return [];
+            return null;
           }
         })
         .then(result => {
-          if (result.length !== 0) {
-            console.log(result);
+          if (result !== null) {
+            result = JSON.parse(result);
+            if (Object.keys(result).length === 0) {
+              return [];
+            }
+            let newData = [];
+            result.values.map(e => {
+              let obj = {};
+              for (let i = 0; i < result.headers.length; ++i) {
+                obj[result.headers[i]] = e[i];
+              }
+              newData.push(obj);
+            });
+            return newData;
           }
+          return null;
+        })
+        .then(newData => {
+          this.setState({ data: newData });
           this.setState({ search: false });
         });
     }
-    if (this.state.data.length === 0) {
-      this.setState({
-        data: [
-          {
-            Date: "11/12/2018",
-            Time: "12:00",
-            "Tempertaure (F)": 84.32,
-            "Wind Speed": 1.5,
-            "Wetness (%)": 7.6,
-            "Rain (in.)": 0
-          },
-          {
-            Date: "11/13/2018",
-            Time: "12:00",
-            "Tempertaure (F)": 83.24,
-            "Wind Speed": 0.7,
-            "Wetness (%)": 7.1,
-            "Rain (in.)": 0
-          },
-          {
-            Date: "11/14/2018",
-            Time: "12:00",
-            Tempertaure: 84.95,
-            "Wind Speed": 3,
-            "Wetness (%)": 7.6,
-            "Rain (in.)": 0
-          }
-        ]
-      });
-      return <div>No Data Available</div>;
+    if (this.state.data === null || this.state.data.length === 0) {
+      let message = <b>No Available Data</b>;
+      if (this.state.data === null) {
+        message = (
+          <b>
+            <p>Error retrieving data from server</p>
+            <br></br>
+            <p>The response for the specified query may have been too large</p>
+            <p>Try limiting your query to a couple of days</p>
+            <br></br>
+            <p>If the problem persists, please contact a site administrator</p>
+          </b>
+        );
+      }
+      return (
+        <div>
+          <p className="WhiteDescription">{message}</p>
+          <br></br>
+          <Button onClick={() => this.setState({ select: true, data:[{ 'loading...': true }] })}>
+            Go Back
+          </Button>
+        </div>
+      );
     }
     let rows = Object.keys(this.state.data[0]).map((e, index) => {
       return <th key={index}>{e}</th>;
@@ -120,35 +130,46 @@ class Data extends React.Component {
       return <tr key={index1}>{rows}</tr>;
     });
     let table = (
-      <Row>
-        <Col md="2" />
-        <Col>
-          <Table striped bordered hover>
-            <thead>
-              <tr>{rows}</tr>
-            </thead>
-            <tbody>{dataTable}</tbody>
-          </Table>
-        </Col>
-        <Col md="2" />
-      </Row>
+      <div className="dataTable">
+        <Row>
+          <Col md="2" />
+          <Col>
+            <Table striped bordered hover>
+              <thead>
+                <tr>{rows}</tr>
+              </thead>
+              <tbody>{dataTable}</tbody>
+            </Table>
+          </Col>
+          <Col md="2" />
+        </Row>
+      </div>
     );
     return (
       <div>
+        <Row>
+          <Col>
+            <Button onClick={() => this.setState({ select: true })}>
+              Go Back
+            </Button>
+          </Col>
+          <Col>
+            <Button
+              href={this.downloadData(this.state.data)}
+              download="data.csv"
+            >
+              Download Data
+            </Button>
+          </Col>
+        </Row>
+        <br></br>
+        <br></br>
         {table}
-        <Button href={this.downloadData(this.state.data)} download="data.csv">
-          Download Data
-        </Button>
-        <br></br>
-        <br></br>
-        <Button onClick={() => this.setState({ select: true })}>Go Back</Button>
       </div>
     );
   }
 
   downloadData(data) {
-    const { Parser } = require("json2csv");
-    const parser = new Parser();
     let csv = encodeURI("data:text/csv;charset=utf-8," + parser.parse(data));
     return csv;
   }

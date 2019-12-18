@@ -3,7 +3,9 @@
     --navColOne: #16271c;
     --navColTwo: #0e3628;
 }
-
+head{
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
 body {
     font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }

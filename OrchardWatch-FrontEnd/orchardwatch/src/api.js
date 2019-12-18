@@ -1,12 +1,22 @@
-import axisos from "axios";
+import axios from "axios"
+
+
+
 const uuid = require('uuid/v4');
 let classifiersToReturn = [];
-console.log("HERE")
-axisos.get('https://2a2glx2h08.execute-api.us-east-2.amazonaws.com/default/Frontend-Lambda/ml/list').then(json => console.log(json)).catch((e) => console.log(e.message))
+axios.get('https://2a2glx2h08.execute-api.us-east-2.amazonaws.com/default/Frontend-Lambda/ml/list').then(json => console.log(json)).catch((e) => console.log(e.message))
 fetch('https://2a2glx2h08.execute-api.us-east-2.amazonaws.com/default/Frontend-Lambda/ml/list', {method:"GET"})
     .then(response => response.json())
     .then(json => console.log(json)).catch((e) => console.log(e.message))
 console.log("HERE")
+
+//let tempURL = URL.createObjectURL(dumbModel);
+//let tempName = "RenamedModel"
+//let tempType = "keras"
+
+//axios.post('https://2a2glx2h08.execute-api.us-east-2.amazonaws.com/default/Frontend-Lambda/ml/list',({tempURL, tempName, tempType}))
+
+
 for(let i = 0; i < 2; i += 1) {
   classifiersToReturn.push({
     id: uuid(),
