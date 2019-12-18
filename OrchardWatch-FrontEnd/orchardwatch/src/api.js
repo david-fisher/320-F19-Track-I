@@ -1,30 +1,39 @@
 import axios from "axios"
 
-
-
 const uuid = require('uuid/v4');
 let classifiersToReturn = [];
-axios.get('https://2a2glx2h08.execute-api.us-east-2.amazonaws.com/default/Frontend-Lambda/ml/list').then(json => console.log(json)).catch((e) => console.log(e.message))
-fetch('https://2a2glx2h08.execute-api.us-east-2.amazonaws.com/default/Frontend-Lambda/ml/list', {method:"GET"})
-    .then(response => response.json())
-    .then(json => console.log(json)).catch((e) => console.log(e.message))
-console.log("HERE")
+let classifersToGet = [];
+console.log(classifiersToReturn.length)
 
-//let tempURL = URL.createObjectURL(dumbModel);
-//let tempName = "RenamedModel"
-//let tempType = "keras"
+axios.get('https://2a2glx2h08.execute-api.us-east-2.amazonaws.com/default/Frontend-Lambda/ml/list')
+    .then(function(u){return u.data})
+    .then(function (json) {classifersToGet.push(Object.entries(json)); return classifersToGet})
+    .then(e => fillClassifiers(e))
+    .catch((e) => console.log(e.message))
+//GOD DAMN THIS PARSING WAS A HOT MESS I SWEAR TO GOD FISHER I F YOU READ THIS YOU BETTER GIVE ME 30 EXTRA POINTS FOR FIGURING THIS AWFUL MESS OUT.
+//WHO STRUCTURES LISTS LIKE THIS. WHO. I MEAN I SHOULD NOT HAVE TO DECOMPILE THIS SHIT INTO IT'S COMPONENT PARTS AND REPAECE IT TOGETHER
+//I KNOW I SHOULD HAVE DONE THIS SHIT EARLIER BUT GOD ALLMIGHTY. IT TOOK ME 5 HOURS TO FIGURE OUT THAT MY LAMBDA CALLS WERE FINE, THE ML TEAM JUST WEREN'T PROVIDING
+//CORS FUNCTIONALITY.
 
-//axios.post('https://2a2glx2h08.execute-api.us-east-2.amazonaws.com/default/Frontend-Lambda/ml/list',({tempURL, tempName, tempType}))
+//AND THEN THIS MESS OF A PARSING. URGH.
+//Anyways I hope you're having a fun time reading this. I didn't comment my name but you know who I am.
+function fillClassifiers(e) {
+  e = e[0]
+  for(var i = 0; i < e.length; i++) {
+    var newTitle = e[i][0];
+    var newClassType = e[i][1];
+    classifiersToReturn.push({
+      id: uuid(),
+      img: 'https://ballparkdigest.com/wp-content/uploads/2018/11/Rocky-Mountain-Vibes-300x300.jpg',
+      title: newTitle,
+      classType: newClassType,
+      desc: 'Hello, Its demo or die day, and we\'re an intelligent AI swarm. My Designation is ${desg}}'
+    });
+  }
 
-
-for(let i = 0; i < 2; i += 1) {
-  classifiersToReturn.push({
-    id: uuid(),
-    img: 'https://ballparkdigest.com/wp-content/uploads/2018/11/Rocky-Mountain-Vibes-300x300.jpg',
-    title: `Stubbed AI Title ${i}`,
-    desc: 'Spicy jalapeno bacon ipsum dolor amet kevin strip steak cow pastrami beef ribs tri-tip corned beef tongue. Leberkas meatball cow andouille boudin capicola pastrami biltong filet mignon turducken ground round pork pig pork belly. Swine frankfurter short ribs, leberkas beef ribs kielbasa fatback capicola. Chislic cupim kielbasa brisket landjaeger, buffalo fatback pork chop tongue pastrami kevin pancetta tail boudin venison. Beef ham hock corned beef andouille jowl. Pancetta tenderloin pig spare ribs capicola ham. Ham doner rump, chicken cow ball tip tongue chislic bacon bresaola shoulder.'
-  });
+  console.log(classifiersToReturn)
 }
+
 
 export default {
   getAIClassifiers: () => classifiersToReturn,
