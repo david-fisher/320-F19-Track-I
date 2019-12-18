@@ -1,6 +1,7 @@
 import React from "react";
 import { Col, Row, Card, Accordion } from "react-bootstrap";
 import { Timeline } from "react-twitter-widgets";
+import GoogleMap from "./GoogleMap";
 
 class Home extends React.Component {
   constructor() {
@@ -16,7 +17,7 @@ class Home extends React.Component {
     // fetch description from Lambdas?
     this.setState({
       description:
-        "OrchardWatch, defender of apples, slayer of apple scab, your friendly neighborhood hero!"
+        "OrchardWatch, defender of apples, slayer of apple scab, your friendly neighborhood orchard guardian!"
     });
     this.setState({
       observations: [
@@ -84,13 +85,15 @@ class Home extends React.Component {
       <div>
         <Row>
           <Col>
-            <p>{description}</p>
+            <p className="WhiteDescription">
+              <b>{description}</b>
+            </p>
           </Col>
         </Row>
         <br />
         <Row>
           <Col md="8">
-            <Accordion>{list}</Accordion>
+            <GoogleMap></GoogleMap>
           </Col>
           <Col>{tweets}</Col>
         </Row>

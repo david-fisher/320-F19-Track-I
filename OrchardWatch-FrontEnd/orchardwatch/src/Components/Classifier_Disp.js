@@ -1,6 +1,6 @@
 import React from "react";
-import {Image} from "react-bootstrap";
-
+import {Image, Button} from "react-bootstrap";
+import "./Ai.css";
 
 export class ClassDisp extends React.Component
 {
@@ -8,25 +8,37 @@ export class ClassDisp extends React.Component
     constructor(props)
     {
         super(props);
-        this.state = {
-            onClick: this.props.onClick
-        }
     }
 
     render()
     {
+        const canDelete = this.props.canDelete;
+
         return(
-            <div className="container-fluid" onClick={this.state.onClick}>
-                <div className="row">
-                    <div className="col-12 mt-3">
-                        <div className="card">
-                            <div className="card-horizontal">
-                                <div className="img-square-wrapper">
-                                    <Image className="" style = {{width: 300, height: 300}} src="http://via.placeholder.com/300x180" alt="Card image cap"/>
+            <div className="container-fluid">
+                <div className="row" >
+                    <div className="col-12 mt-3" >
+                        <div className="ai_card">
+                            <div className= "RowWrap" >
+                                <div className="imgExtraBorder" onClick={this.props.onClick}>
+                                <div className="img-square-wrapper" >
+                                    <Image className="avatar"  src={this.props.imgSrc} alt="Card image cap"/>
                                 </div>
-                                    <h4 className="card-title">Card title</h4>
-                                    <p className="card-text">Some quick example text to build on the card title and make
-                                        up the bulk of the card's content.</p>
+                                </div>
+
+                                <div className= "cardClassDetails">
+                                    <div className= "classifierHeader">
+                                    <h4 className= "classifierTitle">{this.props.title}</h4>
+                                        {canDelete &&
+                                            <Button className="Del"
+                                                variant="danger"
+                                                onClick={this.props.onDelete}>
+                                                Delete
+                                            </Button>
+                                        }
+                                    </div>
+                                    <p clasName= "classifierDesc" onClick={this.props.onClick}>{this.props.desc}</p>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -35,3 +47,5 @@ export class ClassDisp extends React.Component
         );
     }
 }
+
+

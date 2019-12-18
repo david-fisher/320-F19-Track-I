@@ -1,83 +1,174 @@
 import React from "react";
-import logo from "./ow-logo.png";
+import logo from "./Components/PrettyEricGraphics/AltLogo.png";
 import "./App.css";
 import Home from "./Components/Home";
 import Data from "./Components/Data";
 import ImageGallery from "./Components/ImageGallery";
 import Login from "./Components/Login";
 import AskAI from "./Components/AskAI";
+import Annotations from "./Components/Annotations";
 import ForgotPassword from "./Components/ForgotPassword";
 import Dashboard from "./Components/Dashboard";
-import { Button } from "react-bootstrap";
+import { Navbar, Nav } from "react-bootstrap";
+import Cookies from "universal-cookie";
+
+const cookie = new Cookies();
+const myBrand = "Orchard Watch";
 
 class App extends React.Component {
   constructor() {
     super();
     this.state = {
-      page: "Home",
-      user: "guest"
+      page: "Home"
     };
   }
 
   render() {
-    console.log(this.state.user);
+    console.log(cookie.get("user"));
     let page = this.pageRender();
+
     let navBar = (
-      <div className="NavBar">
-        <Button onClick={() => this.setState({ page: "Home" })}>Home</Button>
-        <Button onClick={() => this.setState({ page: "Login" })}>Login</Button>
-      </div>
+      <Navbar className="NavBar" bg="dark" variant="dark" expand="xl">
+        <Navbar.Brand onClick={() => this.setState({ page: "Home" })}>
+          <img
+            alt=""
+            src={logo}
+            width="300"
+            height="50"
+            className="d-inline-block align-top"
+          />
+        </Navbar.Brand>
+        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        <Navbar.Collapse id="basic-navbar-nav">
+          <Nav className="justify-content-center" activeKey="/home">
+            <Nav.Item>
+              <Nav.Link onClick={() => this.setState({ page: "Home" })}>
+                Home{" "}
+              </Nav.Link>
+            </Nav.Item>
+            <Nav.Item>
+              <Nav.Link onClick={() => this.setState({ page: "Gallery" })}>
+                Gallery{" "}
+              </Nav.Link>
+            </Nav.Item>
+            <Nav.Item>
+              <Nav.Link onClick={() => this.setState({ page: "Login" })}>
+                Login{" "}
+              </Nav.Link>
+            </Nav.Item>
+          </Nav>
+        </Navbar.Collapse>
+      </Navbar>
     );
-    if (this.state.user === "public") {
+
+    if (cookie.get("user") === "public") {
       navBar = (
-        <div className="NavBar">
-          <Button onClick={() => this.setState({ page: "Home" })}>Home</Button>
-          <Button onClick={() => this.setState({ page: "Data" })}>Data</Button>
-          <Button onClick={() => this.setState({ page: "Dashboard" })}>
-            Dashboard
-          </Button>
-          <Button
-            onClick={() => {
-              this.setState({ page: "Home", user: "guest", authToken: null });
-            }}
-          >
-            Logout
-          </Button>
-        </div>
+        <Navbar className="NavBar" bg="dark" variant="dark" expand="xl">
+          <Navbar.Brand onClick={() => this.setState({ page: "Home" })}>
+            <img
+              alt=""
+              src={logo}
+              width="300"
+              height="50"
+              className="d-inline-block align-top"
+            />
+          </Navbar.Brand>
+          <Navbar.Toggle aria-controls="basic-navbar-nav" />
+          <Navbar.Collapse id="basic-navbar-nav">
+            <Nav className="justify-content-center">
+              <Nav.Link onClick={() => this.setState({ page: "Home" })}>
+                {" "}
+                Home{" "}
+              </Nav.Link>
+              <Nav.Link onClick={() => this.setState({ page: "Gallery" })}>
+                {" "}
+                Gallery{" "}
+              </Nav.Link>
+              <Nav.Link onClick={() => this.setState({ page: "Data" })}>
+                {" "}
+                Data{" "}
+              </Nav.Link>
+              <Nav.Link onClick={() => this.setState({ page: "Dashboard" })}>
+                {" "}
+                Dashboard{" "}
+              </Nav.Link>
+              <Nav.Link
+                onClick={() => {
+                  cookie.set("email", "");
+                  cookie.set("user", "guest");
+                  cookie.set("authToken", null);
+                  this.setState({ page: "Home" });
+                }}
+              >
+                Logout
+              </Nav.Link>
+            </Nav>
+          </Navbar.Collapse>
+        </Navbar>
       );
     } else if (
-      this.state.user === "grower" ||
-      this.state.user === "researcher"
+      cookie.get("user") === "grower" ||
+      cookie.get("user") === "researcher"
     ) {
       navBar = (
-        <div className="NavBar">
-          <Button onClick={() => this.setState({ page: "Home" })}>Home</Button>
-          <Button onClick={() => this.setState({ page: "Data" })}>Data</Button>
-          <Button onClick={() => this.setState({ page: "Gallery" })}>
-            Gallery
-          </Button>
-          <Button onClick={() => this.setState({ page: "AskAI" })}>
-            Ask AI
-          </Button>
-          <Button onClick={() => this.setState({ page: "Dashboard" })}>
-            Dashboard
-          </Button>
-          <Button
-            onClick={() => {
-              this.setState({ page: "Home", user: "guest" });
-            }}
-          >
-            Logout
-          </Button>
-        </div>
+        <Navbar className="NavBar" bg="dark" variant="dark" expand="xl">
+          <Navbar.Brand onClick={() => this.setState({ page: "Home" })}>
+            <img
+              alt=""
+              src={logo}
+              width="300"
+              height="50"
+              className="d-inline-block align-top"
+            />
+          </Navbar.Brand>
+          <Navbar.Toggle aria-controls="basic-navbar-nav" />
+          <Navbar.Collapse id="basic-navbar-nav">
+            <Nav className="justify-content-center">
+              <Nav.Link onClick={() => this.setState({ page: "Home" })}>
+                {" "}
+                Home{" "}
+              </Nav.Link>
+              <Nav.Link onClick={() => this.setState({ page: "Data" })}>
+                {" "}
+                Data{" "}
+              </Nav.Link>
+              <Nav.Link onClick={() => this.setState({ page: "Gallery" })}>
+                {" "}
+                Gallery{" "}
+              </Nav.Link>
+              <Nav.Link onClick={() => this.setState({ page: "AskAI" })}>
+                {" "}
+                Ask AI{" "}
+              </Nav.Link>
+              <Nav.Link onClick={() => this.setState({ page: "Annotations" })}>
+                {" "}
+                Annotations{" "}
+              </Nav.Link>
+              <Nav.Link onClick={() => this.setState({ page: "Dashboard" })}>
+                {" "}
+                Dashboard{" "}
+              </Nav.Link>
+              <Nav.Link
+                onClick={() => {
+                  cookie.set("user", "guest");
+                  cookie.set("authToken", null);
+                  cookie.set("email", "");
+                  this.setState({ page: "Home" });
+                }}
+              >
+                Logout
+              </Nav.Link>
+            </Nav>
+          </Navbar.Collapse>
+        </Navbar>
       );
     }
     return (
       <div className="App">
         <div className="Header">
-          <img src={logo} alt="OrchardWatch"></img>
+          {navBar}
+          <div className="controlledBorder"></div>
         </div>
-        {navBar}
         <br></br>
         <div className="body">{page}</div>
       </div>
@@ -85,7 +176,8 @@ class App extends React.Component {
   }
 
   auth(user) {
-    this.setState({ page: "Home", user: user });
+    cookie.set("user", user);
+    this.setState({ page: "Home" });
   }
 
   setPage(page) {
@@ -95,34 +187,36 @@ class App extends React.Component {
   pageRender() {
     switch (this.state.page) {
       case "Home":
-        return <Home user={this.state.user} />;
+        return <Home />;
       case "Data":
+        return <Data cookie={cookie} />;
+      case "Gallery":
         return (
-          <Data
-            user={this.state.user}
-            authorized={this.state.authToken !== null}
+          <ImageGallery
+            user={cookie.get("user")}
+            token={this.state.authToken}
           />
         );
-      case "Gallery":
-        return <ImageGallery user={this.state.user} />;
       case "Login":
         return (
           <Login
-            user={this.state.user}
+            cookie={cookie}
             auth={this.auth.bind(this)}
             setPage={this.setPage.bind(this)}
           />
         );
       case "AskAI":
-        return <AskAI user={this.state.user} />;
+        return <AskAI user={cookie.get("user")} />;
+      case "Annotations":
+        return <Annotations />;
       case "Dashboard":
-        return <Dashboard user={this.state.user} />;
+        return <Dashboard cookie={cookie} />;
       case "ForgotPassword":
         return <ForgotPassword resetPass={false} />;
       case "ResetPassword":
         return <ForgotPassword resetPass={true} />;
       default:
-        return <Home user={this.state.user} />;
+        return <Home />;
     }
   }
 }
