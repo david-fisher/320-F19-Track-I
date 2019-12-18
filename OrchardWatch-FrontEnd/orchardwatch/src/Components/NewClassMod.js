@@ -50,8 +50,8 @@ function MyVerticallyCenteredModal(props) {
                         title="File Extension"
                         id="input-group-dropdown-2"
                     >
-                        <Dropdown.Item href="#">.py</Dropdown.Item>
-                        <Dropdown.Item href="#">.h5</Dropdown.Item>
+                        <Dropdown.Item href="#">Keras</Dropdown.Item>
+                        <Dropdown.Item href="#">PyTorch</Dropdown.Item>
                     </DropdownButton>
 
                 </InputGroup>
