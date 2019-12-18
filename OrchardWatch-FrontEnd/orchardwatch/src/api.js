@@ -1,9 +1,11 @@
+import axisos from "axios";
 const uuid = require('uuid/v4');
 let classifiersToReturn = [];
 console.log("HERE")
-fetch('http://ec2-3-18-109-238.us-east-2.compute.amazonaws.com:3000/models/list', {method:"GET"})
+axisos.get('https://2a2glx2h08.execute-api.us-east-2.amazonaws.com/default/Frontend-Lambda/ml/list').then(json => console.log(json)).catch((e) => console.log(e.message))
+fetch('https://2a2glx2h08.execute-api.us-east-2.amazonaws.com/default/Frontend-Lambda/ml/list', {method:"GET"})
     .then(response => response.json())
-    .then(json => console.log(json))
+    .then(json => console.log(json)).catch((e) => console.log(e.message))
 console.log("HERE")
 for(let i = 0; i < 2; i += 1) {
   classifiersToReturn.push({
