@@ -11,8 +11,7 @@ import url8 from "./low-level-images/HOBO1.jpeg";
 import url9 from "./low-level-images/weliveinasociety.jpg";
 import url10 from "./low-level-images/placehold.jpg";
 import { Col, Row, Button } from "react-bootstrap";
-import UploadImage from "./UploadImage";
-import ReactImageUploadComponent from "react-images-upload";
+import ImageUploader from "react-images-upload";
 
 
 let IMAGES = [url1, url3, url5, url6, url7, url4, url8, url9, url10, url2];
@@ -29,7 +28,6 @@ class ImageGallery extends React.Component {
     @input parameters: url, an array of image URLs (strings) that is to be processed
     @output parameters: images, an array of image objects that react-grid-gallery can use
     */
-
   processImages(url) {
     let imageArr = [];
 
@@ -43,11 +41,7 @@ class ImageGallery extends React.Component {
         thumbnailHeight: 400
       });
     }
-    return imageArr;
-  }
-
-  componentDidMount() {
-    fetch(
+    /* fetch(
       "https://2a2glx2h08.execute-api.us-east-2.amazonaws.com/default/Frontend-Lambda/ml/dl_unannotated_imgs/",
       {
         method: "GET",
@@ -55,21 +49,32 @@ class ImageGallery extends React.Component {
     )
       .then(response => {
         return response.json();
-      }) 
+      })
       .then(result => {
         let image = "data:image/jpeg;base64," + result.img1;
-        this.setState({ image: image });
+        imageArr.push({
+          src: image,
+          thumbnail: image,
+          thumbnailWidth: 500,
+          thumbnailHeight: 400,
+          nano:image
+        })
         console.log(this.state.image);
-      })
+      }) */
+    return imageArr;
+  }
+
+  componentDidMount() {
+
   }
 
   render() {
     let imageArr = [];
     imageArr = this.processImages(IMAGES);
     //const B64ToImage = ({ text }) => <img src={"${text}"} />;
-    
 
-    /*
+
+
     let editGallery = <div></div>;
     if (this.props.user === "grower" || this.props.user === "researcher") {
       if (this.state.page == "") {
@@ -84,16 +89,19 @@ class ImageGallery extends React.Component {
       } else if (this.state.page == "Upload") {
         editGallery = (
           <div>
-            <UploadImage
-              token={this.props.token}
-              dashboard={this.resetPage.bind(this)}
-            />
+            <div>
+              <h3>Upload an Image</h3>
+              <input type="file" onChange={() => this.onDrop()}/>
+              <br></br>
+              //THIS PART RIGHT HERE, HOW DO I GET THIS THING BELOW TO GO BACK WHILE KEEPING UPDATES TO THE GLOBAL VARIABLE IMAGES
+              <Button onClick={() => console.log("eat pant")}>Go Back</Button>
+              <br></br>
+            </div>
             <br></br>
           </div>
         );
       }
     }
-    */
 
     return (
       <div>
@@ -101,13 +109,7 @@ class ImageGallery extends React.Component {
           <Row>
             <Col md="2" />
             <Col>
-              <img src={this.state.image} height="100%" width="40%" />
-            </Col>
-            <Col md="2" />
-          </Row>
-          <Row>
-            <Col md="2" />
-            <Col>
+            {editGallery}
               <Gallery images={imageArr} />
             </Col>
             <Col md="2" />
@@ -119,6 +121,22 @@ class ImageGallery extends React.Component {
 
   resetPage() {
     this.setState({ page: "" });
+  }
+
+  onDrop(){
+    let preview = document.querySelector('img');
+    let file = document.querySelector('input[type=file]').files[0];
+    let reader = new FileReader();
+
+    reader.addEventListener("load", function () {
+      console.log(reader.result)
+      IMAGES.push(reader.result)
+    }, false);
+
+    if (file) {
+      reader.readAsDataURL(file);
+    }
+
   }
 
   downloadImages(){
