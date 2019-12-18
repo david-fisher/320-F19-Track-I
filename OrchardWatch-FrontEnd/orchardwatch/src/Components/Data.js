@@ -20,7 +20,7 @@ class Data extends React.Component {
           .subtract(3, "days"),
         moment().clone()
       ),
-      data: []
+      data: [{loading: true}]
     };
   }
 
@@ -29,7 +29,6 @@ class Data extends React.Component {
   };
 
   render() {
-    let status = 0;
     if (this.state.select) {
       return (
         <div>
@@ -56,10 +55,10 @@ class Data extends React.Component {
         </div>
       );
     } else if (this.state.search) {
-      status = fetch(
+      fetch(
         `https://2a2glx2h08.execute-api.us-east-2.amazonaws.com/default/Frontend-Lambda/data/data_download/${this.state.date.start.format(
-          "YYYY-MM-DD%h:mm:ss"
-        )}/${this.state.date.end.format("YYYY-MM-DD%h:mm:ss")}`,
+          "YYYY-MM-DD+h:mm:ss"
+        )}/${this.state.date.end.format("YYYY-MM-DD+h:mm:ss")}`,
         {
           method: "GET"
         }
@@ -69,18 +68,18 @@ class Data extends React.Component {
           if (response.status === 200) {
             return response.json();
           } else if (response.status === 400) {
-            return 1;
+            return null;
           } else {
-            return 2;
+            return null;
           }
         })
         .then(result => {
-          if (result !== 1 || result !== 2) {
+          if (result !== null) {
             result = JSON.parse(result);
-            let newData = [];
-            if (result.values.length === 0){
-              return 3;
+            if (result.values.length === 0) {
+              return [];
             }
+            let newData = [];
             result.values.map(e => {
               let obj = {};
               for (let i = 0; i < result.headers.length; ++i) {
@@ -88,23 +87,25 @@ class Data extends React.Component {
               }
               newData.push(obj);
             });
-            this.setState({ data: newData });
-            console.log(newData);
+            return newData;
           }
+          return null;
+        })
+        .then(newData => {
+          this.setState({ data: newData });
           this.setState({ search: false });
-          return 4;
         });
     }
-    if (status !== 4) {
-      let message = 'Error retrieving data from server.';
-      if (status === 1){
-        message = 'Response from query is too large. Limit to a smaller query.';
-      } else if (status === 3){
-        message = 'No Data Available.';
+    if (this.state.data === null || this.state.data.length === 0) {
+      let message = 'No Available Data';
+      if (this.state.data === null){
+        message = 'Error retrieving data from server';
       }
       return (
         <div>
-          <p>{message}</p>
+          <p className="WhiteDescription">
+            <b>No Available Data</b>
+          </p>
           <br></br>
           <Button onClick={() => this.setState({ select: true })}>
             Go Back
@@ -122,18 +123,20 @@ class Data extends React.Component {
       return <tr key={index1}>{rows}</tr>;
     });
     let table = (
-      <Row>
-        <Col md="2" />
-        <Col>
-          <Table striped bordered hover>
-            <thead>
-              <tr>{rows}</tr>
-            </thead>
-            <tbody>{dataTable}</tbody>
-          </Table>
-        </Col>
-        <Col md="2" />
-      </Row>
+      <div className="dataTable">
+        <Row>
+          <Col md="2" />
+          <Col>
+            <Table striped bordered hover>
+              <thead>
+                <tr>{rows}</tr>
+              </thead>
+              <tbody>{dataTable}</tbody>
+            </Table>
+          </Col>
+          <Col md="2" />
+        </Row>
+      </div>
     );
     return (
       <div>
