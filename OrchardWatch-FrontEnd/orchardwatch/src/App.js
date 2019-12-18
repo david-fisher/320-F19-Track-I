@@ -9,7 +9,7 @@ import AskAI from "./Components/AskAI";
 import Annotations from "./Components/Annotations";
 import ForgotPassword from "./Components/ForgotPassword";
 import Dashboard from "./Components/Dashboard";
-import { Button, Navbar, Nav } from "react-bootstrap";
+import { Navbar, Nav } from "react-bootstrap";
 import Cookies from "universal-cookie";
 
 const cookie = new Cookies();

@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Form, Container, Card } from "react-bootstrap";
+import { Button, Container } from "react-bootstrap";
 import UploadImage from "./UploadImage";
 import Profile from "./Profile";
 
