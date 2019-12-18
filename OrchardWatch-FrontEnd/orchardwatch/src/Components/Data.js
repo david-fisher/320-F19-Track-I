@@ -45,6 +45,7 @@ class Data extends React.Component {
           />
           <br></br>
           <br></br>
+          <p>Note: Only a max of 1000 entries can be queried at once.</p>
           <Button
             onClick={() => {
               this.setState({ select: false, search: true });
@@ -73,7 +74,7 @@ class Data extends React.Component {
         })
         .then(result => {
           if (result.length !== 0) {
-            console.log(result["0"]);
+            console.log(result);
           }
           this.setState({ search: false });
         });

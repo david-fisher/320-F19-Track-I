@@ -1,13 +1,13 @@
-import React from 'react';
-import { Col, Row, Card, Accordion } from 'react-bootstrap';
-import { Timeline } from 'react-twitter-widgets';
-import GoogleMap from './GoogleMap';
+import React from "react";
+import { Col, Row, Card, Accordion } from "react-bootstrap";
+import { Timeline } from "react-twitter-widgets";
+import GoogleMap from "./GoogleMap";
 
 class Home extends React.Component {
   constructor() {
     super();
     this.state = {
-      description: '',
+      description: "",
       editting: false,
       observations: []
     };
@@ -17,32 +17,32 @@ class Home extends React.Component {
     // fetch description from Lambdas?
     this.setState({
       description:
-        'OrchardWatch, defender of apples, slayer of apple scab, your friendly neighborhood hero!'
+        "OrchardWatch, defender of apples, slayer of apple scab, your friendly neighborhood orchard guardian!"
     });
     this.setState({
       observations: [
         {
-          title: 'Some Announcement',
-          description: 'Some Description'
+          title: "Some Announcement",
+          description: "Some Description"
         },
         {
-          title: 'Another Announcement',
-          description: 'Another Description'
+          title: "Another Announcement",
+          description: "Another Description"
         },
         {
-          title: 'Yet Another Announcement',
-          description: 'Yet Another Description'
+          title: "Yet Another Announcement",
+          description: "Yet Another Description"
         },
         {
-          title: 'Some Random Announcement',
-          description: 'blah, blah, blah\nblah\n\nblah'
+          title: "Some Random Announcement",
+          description: "blah, blah, blah\nblah\n\nblah"
         }
       ]
     });
   }
 
   render() {
-    let description = this.state.description.split('\n').map((line, key) => {
+    let description = this.state.description.split("\n").map((line, key) => {
       return (
         <span key={key}>
           {line}
@@ -53,19 +53,19 @@ class Home extends React.Component {
     let tweets = (
       <Timeline
         dataSource={{
-          sourceType: 'profile',
-          screenName: 'iamdevloper'
+          sourceType: "profile",
+          screenName: "iamdevloper"
         }}
         options={{
-          username: 'iamdevloper',
-          height: '500',
-          width: '250'
+          username: "iamdevloper",
+          height: "500",
+          width: "250"
         }}
       />
     );
     let list = this.state.observations.map((e, index) => {
       let announcementDescription = e.description
-        .split('\n')
+        .split("\n")
         .map((line, key) => {
           return (
             <span key={key}>
@@ -85,12 +85,14 @@ class Home extends React.Component {
       <div>
         <Row>
           <Col>
-            <p>{description}</p>
+            <p className="HomeDescription">
+              <b>{description}</b>
+            </p>
           </Col>
         </Row>
         <br />
         <Row>
-          <Col md='8'>
+          <Col md="8">
             <GoogleMap></GoogleMap>
           </Col>
           <Col>{tweets}</Col>

@@ -1,6 +1,6 @@
 :root {
-    //--bgColorOne:  #f4eeea;
-    //--bgColorTwo:  #afb1ce;
+    --bgColorOne:  #f4eeea;
+    --bgColorTwo:  #afb1ce;
     --bgColorOne: #75B863;
     --bgColorTwo:  #40593B;
 
@@ -64,7 +64,7 @@ body
 .navbar-dark .navbar-nav .nav-link
 {
     color: #fff;
-    background-color: #40593B;
+    background-color: #0e3628;
     position: relative;
     z-index: 100000;
 }
@@ -103,4 +103,8 @@ body
 
 .select {
   text-align-last: center;
+}
+
+.HomeDescription {
+  color: white;
 }
