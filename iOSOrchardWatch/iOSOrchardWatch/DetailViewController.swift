@@ -27,7 +27,7 @@ UINavigationControllerDelegate{
 
         setToolBar()
         
-        let myURL = URL(string:"d3gvvf4yx7ay63.cloudfront.net")
+        let myURL = URL(string:"https://coldspringorchard.com/")
         let myRequest = URLRequest(url: myURL!)
         webView.load(myRequest)
         
@@ -95,6 +95,9 @@ UINavigationControllerDelegate{
                 if let response = response as? HTTPURLResponse {
                     status = response.statusCode
                     print("statusCode: \(response.statusCode)")
+                    let httpResponse = response as HTTPURLResponse
+                    let field = httpResponse.allHeaderFields["label"]
+                    print(field)
                 }
                 print(data)
                 if status == 200{
@@ -122,6 +125,5 @@ public func  convertImageToBase64String(image : UIImage ) -> String
     let strBase64 =  image.pngData()?.base64EncodedString()
     return strBase64!
 }
-
 
 
