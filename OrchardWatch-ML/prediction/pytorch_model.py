@@ -5,7 +5,7 @@ import torch
 import json
 import os
 
-# mobilenet = models.mobilenet_v2(pretrained=True)
+# mobilenet = models.mobilenet_v2()
 # torch.save(mobilenet, 'mobilenet.pt')
 
 def predict_pytorch(model_fname, img):
@@ -19,7 +19,8 @@ def predict_pytorch(model_fname, img):
 	print(preds_json)
 
 def load_model(model_fname):
-	model = torch.load(model_fname)
+	model = models.mobilenet_v2()
+	model.load_state_dict(torch.load(model_fname))
 	# change into eval mode
 	model.eval()
 	return model
