@@ -12,11 +12,12 @@ class UploadImage extends React.Component {
   onDrop(picture) {
     //put lambda call here
     //token is under this.props.token
+    /*
     fetch(
       "https://2a2glx2h08.execute-api.us-east-2.amazonaws.com/default/Frontend-Lambda/ml/dl_unannotated_imgs/",
       {
-        method: "POST",
-        body: JSON.stringify({ num_pics: "100", modelName: "resnet" })
+        method: "GET",
+        
       }
     )
       .then(response => {
@@ -25,6 +26,7 @@ class UploadImage extends React.Component {
       .then(result => {
         console.log(result);
       })
+      */
   }
 
   render() {
