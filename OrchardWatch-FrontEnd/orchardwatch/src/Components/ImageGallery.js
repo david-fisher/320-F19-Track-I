@@ -101,7 +101,7 @@ class ImageGallery extends React.Component {
         editGallery = (
           <div>
             <Button onClick={() => this.setState({ page: "Upload" })}>Add Images</Button>
-            <Button > Download Images</Button>
+            
             <br></br>
             <img src={this.state.image} height="100%" width="40%" />
             <br></br>
@@ -142,9 +142,7 @@ class ImageGallery extends React.Component {
           <Row>
             <Col md="2" />
             <Col>
-              <Button >
-                Download Images
-              </Button>
+              
             </Col>
             <Col md="2" />
           </Row>
