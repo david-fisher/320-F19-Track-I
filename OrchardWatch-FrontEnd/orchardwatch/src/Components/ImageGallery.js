@@ -19,7 +19,7 @@ import JSZipUtils from "jszip-utils";
 import { saveAs } from "file-saver";
 
 
-let IMAGES = [url1, url3, url5, url6, url7, url4, url8, url9, url10, url2];
+var IMAGES = [url1, url3, url5, url6, url7, url4, url8, url9, url10, url2];
 
 class ImageGallery extends React.Component {
   constructor() {
@@ -34,6 +34,7 @@ class ImageGallery extends React.Component {
     @output parameters: images, an array of image objects that react-grid-gallery can use
     */
   processImages(url) {
+    console.log(url);
     let imageArr = [];
 
     // fetch images here
@@ -75,33 +76,38 @@ class ImageGallery extends React.Component {
 
   render() {
     let imageArr = [];
-    imageArr = this.processImages(IMAGES);
+    //const B64ToImage = ({ text }) => <img src={"${text}"} />;
 
 
 
     let editGallery = <div></div>;
     if (this.props.user === "grower" || this.props.user === "researcher") {
       if (this.state.page == "") {
+        imageArr = this.processImages(IMAGES);
         editGallery = (
           <div>
             <Button onClick={() => this.setState({ page: "Upload" })}>Add Images</Button>
             <Button onClick={() => this.downloadImages()}> Download Images</Button>
             <br></br>
             <br></br>
+            <Gallery images={imageArr} />
           </div>
         );
       } else if (this.state.page == "Upload") {
+        imageArr = this.processImages(IMAGES);
         editGallery = (
           <div>
             <div>
               <h3>Upload an Image</h3>
-              <input type="file" onChange={() => this.onDrop()}/>
+              <input type="file" onChange={() =>{
+                this.onDrop();
+              }}/>
               <br></br>
-              //THIS PART RIGHT HERE, HOW DO I GET THIS THING BELOW TO GO BACK WHILE KEEPING UPDATES TO THE GLOBAL VARIABLE IMAGES
-              <Button onClick={() => console.log("eat pant")}>Go Back</Button>
+              <Button onClick={() => this.setState({page: ""})}>Go Back</Button>
               <br></br>
             </div>
             <br></br>
+            <Gallery images={imageArr} />
           </div>
         );
       }
@@ -114,7 +120,6 @@ class ImageGallery extends React.Component {
             <Col md="2" />
             <Col>
             {editGallery}
-              <Gallery images={imageArr} />
             </Col>
             <Col md="2" />
           </Row>
@@ -140,10 +145,11 @@ class ImageGallery extends React.Component {
     let preview = document.querySelector('img');
     let file = document.querySelector('input[type=file]').files[0];
     let reader = new FileReader();
-
-    reader.addEventListener("load", function () {
+    var this2 = this;
+    reader.addEventListener("loadend", function () {
       console.log(reader.result)
-      IMAGES.push(reader.result)
+      IMAGES.push(reader.result + "")
+      this2.setState({page: ""});
     }, false);
 
     if (file) {
