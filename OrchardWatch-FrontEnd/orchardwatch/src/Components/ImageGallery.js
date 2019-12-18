@@ -101,7 +101,7 @@ class ImageGallery extends React.Component {
         editGallery = (
           <div>
             <Button onClick={() => this.setState({ page: "Upload" })}>Add Images</Button>
-            <Button onClick={() => this.downloadImages()}> Download Images</Button>
+            <Button > Download Images</Button>
             <br></br>
             <img src={this.state.image} height="100%" width="40%" />
             <br></br>
@@ -142,7 +142,7 @@ class ImageGallery extends React.Component {
           <Row>
             <Col md="2" />
             <Col>
-              <Button onClick={this.downloadImages(imageArr).then((content) => {saveAs(content, "images.zip")})} >
+              <Button >
                 Download Images
               </Button>
             </Col>
@@ -174,7 +174,7 @@ class ImageGallery extends React.Component {
 
   }
 
-  downloadImages(ImageURLs){
+  /*downloadImages(ImageURLs){
     let zip = new JSZip();
     ImageURLs.forEach(element => {
       let url = element;
@@ -183,7 +183,7 @@ class ImageGallery extends React.Component {
       zip.file("image", file);
     });
     return zip.generateAsync({ type: "blob" });
-  }
+  }*/
 
 }
 export default ImageGallery;
