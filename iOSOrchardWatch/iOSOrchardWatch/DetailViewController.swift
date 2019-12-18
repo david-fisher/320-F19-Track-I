@@ -27,7 +27,7 @@ UINavigationControllerDelegate{
 
         setToolBar()
         
-        let myURL = URL(string:"https://coldspringorchard.com/")
+        let myURL = URL(string:"https://www.orchardwatch.org")
         let myRequest = URLRequest(url: myURL!)
         webView.load(myRequest)
         
@@ -49,7 +49,7 @@ UINavigationControllerDelegate{
         toolBar.trailingAnchor.constraint(equalTo: webView.trailingAnchor, constant: 0).isActive = true
     }
     @objc private func goBack() {
-        let myURL = URL(string:"https://coldspringorchard.com/")
+        let myURL = URL(string:"https://www.orchardwatch.org")
         let myRequest = URLRequest(url: myURL!)
         webView.load(myRequest)
     }
@@ -110,12 +110,13 @@ UINavigationControllerDelegate{
         }
         task.resume()
         */
-        
         self.dismiss(animated: true, completion: nil)
         
-        let myURL = URL(string:"https://coldspringorchard.com/")
-        let myRequest = URLRequest(url: myURL!)
-        webView.load(myRequest)
+        //let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
+        
+        //let resultViewController = storyBoard.instantiateViewController(withIdentifier: "ResultViewController") as! ResultViewController
+        
+        //self.present(resultViewController, animated:true, completion:nil)
     }
     
 }
