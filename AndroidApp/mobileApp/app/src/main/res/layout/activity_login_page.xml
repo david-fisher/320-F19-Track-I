@@ -43,4 +43,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/authenticationKey" />
 
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="409dp"
+        android:layout_height="203dp"
+        android:src="@drawable/orchard_watch"
+        app:layout_constraintBottom_toTopOf="@+id/authenticationKey"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.551" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

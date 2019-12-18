@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.ImageView;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -41,6 +42,7 @@ public class LoginPage extends AppCompatActivity {
     private EditText authenKey_txt;
     private Button login_btn;
     private TextView invalid_txt;
+    private ImageView logo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +52,9 @@ public class LoginPage extends AppCompatActivity {
         authenKey_txt = (EditText)findViewById(R.id.authenticationKey);
         login_btn = (Button)findViewById(R.id.btnLogin);
         invalid_txt = (TextView)findViewById(R.id.invalid_view);
+        logo = (ImageView)findViewById(R.id.imageView);
 
+        logo.setImageResource(R.drawable.orchard_watch);
         invalid_txt.setText("Enter Key");
         SharedPreferences prefs = getSharedPreferences("UserData", MODE_PRIVATE);
         String code = prefs.getString("code","");
