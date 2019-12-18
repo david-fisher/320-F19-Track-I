@@ -1,5 +1,4 @@
 import axios from "axios"
-import dumbModel from "./Components/SlapdashHardCodingTestingFolder/RenamedTestClassifer.py";
 
 
 
