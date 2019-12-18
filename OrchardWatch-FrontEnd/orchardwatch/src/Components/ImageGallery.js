@@ -20,6 +20,19 @@ import { Col, Row, Button } from "react-bootstrap";
 
 
 var IMAGES = [url1, url3, url5, url6, url7, url4, url8, url9, url10, url2];
+fetch(
+  "https://2a2glx2h08.execute-api.us-east-2.amazonaws.com/default/Frontend-Lambda/ml/dl_unannotated_imgs/",
+  {
+    method: "GET",
+  }
+)
+  .then(response => {
+    return response.json();
+  })
+  .then(result => {
+    let image = "data:image/jpeg;base64," + result.img1;
+    IMAGES.push(image)
+  })
 //let ImageURLs = ["./low-level-images/burningtree.jpg", "./low-level-images/sans_fisher.jpg", "./low-level-images/toopowerful.jpg", "./low-level-images/fisherpick.jpg", "./low-level-images/apples1.jpg", "./low-level-images/apple2.png", "./low-level-images/apples3.jpg", "./low-level-images/HOBO1.jpeg", "./low-level-images/weliveinasociety.jpg", "./low-level-images/placehold.jpg"];
 
 class ImageGallery extends React.Component {
@@ -72,20 +85,7 @@ class ImageGallery extends React.Component {
   }
 
   componentDidMount() {
-    fetch(
-      "https://2a2glx2h08.execute-api.us-east-2.amazonaws.com/default/Frontend-Lambda/ml/dl_unannotated_imgs/",
-      {
-        method: "GET",
-      }
-    )
-      .then(response => {
-        return response.json();
-      })
-      .then(result => {
-        let image = "data:image/jpeg;base64," + result.img1;
-        this.setState({ image: image });
-        console.log(this.state.image);
-      })
+
   }
 
   render() {
