@@ -90,14 +90,19 @@ class ImageGallery extends React.Component {
     //const B64ToImage = ({ text }) => <img src={"${text}"} />;
 
     let editGallery = <div></div>;
+    let temp = <div></div>;
+    if(this.props.user === "researcher" || this.props.user === "grower" ){
+      temp = (
+        <Button onClick={() => this.setState({ page: "Upload" })}>
+        Add Images
+      </Button>
+      );
+    }
     if (this.state.page == "") {
       imageArr = this.processImages(IMAGES);
       editGallery = (
         <div>
-          <Button onClick={() => this.setState({ page: "Upload" })}>
-            Add Images
-          </Button>
-
+          {temp}
           <br></br>
           <img src={this.state.image} height="100%" width="40%" />
           <br></br>
