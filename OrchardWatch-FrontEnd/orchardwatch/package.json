@@ -1,0 +1,56 @@
+{
+  "name": "orchardwatch",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "axios": "^0.19.0",
+    "base64-img": "^1.0.4",
+    "base64-to-image": "^1.0.2",
+    "browserify-fs": "^1.0.0",
+    "file-saver": "^2.0.2",
+    "google-map-react": "^1.1.5",
+    "json2csv": "^4.5.4",
+    "jszip": "^3.2.2",
+    "jszip-utils": "^0.1.0",
+    "moment": "^2.24.0",
+    "moment-range": "^4.0.2",
+    "npm": "^6.13.4",
+    "prop-types": "^15.7.2",
+    "react": "^16.12.0",
+    "react-bootstrap": "^1.0.0-beta.16",
+    "react-datetime": "^2.16.3",
+    "react-datetime-range-picker": "^2.0.5",
+    "react-dom": "^16.12.0",
+    "react-grid-gallery": "^0.5.5",
+    "react-images-upload": "^1.2.7",
+    "react-router-dom": "^5.1.2",
+    "react-scripts": "^3.3.0",
+    "react-twitter-widgets": "^1.7.1",
+    "universal-cookie": "^4.0.2",
+    "uuid": "^3.3.3"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@babel/plugin-proposal-class-properties": "^7.7.4"
+  }
+}

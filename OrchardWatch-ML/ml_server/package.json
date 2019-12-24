@@ -1,13 +1,21 @@
 {
-  "name": "ML Server",
+  "name": "ml_server",
   "version": "1.0.0",
-  "description": "Server that provides Machine learning services through rest requests",
+  "description": "REST interface for ML Service",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/david-fisher/320-F19-Track-I.git"
+  },
   "author": "Dennis Yatsula",
-  "license": "ISC",
+  "license": "BSD-3-Clause",
+  "bugs": {
+    "url": "https://github.com/david-fisher/320-F19-Track-I/issues"
+  },
+  "homepage": "https://github.com/david-fisher/320-F19-Track-I#readme",
   "dependencies": {
     "express": "^4.17.1"
   }
