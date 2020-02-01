@@ -37,8 +37,8 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 # print('Input image size = ', input_image.shape)
 # plt.imshow(np.uint8(input_image[0]))
 
-def predict_keras(model_fname, img_url):
-	loaded_model, processed_image = load_keras(model_fname, img_url)
+def predict_keras(model_fname, img):
+	loaded_model, processed_image = load_keras(model_fname, img)
 	# resnet50
 	predictions_resnet50 = loaded_model.predict(processed_image)
 	label_resnet50 = decode_predictions(predictions_resnet50)
@@ -60,4 +60,3 @@ def load_keras(model_fname, img):
 	processed_image_resnet50 = applications.resnet50.preprocess_input(input_image.copy())
 
 	return loaded_model, processed_image_resnet50
-

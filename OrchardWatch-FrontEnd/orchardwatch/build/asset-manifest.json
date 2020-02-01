@@ -1,0 +1,40 @@
+{
+  "files": {
+    "main.css": "/static/css/main.7e99633c.chunk.css",
+    "main.js": "/static/js/main.e0500feb.chunk.js",
+    "main.js.map": "/static/js/main.e0500feb.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.50ca3f0d.js",
+    "runtime-main.js.map": "/static/js/runtime-main.50ca3f0d.js.map",
+    "static/css/2.9bf1ea5f.chunk.css": "/static/css/2.9bf1ea5f.chunk.css",
+    "static/js/2.fbc388e3.chunk.js": "/static/js/2.fbc388e3.chunk.js",
+    "static/js/2.fbc388e3.chunk.js.map": "/static/js/2.fbc388e3.chunk.js.map",
+    "index.html": "/index.html",
+    "precache-manifest.d19a06f9e15a2ab67f3a4e5ce0afff34.js": "/precache-manifest.d19a06f9e15a2ab67f3a4e5ce0afff34.js",
+    "service-worker.js": "/service-worker.js",
+    "static/css/2.9bf1ea5f.chunk.css.map": "/static/css/2.9bf1ea5f.chunk.css.map",
+    "static/css/main.7e99633c.chunk.css.map": "/static/css/main.7e99633c.chunk.css.map",
+    "static/js/2.fbc388e3.chunk.js.LICENSE": "/static/js/2.fbc388e3.chunk.js.LICENSE",
+    "static/media/AltLogo.png": "/static/media/AltLogo.2e1501b9.png",
+    "static/media/HOBO1.jpeg": "/static/media/HOBO1.802b7307.jpeg",
+    "static/media/NewClassIcon.png": "/static/media/NewClassIcon.71f2e8d3.png",
+    "static/media/UploadIcon.svg": "/static/media/UploadIcon.1cedb6e9.svg",
+    "static/media/apple2.png": "/static/media/apple2.d4c21986.png",
+    "static/media/apples1.jpg": "/static/media/apples1.e84004df.jpg",
+    "static/media/apples3.jpg": "/static/media/apples3.9fce83bf.jpg",
+    "static/media/burningtree.jpg": "/static/media/burningtree.530deb64.jpg",
+    "static/media/fisherpick.png": "/static/media/fisherpick.d93289b8.png",
+    "static/media/newClassificationUpload.png": "/static/media/newClassificationUpload.560a9a56.png",
+    "static/media/pictureCheck.png": "/static/media/pictureCheck.f63a79b6.png",
+    "static/media/placehold.jpg": "/static/media/placehold.8ed6b9fe.jpg",
+    "static/media/sans_fisher.png": "/static/media/sans_fisher.c5be898f.png",
+    "static/media/toopowerful.png": "/static/media/toopowerful.4e87823a.png",
+    "static/media/weliveinasociety.jpg": "/static/media/weliveinasociety.46cc3aaa.jpg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.50ca3f0d.js",
+    "static/css/2.9bf1ea5f.chunk.css",
+    "static/js/2.fbc388e3.chunk.js",
+    "static/css/main.7e99633c.chunk.css",
+    "static/js/main.e0500feb.chunk.js"
+  ]
+}
