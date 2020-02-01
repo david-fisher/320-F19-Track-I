@@ -15,6 +15,11 @@ app.use(bodyParser.json());
 //Requires modelName and imageURL parameters
 //Returns prediction
 app.get('/predict', function (req, res) {
+	res.setHeader('Content-Type', 'application/json')
+	res.setHeader('X-Content-Type-Options', 'nosniff')
+	res.setHeader('Access-Control-Allow-Origin', '*')
+	res.setHeader('Access-Control-Allow-Headers', '*')
+	res.setHeader('Access-Control-Allow-Methods', '*')
 	let functionFlag = 'predict'
 	let modelName = req.query.modelName
 	let imageURL = req.query.imageURL
@@ -61,6 +66,11 @@ app.get('/predict', function (req, res) {
 //Function to handle model upload
 //Requires modelName parameter
 app.post('/upload/new', function (req, res) {
+	res.setHeader('Content-Type', 'application/json')
+	res.setHeader('X-Content-Type-Options', 'nosniff')
+	res.setHeader('Access-Control-Allow-Origin', '*')
+	res.setHeader('Access-Control-Allow-Headers', '*')
+	res.setHeader('Access-Control-Allow-Methods', '*')
 	let functionFlag = 'upload'
 	let modelFileURL = req.query.modelFileURL
 	let modelName = req.query.modelName
@@ -105,6 +115,11 @@ app.post('/upload/new', function (req, res) {
 
 //Function to handle model replacement
 app.put('/upload/replace', function (req, res) {
+	res.setHeader('Content-Type', 'application/json')
+	res.setHeader('X-Content-Type-Options', 'nosniff')
+	res.setHeader('Access-Control-Allow-Origin', '*')
+	res.setHeader('Access-Control-Allow-Headers', '*')
+	res.setHeader('Access-Control-Allow-Methods', '*')
 	let functionFlag = 'upload'
 	let modelFileURL = req.query.modelFileURL
 	let modelName = req.query.modelName
@@ -148,6 +163,11 @@ app.put('/upload/replace', function (req, res) {
 
 //Function handle sending back a list of models
 app.get('/models/list', function (req, res) {
+	res.setHeader('Content-Type', 'application/json')
+	res.setHeader('X-Content-Type-Options', 'nosniff')
+	res.setHeader('Access-Control-Allow-Origin', '*')
+	res.setHeader('Access-Control-Allow-Headers', '*')
+	res.setHeader('Access-Control-Allow-Methods', '*')
 	let functionFlag = 'list'
 
 	const spawn = require('child_process').spawn

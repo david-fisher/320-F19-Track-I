@@ -1,0 +1,30 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "label": "Execute front end",
+        "type": "shell",
+        "command": "./scripts/test.sh",
+        "windows": {
+          "command": "sam local invoke --no-event"
+        },
+        "group": "build",
+        "presentation": {
+          "reveal": "always",
+          "panel": "shared"
+        }
+      },
+      {
+        "label": "Deploy Drone",
+        "type": "shell",
+        "command": "aws lambda update-function-code --function-name Drone-Lambda --zip-file fileb://lambdas/Frontend-Lambda.zip",
+        "group": "build",
+        "presentation": {
+          "reveal": "always",
+          "panel": "shared"
+        }
+      },
+    ]
+  }
