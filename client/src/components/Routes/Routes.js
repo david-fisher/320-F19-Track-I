@@ -14,6 +14,7 @@ import Register from "../../pages/Register/Register";
 import Predict from "../../pages/Predict/Predict";
 import Annotate from "../../pages/Annotate/Annotate";
 import NotFound from "../../pages/NotFound/NotFound";
+import Forgot from "../../pages/Forgot/Forgot";
 import UnauthenticatedRoute from "./UnauthenticatedRoute";
 import AuthenticatedRoute from "./AuthenticatedRoute";
 
@@ -34,6 +35,7 @@ export default function Routes() {
       <Route path="/register" exact component={Register} />
       <AuthenticatedRoute path="/annotate" exact component={Annotate} />
       <AuthenticatedRoute path="/predict" exact component={Predict} />
+      <Route path="/forgot" exact component={Forgot} />
       <Route component={NotFound} />
     </Switch>
   );
