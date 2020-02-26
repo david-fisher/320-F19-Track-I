@@ -2,9 +2,20 @@ import React, { Component } from 'react';
 import { AppRegistry, StyleSheet, Text, View, TextInput, Dimensions, Button, Image } from 'react-native';
 
 
+
 export default class App extends Component {
 
-  code = ''
+  state = {
+    code: -1
+  }
+  LoginHandler() {
+    if (this.state.code === '0000') {
+      
+    }
+    else {
+      alert("Incorrect Access Code")
+    }
+  }
   render() {
     return (
       <View style={styles.container}>
@@ -19,12 +30,12 @@ export default class App extends Component {
           keyboardType = 'number-pad'
           textAlign = {'center'}
           placeholderTextColor = {'gray'}
-          onChangeText = {(text)=>this.setState({code: text})}
+          onChangeText = {(code)=>this.setState({code})}
         />
         <Button
           style = {styles.submitButton}
           title = 'Submit'
-          onPress = {()=>{console.log(code)}}
+          onPress = {()=>this.LoginHandler()}
         />
       </View>
     );
@@ -46,4 +57,4 @@ const styles = StyleSheet.create({
   },
 });
 
-AppRegistry.registerComponent('App',()=>'App');
+AppRegistry.registerComponent('App',()=>App);
