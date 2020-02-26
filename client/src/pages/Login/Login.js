@@ -98,6 +98,11 @@ export default function Login() {
               Create an account
             </Button>
           </FormGroup>
+          <FormGroup>
+            <Button block href="/forgot">
+              Forgot Password
+            </Button>
+          </FormGroup>
           <LoginModal
             show={modalShow}
             onHide={() => {
