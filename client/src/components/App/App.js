@@ -25,6 +25,7 @@ export default function App() {
         <Nav className="mr-auto">
           <Nav.Link href="/home">Home</Nav.Link>
           <Nav.Link href="/about">About Us</Nav.Link>
+          <Nav.Link href="/announcements">Announcements</Nav.Link>
           {/*{token !== undefined && (*/}
           {/*  <Nav.Link href="/orchards">Orchards</Nav.Link>*/}
           {/*)}*/}
