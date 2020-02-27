@@ -3,17 +3,21 @@ import { AppRegistry, StyleSheet, Text, View, TextInput, Dimensions, Button, Ima
 import 'react-native-gesture-handler';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator, createSwitchNavigator} from '@react-navigation/stack';
+import { WebView } from "react-native-webview";
 
 export default class Home extends Component {
   render() {
     return (
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-            <Text>Home Screen</Text>
-            <Button
-            title="Go to datasets page"
-            onPress={() => this.props.navigation.navigate('Login')}
-                />
-        </View>
+      <WebView
+      source={{uri:'http://orchardwatch.surge.sh/home'}}
+      style = {styles.webstyle}
+      />   
     )
   }
 }
+
+const styles = StyleSheet.create({
+  webstyle: {
+    marginTop: 40
+  }
+});

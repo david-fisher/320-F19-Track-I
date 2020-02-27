@@ -20,7 +20,7 @@ export default class Login extends Component {
         return (
             <View style={styles.container}>
             <Image
-                style = {{height: 200, width: Dimensions.get('window').width - 40}}
+                style = {{height: 150, width: Dimensions.get('window').width - 40}}
                 source = {require('../assets/orchardWatch.png')}
             />
             <TextInput 
@@ -55,4 +55,7 @@ const styles = StyleSheet.create({
       borderColor: 'black', 
       borderWidth: 1,
     },
+    submitButton: {
+        height: 30
+    }
   });
