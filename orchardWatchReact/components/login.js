@@ -3,6 +3,9 @@ import { AppRegistry, StyleSheet, Text, View, TextInput, Dimensions, Button, Ima
 import 'react-native-gesture-handler';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator, createSwitchNavigator} from '@react-navigation/stack';
+import { Cookies } from "react-cookie";
+
+const cookies = new Cookies()
 
 export default class Login extends Component {
     state = {
@@ -10,6 +13,7 @@ export default class Login extends Component {
     }
     LoginHandler() {
         if (this.state.code === '0000') {
+            cookies.set('authenticated',true,{path: '/'})
             this.props.navigation.navigate('Home')
         }
         else {
