@@ -4,15 +4,45 @@ import 'react-native-gesture-handler';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator, createSwitchNavigator} from '@react-navigation/stack';
 import { WebView } from "react-native-webview";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import Camera from 'react-native-camera';
+
+const Tab = createBottomTabNavigator()
 
 export default class Home extends Component {
-  render() {
+  Website() {
     return (
       <WebView
       source={{uri:'http://orchardwatch.surge.sh/home'}}
       style = {styles.webstyle}
       />   
     )
+  }
+
+  Datasets() {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <Text>DataSets Coming Here Soon</Text>
+      </View>
+    )
+  }
+
+  Camera() {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <Text>Camera Coming Here Soon</Text>
+      </View>
+    )
+  }
+
+  render() {
+    return (
+        <Tab.Navigator initialRouteName = "Website">
+          <Tab.Screen name="WebSite" component={this.Website} />
+          <Tab.Screen name="Datasets" component={this.Datasets} />
+          <Tab.Screen name="Camera" component={this.Camera} />
+        </Tab.Navigator>
+    );
   }
 }
 

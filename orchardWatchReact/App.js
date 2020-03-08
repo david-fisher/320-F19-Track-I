@@ -5,15 +5,25 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator, createSwitchNavigator} from '@react-navigation/stack';
 import Home from './components/home';
 import Login from './components/login';
+import { Cookies } from "react-cookie";
 
 const Stack = createStackNavigator();
-
+const cookies = new Cookies();
 export default class App extends Component {
+  // authentication = Cookies.get('authenticated')
+  setRoute() {
+    if (cookies.get('authenticated',{path: '/'}) === true) {
+      return 'Home'
+    } else {
+      return 'Login'
+    }
+  }
+
   render() {
     return (
       <NavigationContainer>
         <Stack.Navigator
-          initialRouteName="Login"
+          initialRouteName= {this.setRoute()}
           screenOptions={{ gestureEnabled: false, headerShown: false }}
         >
           <Stack.Screen
