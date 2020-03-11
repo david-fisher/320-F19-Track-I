@@ -26,6 +26,7 @@ export default function App() {
           <Nav.Link href="/home">Home</Nav.Link>
           <Nav.Link href="/about">About Us</Nav.Link>
           <Nav.Link href="/announcements">Announcements</Nav.Link>
+          <Nav.Link href="/contacts">Contacts</Nav.Link>
           {/*{token !== undefined && (*/}
           {/*  <Nav.Link href="/orchards">Orchards</Nav.Link>*/}
           {/*)}*/}
@@ -46,6 +47,7 @@ export default function App() {
         </Nav>
 
         <Nav className="justify-content-end">
+          {token === undefined && (<Nav.Link href="/accountinfo">Account Info</Nav.Link>)}
           {token === undefined && (
             <Nav.Link href="/register">Register</Nav.Link>
           )}

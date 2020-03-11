@@ -1,0 +1,18 @@
+.Title {
+  padding: 1rem;
+}
+.name {
+  margin-top: 20px;
+  font-style: italic;
+  font-size: 30px;
+}
+.footer {
+  height: 70px;
+  font-size: 30px;
+  color: white;
+  padding-top: 10px;
+  text-indent: 50px;
+}
+.left-margin {
+  margin-left: 10px;
+}
