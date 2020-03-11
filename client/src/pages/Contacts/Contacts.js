@@ -19,6 +19,16 @@ export function Contacts() {
         <p class="lead border border-light rounded">
           Email: researchersUnited@gmail.com
         </p>
+        
+        <h1 className="name">Donut Monkey</h1>
+        <p class="lead border border-light rounded">
+          Email: giveMeDonuts@aol.com
+        </p>
+        
+        <h1 className="name">Dirty Dan</h1>
+        <p class="lead border border-light rounded">
+          Email: imNotPinheadLarry@aol.com
+        </p>
       </Container>
     </body>
   );

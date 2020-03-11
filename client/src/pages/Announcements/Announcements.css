@@ -7,7 +7,7 @@
   margin-right: auto;
   width: 100%;
 }
-.header {
+.title {
   margin-top: 20px;
   font-style: italic;
 }
@@ -20,4 +20,8 @@
 }
 .left-margin {
   margin-left: 10px;
+}
+.addUpdate {
+  margin-left: auto;
+  margin-right: auto;
 }
