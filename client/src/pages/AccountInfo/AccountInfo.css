@@ -1,0 +1,29 @@
+.Title {
+  padding: 1rem;
+}
+.accountPic {
+  display: block;
+  margin-left: 20px;
+  margin-right: auto;
+  width: 10%;
+}
+.h {
+  margin-top: 20px;
+  font-size: 30px;
+  font-style: italic;
+}
+.footer {
+  height: 70px;
+  font-size: 30px;
+  color: white;
+  padding-top: 10px;
+  text-indent: 50px;
+}
+.left-margin {
+  margin-left: 10px;
+}
+.changeInfoButton {
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+}

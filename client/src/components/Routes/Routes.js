@@ -16,6 +16,7 @@ import Annotate from "../../pages/Annotate/Annotate";
 import NotFound from "../../pages/NotFound/NotFound";
 import Forgot from "../../pages/Forgot/Forgot";
 import Announcements from "../../pages/Announcements/Announcements"
+import AccountInfo from "../../pages/AccountInfo/AccountInfo"
 import UnauthenticatedRoute from "./UnauthenticatedRoute";
 import AuthenticatedRoute from "./AuthenticatedRoute";
 
@@ -38,6 +39,7 @@ export default function Routes() {
       <AuthenticatedRoute path="/predict" exact component={Predict} />
       <Route path="/forgot" exact component={Forgot} />
       <Route path="/announcements" exact component={Announcements} />
+      <Route path="/accountinfo" exact component={AccountInfo} />
       <Route component={NotFound} />
     </Switch>
   );
