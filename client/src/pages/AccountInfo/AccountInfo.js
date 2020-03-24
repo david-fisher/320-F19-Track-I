@@ -25,7 +25,7 @@ export function AccountInfo() {
           
           <h1 classname="h">Email:</h1>
           <p class="lead border border-light rounded">
-            {accInfo.email}
+            <a href={"mailto:" + accInfo.email}> {accInfo.email} </a>
           </p>
           
           <h1 classname="h">Position:</h1>
