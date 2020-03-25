@@ -5,6 +5,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator, createSwitchNavigator} from '@react-navigation/stack';
 import Home from './components/home';
 import Login from './components/login';
+import CameraPage from "./components/camera.page"
 import { Cookies } from "react-cookie";
 
 const Stack = createStackNavigator();
@@ -36,6 +37,11 @@ export default class App extends Component {
             component={Home}
             options={{ title: 'Homepage' }}
           />
+          {/* <Stack.Screen
+            name="Camera"
+            component={CameraPage}
+            options={{ title: 'Homepage' }}
+          /> */}
         </Stack.Navigator>
       </NavigationContainer>
     );

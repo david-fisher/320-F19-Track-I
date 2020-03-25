@@ -5,8 +5,8 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator, createSwitchNavigator} from '@react-navigation/stack';
 import { WebView } from "react-native-webview";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import Camera from 'react-native-camera';
-
+// import Camera from 'react-native-camera';
+import CameraPage from "./camera.page";
 const Tab = createBottomTabNavigator()
 
 export default class Home extends Component {
@@ -29,8 +29,11 @@ export default class Home extends Component {
 
   Camera() {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Text>Camera Coming Here Soon</Text>
+      // <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      //   <Text>Camera Coming Here Soon</Text>
+      // </View>
+      <View style={{flex : 1}}>
+        <CameraPage />
       </View>
     )
   }
