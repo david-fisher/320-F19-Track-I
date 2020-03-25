@@ -7,6 +7,8 @@ import { WebView } from "react-native-webview";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 // import Camera from 'react-native-camera';
 import CameraPage from "./camera.page";
+import Datasets from "./datasets";
+
 const Tab = createBottomTabNavigator()
 
 export default class Home extends Component {
@@ -21,17 +23,14 @@ export default class Home extends Component {
 
   Datasets() {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Text>DataSets Coming Here Soon</Text>
+      <View>
+        <Datasets />
       </View>
     )
   }
 
   Camera() {
     return (
-      // <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      //   <Text>Camera Coming Here Soon</Text>
-      // </View>
       <View style={{flex : 1}}>
         <CameraPage />
       </View>
