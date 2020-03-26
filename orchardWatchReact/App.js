@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import { AppRegistry, StyleSheet, Text, View, TextInput, Dimensions, Button, Image } from 'react-native';
+import { AppRegistry, StyleSheet, Text, View, TextInput, Dimensions, Button, Image, StatusBar } from 'react-native';
 import 'react-native-gesture-handler';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator, createSwitchNavigator} from '@react-navigation/stack';
 import Home from './components/home';
 import Login from './components/login';
+import Datasets from './components/datasets';
 import { Cookies } from "react-cookie";
 
 const Stack = createStackNavigator();
@@ -24,17 +25,22 @@ export default class App extends Component {
       <NavigationContainer>
         <Stack.Navigator
           initialRouteName= {this.setRoute()}
-          screenOptions={{ gestureEnabled: false, headerShown: false }}
+          screenOptions={{ gestureEnabled: false }}
         >
           <Stack.Screen
             name="Login"
             component={Login}
-            options={{ title: 'Login' }}
+            options={{ title: 'Login', headerShown: false}}
           />
           <Stack.Screen
             name="Home"
             component={Home}
-            options={{ title: 'Homepage' }}
+            options={{ title: 'Homepage', headerShown: false }}
+          />
+          <Stack.Screen
+            name="Datasets"
+            component={Datasets}
+            options={{ title: 'Datasets', headerShown: true}}
           />
         </Stack.Navigator>
       </NavigationContainer>

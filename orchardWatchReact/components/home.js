@@ -6,6 +6,10 @@ import {createStackNavigator, createSwitchNavigator} from '@react-navigation/sta
 import { WebView } from "react-native-webview";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Camera from 'react-native-camera';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import DataSets from './datasets.js'
+import CameraPage from './camera.js'
+import Constants from 'expo-constants';
 
 const Tab = createBottomTabNavigator()
 
@@ -19,28 +23,32 @@ export default class Home extends Component {
     )
   }
 
-  Datasets() {
-    return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Text>DataSets Coming Here Soon</Text>
-      </View>
-    )
-  }
-
-  Camera() {
-    return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Text>Camera Coming Here Soon</Text>
-      </View>
-    )
-  }
-
   render() {
     return (
-        <Tab.Navigator initialRouteName = "Website">
-          <Tab.Screen name="WebSite" component={this.Website} />
-          <Tab.Screen name="Datasets" component={this.Datasets} />
-          <Tab.Screen name="Camera" component={this.Camera} />
+        <Tab.Navigator initialRouteName = "Website"
+        screenOptions={({ route }) => ({
+          tabBarIcon: ({ focused, color, size }) => {
+            let iconName;
+
+            if (route.name === 'Website') {
+              iconName = 'food-apple';
+            } else if (route.name === 'Datasets') {
+              iconName = 'database';
+            } else if (route.name === 'Camera') {
+              iconName = 'camera';
+            }
+
+            return <MaterialCommunityIcons name={iconName} size={size} color={color} />;
+          },
+        })}
+        tabBarOptions={{
+          activeTintColor: 'tomato',
+          inactiveTintColor: 'gray',
+        }}
+        >
+          <Tab.Screen name="Website" component={this.Website} />
+          <Tab.Screen name="Datasets" component={DataSets} />
+          <Tab.Screen name="Camera" component={CameraPage} />
         </Tab.Navigator>
     );
   }
@@ -48,6 +56,6 @@ export default class Home extends Component {
 
 const styles = StyleSheet.create({
   webstyle: {
-    marginTop: 40
+    marginTop: Constants.statusBarHeight
   }
 });
