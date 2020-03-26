@@ -8,6 +8,8 @@ import Constants from 'expo-constants';
 import Dialog from 'react-native-dialog';
 import NavigationBar from "react-native-navbar";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import ActionSheetCustom from "react-native-actionsheet";
+import ActionSheet from 'react-native-actionsheet';
 
 export default class DataSets extends Component {
 
@@ -17,15 +19,11 @@ export default class DataSets extends Component {
   }
 
   handleConfirm = () => {
-    if(this.state.entry.length > 0){
-      var currDate = new Date()
-      this.entries.push({key: this.state.entry, last: currDate.getMonth()+1 + "/" + currDate.getDate() + "/" + currDate.getYear()%100})
+    if(this.state.entry != ""){
+        this.ActionSheet.show()
     }else{
-      alert("Enter a valid location")
+        alert("Enter a valid location")
     }
-
-    this.setState({entry: ""})
-    this.setState({dialogVisible: false})
   }
 
   handleCancel = () => {
@@ -48,14 +46,21 @@ export default class DataSets extends Component {
   ];
 
 
+  actionHandler(index) {
+        var currDate = new Date()
+        this.setState({dialogVisible: false})
+        this.entries.push({key: this.state.entry, last: currDate.getMonth()+1 + "/" + currDate.getDate() + "/" + currDate.getYear()%100})
+        this.setState({entry: ""})
+  }
+
   render() {
+    optionsArray = ['Tree Picture', 'Cluster Picture', 'Manual Entry', 'Cancel']
     return (
       <View style={styles.container}>
         <NavigationBar 
-                title = {{title: 'Datasets'}}
-                rightButton = {this.rightButton}
-                style = {styles.navbar}
-                // tintColor = {'black'}
+            title = {{title: 'Datasets'}}
+            rightButton = {this.rightButton}
+            style = {styles.navbar}
         />
 
         <Dialog.Container visible={this.state.dialogVisible}>
@@ -67,9 +72,18 @@ export default class DataSets extends Component {
         </Dialog.Container>
 
         <FlatList
-          data={this.entries}
-          renderItem={({item}) => <Text style={styles.item}>{item.key}                                 Last updated: {item.last}</Text>}
+            data={this.entries}
+            renderItem={({item}) => <Text style={styles.item}>{item.key}{'\t\t\t'} Last updated: {item.last}</Text>}
         />
+
+        <ActionSheet 
+            ref = {o => (this.ActionSheet = o)}
+            title = {'Choose data entry mode'}
+            options = {optionsArray}
+            cancelButtonIndex = {3}
+            onPress = {index => {this.actionHandler(index)}}
+        />
+        
 
       </View>
     )
