@@ -103,7 +103,6 @@ const styles = StyleSheet.create({
   rightButton: {
     width: 20,
     height: 20,
-    fontSize: 50,
-    lineHeight: 20
   }
 });
+
