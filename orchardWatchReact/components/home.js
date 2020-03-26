@@ -7,9 +7,9 @@ import { WebView } from "react-native-webview";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Camera from 'react-native-camera';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import DataSets from './datasets.js'
-import CameraPage from './camera.js'
 import Constants from 'expo-constants';
+import CameraPage from "./camera.page";
+import Datasets from "./datasets";
 
 const Tab = createBottomTabNavigator()
 
@@ -38,6 +38,7 @@ export default class Home extends Component {
               iconName = 'camera';
             }
 
+
             return <MaterialCommunityIcons name={iconName} size={size} color={color} />;
           },
         })}
@@ -47,7 +48,7 @@ export default class Home extends Component {
         }}
         >
           <Tab.Screen name="Website" component={this.Website} />
-          <Tab.Screen name="Datasets" component={DataSets} />
+          <Tab.Screen name="Datasets" component={Datasets} />
           <Tab.Screen name="Camera" component={CameraPage} />
         </Tab.Navigator>
     );
