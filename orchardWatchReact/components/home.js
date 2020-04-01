@@ -10,6 +10,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Constants from 'expo-constants';
 import CameraPage from "./camera.page";
 import Datasets from "./datasets";
+import ExistDataset from "./exist_dataset"
 
 const Tab = createBottomTabNavigator()
 

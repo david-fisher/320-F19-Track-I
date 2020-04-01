@@ -10,6 +10,7 @@ import NavigationBar from "react-native-navbar";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import ActionSheetCustom from "react-native-actionsheet";
 import ActionSheet from 'react-native-actionsheet';
+import { ListItem } from 'react-native-elements';
 
 export default class DataSets extends Component {
 
@@ -40,6 +41,7 @@ export default class DataSets extends Component {
     style: styles.rightButton
   }
 
+  //temporary for the data we will obtain from lambda
   entries = [
     {key: 'location1', last: '3/24/20'},
     {key: 'location2', last: '3/20/20'}
@@ -52,6 +54,17 @@ export default class DataSets extends Component {
         this.entries.push({key: this.state.entry, last: currDate.getMonth()+1 + "/" + currDate.getDate() + "/" + currDate.getYear()%100})
         this.setState({entry: ""})
   }
+
+  renderItems = ({item}) => 
+    <ListItem 
+      containerStyle = {styles.listItem}
+      title={item.key} 
+      subtitle={"Last Updated: " + item.last} 
+      bottomDivider
+      topDivider
+      chevron = {{color: 'black'}}
+      onPress={() => this.props.navigation.navigate('ExistDataset', {name: item.key})}
+    /> 
 
   render() {
     optionsArray = ['Tree Picture', 'Cluster Picture', 'Manual Entry', 'Cancel']
@@ -73,7 +86,7 @@ export default class DataSets extends Component {
 
         <FlatList
             data={this.entries}
-            renderItem={({item}) => <Text style={styles.item}>{item.key}{'\t\t\t'} Last updated: {item.last}</Text>}
+            renderItem={this.renderItems}
         />
 
         <ActionSheet 
@@ -117,6 +130,9 @@ const styles = StyleSheet.create({
   rightButton: {
     width: 20,
     height: 20,
+  },
+  listItem: {
+
   }
 });
 

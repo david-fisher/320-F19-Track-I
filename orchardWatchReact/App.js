@@ -8,6 +8,7 @@ import Login from './components/login';
 import Datasets from './components/datasets';
 import CameraPage from "./components/camera.page"
 import { Cookies } from "react-cookie";
+import ExistDataset from './components/exist_dataset';
 
 const Stack = createStackNavigator();
 const cookies = new Cookies();
@@ -26,7 +27,7 @@ export default class App extends Component {
       <NavigationContainer>
         <Stack.Navigator
           initialRouteName= {this.setRoute()}
-          screenOptions={{ gestureEnabled: false }}
+          screenOptions={{ gestureEnabled: false}}
         >
           <Stack.Screen
             name="Login"
@@ -36,12 +37,17 @@ export default class App extends Component {
           <Stack.Screen
             name="Home"
             component={Home}
-            options={{ title: 'Homepage', headerShown: false }}
+            options={{ title: 'Home', headerShown: false }}
           />
           <Stack.Screen
             name="Datasets"
             component={Datasets}
             options={{ title: 'Datasets', headerShown: true}}
+          />
+          <Stack.Screen
+            name="ExistDataset"
+            component={ExistDataset}
+            options={({ route }) => ({ title: route.params.name })}
           />
           {/* <Stack.Screen
             name="Camera"
