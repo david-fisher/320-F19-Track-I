@@ -10,7 +10,9 @@ import {
   VictoryBar,
   VictoryScatter,
   VictoryPie,
-  VictoryArea
+  VictoryArea,
+  VictoryPolarAxis,
+  VictoryVoronoi
 } from "victory";
 
 const data = [
@@ -210,7 +212,7 @@ class Select extends React.Component {
           <option value="Bar"> Bar </option>
           <option value="Scatter"> Scatter </option>
           <option value="Pie"> Pie </option>
-          <option value="Chart"> Chart </option>
+          <option value="Area"> Area </option>
         </select>
         <Graph y={this.state} />
         {/*{this.table(this.state)}*/}
@@ -265,7 +267,7 @@ function Graph(props) {
       <VictoryChart domainPadding={20} theme={VictoryTheme.material}>
         <VictoryLabel text={props.y.y} x={50} y={30} textAnchor="middle" />
         <VictoryLabel text="Time" x={410} y={270} textAnchor="middle" />
-        <VictoryArea data={props.y.sdata} x="Epochtime" y={props.y.y} style={{ data: { fill: "#b43a31" } }} 
+        <VictoryArea data={props.y.sdata} x="Epochtime" y={props.y.y} style={{ data: { fill: "#c43a31" } }} 
           animate={{duration: 2000, onLoad: { duration: 1000 }}} />
         <VictoryAxis tickFormat={() => ""} />
         <VictoryAxis dependentAxis />
@@ -307,94 +309,19 @@ export default function Data() {
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>12-16-19 7:34AM</td>
-              <td>454-788</td>
-              <td>7</td>
-              <td>9</td>
-              <td>83</td>
-              <td>43</td>
-              <td>343413</td>
-              <td>92</td>
-              <td>4</td>
-            </tr>
-            <tr>
-              <td>12-16-19 7:35AM</td>
-              <td>454-788</td>
-              <td>7</td>
-              <td>9</td>
-              <td>83</td>
-              <td>43</td>
-              <td>323444</td>
-              <td>12</td>
-              <td>7</td>
-            </tr>
-            <tr>
-              <td>12-16-19 7:36AM</td>
-              <td>454-788</td>
-              <td>7</td>
-              <td>9</td>
-              <td>83</td>
-              <td>43</td>
-              <td>323444</td>
-              <td>12</td>
-              <td>7</td>
-            </tr>
-            <tr>
-              <td>12-16-19 7:36AM</td>
-              <td>454-788</td>
-              <td>4</td>
-              <td>5</td>
-              <td>73</td>
-              <td>43</td>
-              <td>323413</td>
-              <td>92</td>
-              <td>6</td>
-            </tr>
-            <tr>
-              <td>12-16-19 7:32AM</td>
-              <td>454-789</td>
-              <td>1</td>
-              <td>9</td>
-              <td>83</td>
-              <td>43</td>
-              <td>343413</td>
-              <td>92</td>
-              <td>4</td>
-            </tr>
-            <tr>
-              <td>12-16-19 7:33AM</td>
-              <td>454-789</td>
-              <td>3</td>
-              <td>9</td>
-              <td>73</td>
-              <td>73</td>
-              <td>327444</td>
-              <td>12</td>
-              <td>5</td>
-            </tr>
-            <tr>
-              <td>12-16-19 7:34AM</td>
-              <td>454-789</td>
-              <td>4</td>
-              <td>5</td>
-              <td>73</td>
-              <td>43</td>
-              <td>323413</td>
-              <td>32</td>
-              <td>6</td>
-            </tr>
-            <tr>
-              <td>12-16-19 7:35AM</td>
-              <td>454-789</td>
-              <td>3</td>
-              <td>2</td>
-              <td>83</td>
-              <td>13</td>
-              <td>344415</td>
-              <td>92</td>
-              <td>6</td>
-            </tr>
+            {data.map((dataInfo, index)=> {
+              return <tr>
+                <td>12-16-19 7:34AM</td>
+                <td>{dataInfo.HoboID}</td>
+                <td>{dataInfo.Humidity}</td>
+                <td>{dataInfo.LeafWetness}</td>
+                <td>{dataInfo.Rainfall}</td>
+                <td>{dataInfo.SoilMoisture}</td>
+                <td>{dataInfo.SolarRadiation}</td>
+                <td>{dataInfo.Temperature}</td>
+                <td>{dataInfo.Wind}</td>
+              </tr>
+            })}
           </tbody>
         </Table>
         <Button block href={downloadData()} download="data.csv">
