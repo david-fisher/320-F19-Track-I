@@ -8,13 +8,6 @@ export default function UpdatePass() {
     <div>
       <div className="UpdatePass">
         <form>
-        <FormGroup controlId="email">
-            <FormLabel>Email</FormLabel>
-            <FormControl
-              autoFocus
-              type="email"
-            />
-          </FormGroup>
           <FormGroup controlId="pass">
             <FormLabel>New Password</FormLabel>
             <FormControl
