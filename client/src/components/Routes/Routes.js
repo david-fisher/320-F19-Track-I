@@ -15,9 +15,10 @@ import Predict from "../../pages/Predict/Predict";
 import Annotate from "../../pages/Annotate/Annotate";
 import NotFound from "../../pages/NotFound/NotFound";
 import Forgot from "../../pages/Forgot/Forgot";
-import Announcements from "../../pages/Announcements/Announcements"
-import AccountInfo from "../../pages/AccountInfo/AccountInfo"
-import Contacts from "../../pages/Contacts/Contacts"
+import Announcements from "../../pages/Announcements/Announcements";
+import AccountInfo from "../../pages/AccountInfo/AccountInfo";
+import Contacts from "../../pages/Contacts/Contacts";
+import UpdatePass from "../../pages/UpdatePass/UpdatePass";
 import UnauthenticatedRoute from "./UnauthenticatedRoute";
 import AuthenticatedRoute from "./AuthenticatedRoute";
 
@@ -42,6 +43,7 @@ export default function Routes() {
       <Route path="/announcements" exact component={Announcements} />
       <Route path="/accountinfo" exact component={AccountInfo} />
       <Route path="/contacts" exact component={Contacts} />
+      <Route path="/updatepass" exact component={UpdatePass} />
       <Route component={NotFound} />
     </Switch>
   );

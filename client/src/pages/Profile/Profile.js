@@ -29,7 +29,7 @@ export default function Profile() {
               <hr />
               <Card.Text>Password</Card.Text>
               <p>*****************</p>
-              <a href="/home">Change your password</a>
+              <a href="/updatepass">Change your password</a>
               <hr />
               <Card.Text>Email</Card.Text>
               <p>{email}</p>
