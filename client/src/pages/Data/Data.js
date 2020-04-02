@@ -6,7 +6,11 @@ import {
   VictoryChart,
   VictoryLabel,
   VictoryAxis,
-  VictoryTheme
+  VictoryTheme,
+  VictoryBar,
+  VictoryScatter,
+  VictoryPie,
+  VictoryArea
 } from "victory";
 
 const data = [
@@ -105,12 +109,14 @@ class Select extends React.Component {
     this.state = {
       y: "Humidity",
       hobo: "454-788",
-      sdata: this.sortData("454-788")
+      sdata: this.sortData("454-788"),
+      chartType: "Line"
     };
 
     this.handleSelect = this.handleSelect.bind(this);
     this.handleSelectHobo = this.handleSelectHobo.bind(this);
     this.handleSelectHobo = this.handleSelectHobo.bind(this);
+    this.handleSelectChartType = this.handleSelectChartType.bind(this);
 
     // this.renderTableHeader = this.renderTableHeader.bind(this);
     // this.renderTableData = this.renderTableData.bind(this);
@@ -171,6 +177,9 @@ class Select extends React.Component {
     this.setState({ hobo: e.target.value });
     this.setState({ sdata: this.sortData(e.target.value) });
   }
+  handleSelectChartType(e) {
+  	this.setState({ chartType: e.target.value});
+  }
   sortData(h) {
     let newdata = [];
     for (let i = 0; i < data.length; i++) {
@@ -196,6 +205,13 @@ class Select extends React.Component {
           <option value="Temperature"> Temperature </option>
           <option value="Wind"> Wind </option>
         </select>
+        <select onChange={this.handleSelectChartType}>
+          <option value="Line"> Line </option>
+          <option value="Bar"> Bar </option>
+          <option value="Scatter"> Scatter </option>
+          <option value="Pie"> Pie </option>
+          <option value="Chart"> Chart </option>
+        </select>
         <Graph y={this.state} />
         {/*{this.table(this.state)}*/}
       </div>
@@ -204,16 +220,59 @@ class Select extends React.Component {
 }
 
 function Graph(props) {
-  const page = (
-    <VictoryChart domainPadding={20} theme={VictoryTheme.material}>
-      <VictoryLabel text={props.y.y} x={50} y={30} textAnchor="middle" />
-      <VictoryLabel text="Time" x={410} y={270} textAnchor="middle" />
-      <VictoryLine data={props.y.sdata} x="Epochtime" y={props.y.y} />
-      <VictoryAxis tickFormat={() => ""} />
-      <VictoryAxis dependentAxis />
-    </VictoryChart>
-  );
-  return page;
+  if (props.y.chartType == "Line") {
+  	const page = (
+      <VictoryChart domainPadding={20} theme={VictoryTheme.material}>
+        <VictoryLabel text={props.y.y} x={50} y={30} textAnchor="middle" />
+        <VictoryLabel text="Time" x={410} y={270} textAnchor="middle" />
+        <VictoryLine data={props.y.sdata} x="Epochtime" y={props.y.y} 
+          animate={{duration: 2000, onLoad: { duration: 1000 }}}/>
+        <VictoryAxis tickFormat={() => ""} />
+        <VictoryAxis dependentAxis />
+      </VictoryChart>
+    );
+    return page;
+  } else if (props.y.chartType == "Bar"){
+    const page = (
+      <VictoryChart domainPadding={20} theme={VictoryTheme.material}>
+        <VictoryLabel text={props.y.y} x={50} y={30} textAnchor="middle" />
+        <VictoryLabel text="Time" x={410} y={270} textAnchor="middle" />
+        <VictoryBar data={props.y.sdata} x="Epochtime" y={props.y.y} style={{ data: { fill: "#c43a31" } }} 
+          animate={{duration: 2000, onLoad: { duration: 1000 }}} />
+        <VictoryAxis tickFormat={() => ""} />
+        <VictoryAxis dependentAxis />
+      </VictoryChart>
+    );
+    return page;
+  } else if (props.y.chartType == "Scatter"){
+    const page = (
+      <VictoryChart domainPadding={20} theme={VictoryTheme.material}>
+        <VictoryLabel text={props.y.y} x={50} y={30} textAnchor="middle" />
+        <VictoryLabel text="Time" x={410} y={270} textAnchor="middle" />
+        <VictoryScatter data={props.y.sdata} x="Epochtime" y={props.y.y} />
+        <VictoryAxis tickFormat={() => ""} />
+        <VictoryAxis dependentAxis />
+      </VictoryChart>
+    );
+    return page;
+  } else if (props.y.chartType == "Pie"){
+    const page = (
+      <VictoryPie colorScale={["tomato", "orange", "cyan", "navy" ]} data={props.y.sdata} y={props.y.y} />
+    );
+    return page;
+  } else {
+  	const page = (
+      <VictoryChart domainPadding={20} theme={VictoryTheme.material}>
+        <VictoryLabel text={props.y.y} x={50} y={30} textAnchor="middle" />
+        <VictoryLabel text="Time" x={410} y={270} textAnchor="middle" />
+        <VictoryArea data={props.y.sdata} x="Epochtime" y={props.y.y} style={{ data: { fill: "#b43a31" } }} 
+          animate={{duration: 2000, onLoad: { duration: 1000 }}} />
+        <VictoryAxis tickFormat={() => ""} />
+        <VictoryAxis dependentAxis />
+      </VictoryChart>
+    );
+    return page;
+  }
 }
 
 export default function Data() {
