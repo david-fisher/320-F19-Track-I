@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import { FlatList, AppRegistry, StyleSheet, Text, View, TextInput, Dimensions, Button, Image, StatusBar, Alert } from 'react-native';
 import 'react-native-gesture-handler';
 import { ListItem } from 'react-native-elements';
+import NavigationBar from "react-native-navbar";
+import {NavigationContainer} from '@react-navigation/native';
+import {createStackNavigator, createSwitchNavigator} from '@react-navigation/stack';
 
 export default class ExistDataset extends Component {
 
@@ -28,6 +31,7 @@ export default class ExistDataset extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        paddingTop: 40
     },
     leftButton: {
         width: 20,

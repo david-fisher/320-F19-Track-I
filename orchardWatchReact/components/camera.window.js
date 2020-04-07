@@ -3,12 +3,15 @@ import { View, Text, StyleSheet, Dimensions, ImageBackground } from 'react-nativ
 import { Camera } from 'expo-camera';
 import * as Permissions from "expo-permissions";
 import { Component } from 'react';
-import Toolbar from './toolbar.component';
+import Toolbar from './toolbar.window';
 import Constants from "expo-constants";
 import NavigationBar from "react-native-navbar";
+import {NavigationContainer} from '@react-navigation/native';
+import {createStackNavigator, createSwitchNavigator} from '@react-navigation/stack';
+import Gallery from "./gallery";
 
 
-export default class CameraPage extends Component {
+export default class CameraWindow extends Component {
     camera = null;
     state = {
         flashMode: Camera.Constants.FlashMode.off,
@@ -21,6 +24,9 @@ export default class CameraPage extends Component {
     setFlashMode = (flashMode) => this.setState({ flashMode });
     setCameraType = (cameraType) => this.setState({ cameraType });
     handleCaptureIn = () => this.setState({ capturing: true });
+    gallery = () => {
+        this.props.navigation.navigate('Gallery')
+    }
 
     handleCaptureOut = () => {
         if (this.state.capturing)
@@ -50,6 +56,13 @@ export default class CameraPage extends Component {
         const { hasCameraPermission, flashMode, cameraType, capturing } = this.state;
         const { imageUri } = this.state;
 
+        //for box
+        const { height, width } = Dimensions.get('window');
+        const maskRowHeight = Math.round((height - 300) / 20);
+        const maskColWidth = (width - 300) / 2;
+
+
+
         if (imageUri !== null) {
             return (
                 <Fragment>
@@ -74,23 +87,41 @@ export default class CameraPage extends Component {
         else{
             return (
                 <Fragment>
-                    <View>
-                    <Camera
-                        type={cameraType}
-                        flashMode={flashMode}
-                        style={styles.previewCam}
-                        ref={camera => this.camera = camera}
+                    <NavigationBar
+                        leftButton = {{title: "< Back", handler: () => {this.props.navigation.navigate('Home')}}}
+                        style = {styles.navbar}
                     />
-                </View>
-                <Toolbar 
-                    capturing={capturing}
-                    flashMode={flashMode}
-                    cameraType={cameraType}
-                    setFlashMode={this.setFlashMode}
-                    onCaptureIn={this.handleCaptureIn}
-                    onCaptureOut={this.handleCaptureOut}
-                    onShortCapture={this.handleShortCapture}
-                />
+                    <View>
+                        <Camera
+                            type={cameraType}
+                            flashMode={flashMode}
+                            style={styles.previewCam}
+                            ref={camera => this.camera = camera}
+                        />
+                    </View>
+
+                    {/* for box */}
+                    <View style={styles.maskOutter}>
+                        <View style={[{ flex: maskRowHeight  }, styles.maskRow, styles.maskFrame]} />
+                        <View style={[{ flex: 30 }, styles.maskCenter]}>
+                        <View style={[{ width: maskColWidth }, styles.maskFrame]} />
+                        <View style={styles.maskInner} />
+                        <View style={[{ width: maskColWidth }, styles.maskFrame]} />
+                        </View>
+                        <View style={[{ flex: maskRowHeight }, styles.maskRow, styles.maskFrame]} />
+                    </View>
+
+
+                    <Toolbar 
+                        capturing={capturing}
+                        flashMode={flashMode}
+                        cameraType={cameraType}
+                        setFlashMode={this.setFlashMode}
+                        onCaptureIn={this.handleCaptureIn}
+                        onCaptureOut={this.handleCaptureOut}
+                        onShortCapture={this.handleShortCapture}
+                        gallery = {this.gallery}
+                    />
                 </Fragment>
             );
         }
@@ -106,7 +137,6 @@ const styles = StyleSheet.create({
         top: 0,
         right: 0,
         bottom: 0,
-        marginTop: 40,
     },
     navbar: {
         marginTop: 40,
@@ -123,4 +153,29 @@ const styles = StyleSheet.create({
         bottom: 0,
         marginTop: 125,
     },
+
+    // for box
+    maskOutter: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: Dimensions.get('window').height-225,
+        marginTop: 100,
+        alignItems: 'center',
+        justifyContent: 'space-around',
+      },
+      maskInner: {
+        width: 300,
+        backgroundColor: 'transparent',
+        borderColor: 'white',
+        borderWidth: 1,
+      },
+      maskFrame: {
+        backgroundColor: 'rgba(1,1,1,0.6)',
+      },
+      maskRow: {
+        width: '100%',
+      },
+      maskCenter: { flexDirection: 'row' },
 });

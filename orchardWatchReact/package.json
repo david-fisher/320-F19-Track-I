@@ -8,12 +8,14 @@
     "eject": "expo eject"
   },
   "dependencies": {
+    "@react-native-community/async-storage": "github:react-native-community/async-storage",
     "@react-native-community/masked-view": "^0.1.7",
     "@react-navigation/bottom-tabs": "^5.1.1",
     "@react-navigation/native": "^5.0.9",
     "@react-navigation/stack": "^5.1.1",
     "expo": "~36.0.0",
     "expo-camera": "~8.0.0",
+    "expo-image-picker": "^8.1.0",
     "expo-permissions": "~8.0.0",
     "navigationbar-react-native": "0.0.5",
     "react": "~16.9.0",
@@ -26,9 +28,11 @@
     "react-native-camera-kit": "^8.0.4",
     "react-native-dialog": "^5.6.0",
     "react-native-dialog-input": "^1.0.7",
+    "react-native-easy-grid": "^0.2.2",
     "react-native-elements": "^1.2.7",
     "react-native-fs": "^2.16.6",
     "react-native-gesture-handler": "^1.6.0",
+    "react-native-image-picker": "^2.3.1",
     "react-native-navbar": "^2.1.0",
     "react-native-navigation-bar": "^0.2.1",
     "react-native-safe-area-context": "^0.7.3",
@@ -36,6 +40,8 @@
     "react-native-web": "~0.11.7",
     "react-native-webview": "^8.1.2",
     "react-native-windows": "^0.59.0-legacy.1",
+    "save": "^2.4.0",
+    "tcomb-form-native": "^0.6.20",
     "universal-cookie": "^4.0.3"
   },
   "devDependencies": {

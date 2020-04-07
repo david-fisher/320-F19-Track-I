@@ -8,21 +8,12 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Camera from 'react-native-camera';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Constants from 'expo-constants';
-import CameraPage from "./camera.page";
+import CameraNew from "./camera.page";
 import Datasets from "./datasets";
-import ExistDataset from "./exist_dataset"
 
 const Tab = createBottomTabNavigator()
 
 export default class Home extends Component {
-  Website() {
-    return (
-      <WebView
-      source={{uri:'http://orchardwatch.surge.sh/home'}}
-      style = {styles.webstyle}
-      />   
-    )
-  }
 
   render() {
     return (
@@ -31,9 +22,7 @@ export default class Home extends Component {
           tabBarIcon: ({ focused, color, size }) => {
             let iconName;
 
-            if (route.name === 'Website') {
-              iconName = 'food-apple';
-            } else if (route.name === 'Datasets') {
+            if (route.name === 'Datasets') {
               iconName = 'database';
             } else if (route.name === 'Camera') {
               iconName = 'camera';
@@ -48,9 +37,8 @@ export default class Home extends Component {
           inactiveTintColor: 'gray',
         }}
         >
-          <Tab.Screen name="Website" component={this.Website} />
           <Tab.Screen name="Datasets" component={Datasets} />
-          <Tab.Screen name="Camera" component={CameraPage} />
+          <Tab.Screen name="Camera" component={CameraNew} />
         </Tab.Navigator>
     );
   }
