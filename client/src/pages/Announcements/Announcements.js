@@ -1,6 +1,8 @@
 import React from "react";
 import "./Announcements.css";
 import { Container } from "react-bootstrap";
+import { Button } from "react-bootstrap";
+import TestData from "./testData.json"
 
 export function Announcements() {
   return (
@@ -9,15 +11,24 @@ export function Announcements() {
         <h1>Announcements</h1>
         <hr />
       </Container>
+      
       <Container>
 		<img src={require("./announcements.jpg")} alt="Announcements" class="center" />        
 
-        <h1 className="header ">Recent Updates</h1>
-        <p class="lead border border-light rounded">
-          Update 1: Monkeys have been eating up my apples. I need some help! They are
-          everywhere and they are tearing up the place. Update 2: Why are there donuts all over my orchard?
-        </p>
+		<Button className="addUpdate">
+          Add Announcement
+        </Button>
       </Container>
+        
+      {TestData.map((annInfo, index)=> {
+        return <Container>
+          <h1 classname="title">{annInfo.title}</h1>
+          <p class="lead border border-light rounded">
+            {annInfo.date}: {annInfo.description}
+          </p>
+        	
+        </Container>
+      })}
     </body>
   );
 }
