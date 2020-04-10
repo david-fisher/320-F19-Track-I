@@ -11,7 +11,7 @@ export function Contacts() {
         <hr />
       </Container>
       
-      // Displays contact information taken from json data
+      
       {ContactsData.map((contactsInfo, index)=> {
         return <Container>
         	<h1 classname="name">{contactsInfo.name}</h1>
@@ -19,7 +19,7 @@ export function Contacts() {
         	  {contactsInfo.position}
         	</p>
         	<p class="lead border border-light rounded">
-        	  {contactsInfo.email}
+        	  <a href={"mailto:" + contactsInfo.email}> {contactsInfo.email} </a>
         	</p>
         </Container>
       })}

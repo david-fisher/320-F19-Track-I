@@ -17,7 +17,8 @@ export default function Login() {
     event.preventDefault();
 
     fetch(
-      "https://mt7pf3aohi.execute-api.us-east-2.amazonaws.com/test/user-login",
+      // "https://mt7pf3aohi.execute-api.us-east-2.amazonaws.com/test/user-login",
+      "https://2a2glx2h08.execute-api.us-east-2.amazonaws.com/default/Frontend-Lambda/account/login/",
       {
         method: "POST",
         headers: {
@@ -25,8 +26,8 @@ export default function Login() {
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          Email: email,
-          Password: password
+          email: email,
+          pass: password
         })
       }
     )
