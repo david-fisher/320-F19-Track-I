@@ -105,7 +105,210 @@ const data = [
     Wind: 6
   }
 ];
-class Select extends React.Component {
+
+const appleData = [
+  {
+    TreeID: 10,
+    ClusterID: 219,
+    AppleGrowthRates: [5, 12, 6, 3, 4, 1]
+  },
+  {
+    TreeID: 10,
+    ClusterID: 261,
+    AppleGrowthRates: [7, 16, 2, 13, 4, 5]
+  },
+  {
+    TreeID: 27,
+    ClusterID: 162,
+    AppleGrowthRates: [15, 2, 14, 3, 4, 11]
+  },
+  {
+    TreeID: 27,
+    ClusterID: 54,
+    AppleGrowthRates: [5, 12, 4, 3, 22, 1]
+  },
+  {
+    TreeID: 16,
+    ClusterID: 73,
+    AppleGrowthRates: [5, 17, 20, 3, 1, 1]
+  },
+  {
+    TreeID: 16,
+    ClusterID: 201,
+    AppleGrowthRates: [7, 12, 1, 3, 4, 12]
+  },
+  {
+    TreeID: 34,
+    ClusterID: 17,
+    AppleGrowthRates: [8, 1, 16, 3, 14, 1]
+  },
+  {
+    TreeID: 34,
+    ClusterID: 59,
+    AppleGrowthRates: [10, 12, 16, 3, 4, 21]
+  },
+  {
+    TreeID: 73,
+    ClusterID: 76,
+    AppleGrowthRates: [15, 2, 6, 3, 4, 11]
+  },
+  {
+    TreeID: 73,
+    ClusterID: 109,
+    AppleGrowthRates: [5, 12, 6, 3, 14, 1]
+  },
+]
+
+const treeData = [
+  {
+    TreeID: 10,
+    PotentialBoreRate: 12
+  },
+  {
+    TreeID: 27,
+    PotentialBoreRate: 17
+  },
+  {
+    TreeID: 16,
+    PotentialBoreRate: 22
+  },
+  {
+    TreeID: 34,
+    PotentialBoreRate: 7
+  },
+  {
+    TreeID: 73,
+    PotentialBoreRate: 6
+  }
+];
+
+class SelectDataType extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      dataType: "Hobonet Data"
+    };
+    
+    this.handleSelect = this.handleSelect.bind(this);
+  }
+  
+  handleSelect(e) {
+    this.setState({ dataType: e.target.value });
+  }
+  
+  render() {
+    return (
+      <div>
+        <select onChange={this.handleSelect}>
+          <option value="Hobonet Data"> Hobonet Data </option>
+          <option value="Apple Growth Rates"> Apple Growth Rates </option>
+          <option value="Potential Fruit Bore Per Tree"> Potential Fruit Bore Per Tree </option>
+        </select>
+        {this.state.dataType == "Hobonet Data" && 
+          <h1>HoboNet Data</h1>
+        }
+        {this.state.dataType == "Apple Growth Rates" &&
+          <h1>Apple Growth Rates</h1>
+        }
+        {this.state.dataType == "Potential Fruit Bore Per Tree" && 
+          <h1>Potential Fruit Bore Per Tree</h1>
+        }
+        <hr />
+        <CustomTable y={this.state} />
+      </div>
+    );
+  }
+}
+
+function CustomTable(props) {
+  if (props.y.dataType == "Hobonet Data") {
+    const page = (
+      <Table striped bordered hover>
+        <thead>
+          <tr>
+            <th>Time</th>
+            <th>HoboID</th>
+            <th>Humidity</th>
+            <th>Leaf Wetness</th>
+            <th>Rainfall</th>
+            <th>Soil Moisture</th>
+            <th>Solar Radiation</th>
+            <th>Temperature</th>
+            <th>Wind</th>
+          </tr>
+        </thead>
+        <tbody>
+          {data.map((dataInfo, index)=> {
+            return <tr>
+              <td>12-16-19 7:34AM</td>
+              <td>{dataInfo.HoboID}</td>
+              <td>{dataInfo.Humidity}</td>
+              <td>{dataInfo.LeafWetness}</td>
+              <td>{dataInfo.Rainfall}</td>
+              <td>{dataInfo.SoilMoisture}</td>
+              <td>{dataInfo.SolarRadiation}</td>
+              <td>{dataInfo.Temperature}</td>
+              <td>{dataInfo.Wind}</td>
+            </tr>
+          })}
+        </tbody>
+      </Table>
+    );
+    return page;
+  } else if (props.y.dataType == "Apple Growth Rates") {
+    const page = (
+      <Table striped bordered hover>
+        <thead>
+          <tr>
+            <th>TreeID</th>
+            <th>ClusterID</th>
+            <th>Apple #1 Growth Rate (cm/d)</th>
+            <th>Apple #2 Growth Rate (cm/d)</th>
+            <th>Apple #3 Growth Rate (cm/d)</th>
+            <th>Apple #4 Growth Rate (cm/d)</th>
+            <th>Apple #5 Growth Rate (cm/d)</th>
+          </tr>
+        </thead>
+        <tbody>
+          {appleData.map((dataInfo, index)=> {
+            return <tr>
+              <td>{dataInfo.TreeID}</td>
+              <td>{dataInfo.ClusterID}</td>
+              <td>{dataInfo.AppleGrowthRates[0]}</td>
+              <td>{dataInfo.AppleGrowthRates[1]}</td>
+              <td>{dataInfo.AppleGrowthRates[2]}</td>
+              <td>{dataInfo.AppleGrowthRates[3]}</td>
+              <td>{dataInfo.AppleGrowthRates[4]}</td>
+            </tr>
+          })}
+        </tbody>
+      </Table>
+    );
+    return page;
+  } else {
+    const page = (
+      <Table striped bordered hover>
+        <thead>
+          <tr>
+            <th>TreeID</th>
+            <th>Potential Bore (apples)</th>
+          </tr>
+        </thead>
+        <tbody>
+          {treeData.map((dataInfo, index)=> {
+            return <tr>
+              <td>{dataInfo.TreeID}</td>
+              <td>{dataInfo.PotentialBoreRate}</td>
+            </tr>
+          })}
+        </tbody>
+      </Table>
+    );
+    return page;
+  }
+}
+
+class SelectHobo extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -214,14 +417,14 @@ class Select extends React.Component {
           <option value="Pie"> Pie </option>
           <option value="Area"> Area </option>
         </select>
-        <Graph y={this.state} />
+        <HoboGraph y={this.state} />
         {/*{this.table(this.state)}*/}
       </div>
     );
   }
 }
 
-function Graph(props) {
+function HoboGraph(props) {
   if (props.y.chartType == "Line") {
   	const page = (
       <VictoryChart domainPadding={20} theme={VictoryTheme.material}>
@@ -292,38 +495,7 @@ export default function Data() {
   return (
     <div>
       <Container className="Title">
-        <h1>HoboNet Data</h1>
-        <hr />
-        <Table striped bordered hover>
-          <thead>
-            <tr>
-              <th>Time</th>
-              <th>HoboID</th>
-              <th>Humidity</th>
-              <th>Leaf Wetness</th>
-              <th>Rainfall</th>
-              <th>Soil Moisture</th>
-              <th>Solar Radiation</th>
-              <th>Temperature</th>
-              <th>Wind</th>
-            </tr>
-          </thead>
-          <tbody>
-            {data.map((dataInfo, index)=> {
-              return <tr>
-                <td>12-16-19 7:34AM</td>
-                <td>{dataInfo.HoboID}</td>
-                <td>{dataInfo.Humidity}</td>
-                <td>{dataInfo.LeafWetness}</td>
-                <td>{dataInfo.Rainfall}</td>
-                <td>{dataInfo.SoilMoisture}</td>
-                <td>{dataInfo.SolarRadiation}</td>
-                <td>{dataInfo.Temperature}</td>
-                <td>{dataInfo.Wind}</td>
-              </tr>
-            })}
-          </tbody>
-        </Table>
+        <SelectDataType />
         <Button block href={downloadData()} download="data.csv">
           Download
         </Button>
@@ -332,7 +504,7 @@ export default function Data() {
         <hr />
         <h1>Visualize</h1>
         <hr />
-        <Select />
+        <SelectHobo />
       </Container>
     </div>
   );
