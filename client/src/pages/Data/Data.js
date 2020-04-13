@@ -296,6 +296,7 @@ function CustomTable(props) {
             <th>Apple #3 Growth Rate (cm/day)</th>
             <th>Apple #4 Growth Rate (cm/day)</th>
             <th>Apple #5 Growth Rate (cm/day)</th>
+            <th>Apple #6 Growth Rate (cm/day)</th>
           </tr>
         </thead>
         <tbody>
@@ -308,6 +309,7 @@ function CustomTable(props) {
               <td>{dataInfo.AppleGrowthRates[2]}</td>
               <td>{dataInfo.AppleGrowthRates[3]}</td>
               <td>{dataInfo.AppleGrowthRates[4]}</td>
+              <td>{dataInfo.AppleGrowthRates[5]}</td>
             </tr>
           })}
         </tbody>
