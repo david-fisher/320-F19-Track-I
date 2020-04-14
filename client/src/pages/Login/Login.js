@@ -17,8 +17,7 @@ export default function Login() {
     event.preventDefault();
 
     fetch(
-      // "https://mt7pf3aohi.execute-api.us-east-2.amazonaws.com/test/user-login",
-      "https://2a2glx2h08.execute-api.us-east-2.amazonaws.com/default/Frontend-Lambda/account/login/",
+      "https://2a2glx2h08.execute-api.us-east-2.amazonaws.com/default/user/login",
       {
         method: "POST",
         headers: {
@@ -47,17 +46,18 @@ export default function Login() {
         cookies.remove("lastName");
         cookies.remove("role");
         cookies.remove("token");
-        cookies.set("email", json["body"]["userinfo"]["EMail"], {
-          path: "/"
-        });
-        cookies.set("firstName", json["body"]["userinfo"]["FName"], {
-          path: "/"
-        });
-        cookies.set("lastName", json["body"]["userinfo"]["LName"], {
-          path: "/"
-        });
-        cookies.set("role", json["body"]["userinfo"]["Role"], { path: "/" });
-        cookies.set("token", json["body"]["token"], { path: "/" });
+        // We'll have to add this stuff back at a later date
+        // cookies.set("email", json["body"]["userinfo"]["EMail"], {
+        //   path: "/"
+        // });
+        // cookies.set("firstName", json["body"]["userinfo"]["FName"], {
+        //   path: "/"
+        // });
+        // cookies.set("lastName", json["body"]["userinfo"]["LName"], {
+        //   path: "/"
+        // });
+        // cookies.set("role", json["body"]["userinfo"]["Role"], { path: "/" });
+        cookies.set("token", json["token"], { path: "/" });
       })
       .then(() => {
         setModalShow(true);
