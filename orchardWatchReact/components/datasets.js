@@ -18,16 +18,24 @@ export default class DataSets extends Component {
   state = {
     dialogVisible: false,
     entry: "",
-    todisplay: null
+    todisplay: null,
+    data: {},
   }
 
   handleConfirm = () => {
-    if(this.state.entry != ""){
+    var locationName = this.state.entry
+
+    if(locationName !== "" && !(this.contains(locationName.toLowerCase()))){
         this.ActionSheet.show()
+    }else if(this.contains(locationName.toLowerCase())){
+        alert("Location name already exists")
     }else{
         alert("Enter a valid location")
     }
   }
+
+  contains = (name) => this.entries.findIndex(loc => loc.key === name) !== -1
+
 
   handleCancel = () => {
     this.setState({dialogVisible: false})
@@ -44,27 +52,31 @@ export default class DataSets extends Component {
   }
 
   entries = [
-    {key: 'location1', last: '3/24/20'},
-    {key: 'location2', last: '3/20/20'}
+    {key: 'location1', last: '3/24/20', data: {
+      numberOfClusters: 0,
+      numberOfTrees: 0,
+      projectedApples: 0
+    }},
+    {key: 'location2', last: '3/20/20', data: {}}
   ];
 
-
   actionHandler(index) {
+      var currDate = new Date()
+      var dateFormat = currDate.getMonth()+1 + "/" + currDate.getDate() + "/" + currDate.getYear()%100
+
       if(index === 0 || index === 1)
       {
-        var currDate = new Date()
         this.setState({dialogVisible: false})
-        this.entries.push({key: this.state.entry, last: currDate.getMonth()+1 + "/" + currDate.getDate() + "/" + currDate.getYear()%100})
-        this.setState({entry: ""})
+        this.entries.push({key: this.state.entry.toLowerCase(), last: dateFormat})
         this.props.navigation.navigate('CameraPage')
-      }
-      else if(index)
-      {
-        var currDate = new Date()
-        this.setState({dialogVisible: false})
-        this.entries.push({key: this.state.entry, last: currDate.getMonth()+1 + "/" + currDate.getDate() + "/" + currDate.getYear()%100})
         this.setState({entry: ""})
-        this.props.navigation.navigate('TabularEntry')
+      }
+      else if(index === 2)
+      {
+        this.setState({dialogVisible: false})
+        this.props.navigation.navigate('TabularEntry', {entries: this.entries, key: this.state.entry.toLowerCase(), last: dateFormat})
+        // this.entries.push({key: this.state.entry.toLowerCase(), last: currDate.getMonth()+1 + "/" + currDate.getDate() + "/" + currDate.getYear()%100})
+        this.setState({entry: ""})
       }
   }
 
@@ -76,16 +88,19 @@ export default class DataSets extends Component {
       bottomDivider
       topDivider
       chevron = {{color: 'black'}}
-      onPress={() => this.setState({todisplay: item.key})}
+      onPress={() => this.setState({todisplay: item.key, data: item.data})}
     />
 
 
   back = () => {
-    this.setState({todisplay: null})
+    this.setState({todisplay: null, data: {}})
   }
 
+  optionsArray = ['Tree Picture', 'Cluster Picture', 'Manual Entry', 'Cancel']
+
+
   render() {
-    optionsArray = ['Tree Picture', 'Cluster Picture', 'Manual Entry', 'Cancel']
+
     if(this.state.todisplay === null)
     {
       return (
@@ -112,7 +127,7 @@ export default class DataSets extends Component {
           <ActionSheet 
               ref = {o => (this.ActionSheet = o)}
               title = {'Choose data entry mode'}
-              options = {optionsArray}
+              options = {this.optionsArray}
               cancelButtonIndex = {3}
               onPress = {index => {this.actionHandler(index)}}
           />
@@ -123,6 +138,7 @@ export default class DataSets extends Component {
     }
     else {
       return (
+
         <Fragment>
           <View>
             <NavigationBar 
@@ -132,6 +148,7 @@ export default class DataSets extends Component {
             />
           </View>
           <ExistDataset />
+
         </Fragment>
       )
     }

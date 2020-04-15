@@ -52,6 +52,13 @@ export default class CameraWindow extends Component {
         })
     }
 
+    upload = () => {
+        alert("Successfully uploaded image")
+        this.setState({
+            imageUri: null
+        })
+    }
+
     render() {
         const { hasCameraPermission, flashMode, cameraType, capturing } = this.state;
         const { imageUri } = this.state;
@@ -73,7 +80,7 @@ export default class CameraWindow extends Component {
                     <NavigationBar 
                         title = {{title: 'Datasets'}}
                         leftButton = {{title: "< Back", handler: this.backBtn}}
-                        rightButton = {{title: "Upload", handler: this.backBtn}}
+                        rightButton = {{title: "Upload", handler: this.upload}}
                         style = {styles.navbar}
                     />
                 </Fragment>
