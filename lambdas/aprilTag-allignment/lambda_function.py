@@ -7,8 +7,8 @@ import math
 # from pathlib import Path
 
 def main(event, context):
-    clusterID = event['cluster_id']
-
+    clusterID = event['clust_num']
+    image = event['clust_img']
 
     # STEP 1:check if folder for cluster exists, if not, create new folder with name clusterID
     # ---in s3, however that happens :
@@ -95,6 +95,10 @@ def compute_homography_distance(m1, m2):
 # Params: l1 and l2 are file system paths
 # Returns: 1 if aligned, 0 otherwise, -1 on error
 def check_alignment(l1, l2):
+    # results and r are defined in the Training Wheels Collab file
+    results = []
+    r =[]
+
     # Threshold for alignment
     # VVV MAKE THIS NUMBER LARGER IF YOU NEED TO FAKE IT FOR THE DEMO
     sim_thresh = 1
