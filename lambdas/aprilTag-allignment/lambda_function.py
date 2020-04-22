@@ -3,9 +3,13 @@ import apriltag
 import cv2
 import os
 from datetime import datetime
+import math
 # from pathlib import Path
 
 def main(event, context):
+    clusterID = event['cluster_id']
+
+
     # STEP 1:check if folder for cluster exists, if not, create new folder with name clusterID
     # ---in s3, however that happens :
     #  'if [ ! -d "/harvest2020/$CLUSTERID" ] then mkdir /harvest2020/$CLUSTERID fi'
@@ -14,7 +18,7 @@ def main(event, context):
     inputPicture = context  # figure this out
     cluster_ID = 1  # filler get from input
 
-    if !(is_valid_clusterID(clusterID)):
+    if not (is_valid_clusterID(clusterID)):
         return {
             'statusCode': 400,
             'body': json.dumps('invalid clusterID!')
@@ -33,10 +37,10 @@ def main(event, context):
         }
     elif (aligned == 0):
         print("input image not aligned")
-    return {
-        'statusCode': 300,
-        'body': json.dumps('Hello from Lambda!')
-    }
+        return {
+            'statusCode': 300,
+            'body': json.dumps('Hello from Lambda!')
+        }
     else:
         print("successfully aligned")
 
@@ -57,6 +61,8 @@ def main(event, context):
 
 def is_valid_clusterID(clusterID):
     # checks input to see if clusterID is valid
+    validClusters = 99999
+
     if (isinstance(clusterID, int)):
         if (clusterID > 0):
             if (clusterID <= validClusters):
