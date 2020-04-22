@@ -36,7 +36,7 @@ export default function Register() {
   function handleSubmit(event) {
     event.preventDefault();
     fetch(
-      "https://mt7pf3aohi.execute-api.us-east-2.amazonaws.com/test/register-user",
+      "https://2a2glx2h08.execute-api.us-east-2.amazonaws.com/default/user/register",
       {
         method: "POST",
         headers: {
@@ -44,11 +44,11 @@ export default function Register() {
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          Email: email,
+          email: email,
           Role: "PUBLIC",
-          FirstName: firstName,
-          LastName: lastName,
-          Password: password
+          first_name: firstName,
+          last_name: lastName,
+          password: password
         })
       }
     )
