@@ -46,10 +46,12 @@ export default function Login() {
         cookies.remove("lastName");
         cookies.remove("role");
         cookies.remove("token");
-        // We'll have to add this stuff back at a later date
-        // cookies.set("email", json["body"]["userinfo"]["EMail"], {
-        //   path: "/"
-        // });
+        
+        // cookies.set for email/firstName/lastName is super duper not secure and should be changed when a better solution is available 
+        // (They shouldnt be stored in cookies)
+        cookies.set("email", email, {
+          path: "/"
+        });
         // cookies.set("firstName", json["body"]["userinfo"]["FName"], {
         //   path: "/"
         // });
@@ -61,6 +63,7 @@ export default function Login() {
       })
       .then(() => {
         setModalShow(true);
+        document.location.href = "/home";
       })
       .catch(error => {
         alert("Invalid credentials");
