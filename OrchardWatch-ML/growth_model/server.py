@@ -9,6 +9,8 @@ from PIL import Image
 import cv2
 from datetime import datetime
 import re
+import math
+import apriltag
 
 # from flask_cors import CORS
 from logzero import logger
@@ -46,7 +48,7 @@ def create_app(config=None):
     def label_apples(cluster_num=None):
         logger.info("POST /cluster/{}".format(cluster_num))
         if "cluster_img" not in request.files:
-            return "Missing image", status.HTTP_400_BAD_REQUEST
+            return ret(error_message="missing_cluster_img"), status.HTTP_400_BAD_REQUEST
 
         input_image = request.files["cluster_img"]
 
@@ -56,22 +58,24 @@ def create_app(config=None):
             filename = os.path.join(UPLOAD_FOLDER, filename)
             input_image.save(filename)
         else:
-            return "Invalid image", status.HTTP_400_BAD_REQUEST
+            return ret(error_message="invalid_cluster_img"), status.HTTP_400_BAD_REQUEST
 
         # input_image = np.fromstring(input_image.read(), np.uint8)
         # decode image
         input_image = cv2.imread(filename)
+        os.remove(filename)
         # input_image = cv2.cvtColor(input_image, cv2.COLOR_BGR2RGB)
-        print(input_image.shape)
+
+        s3 = boto3.client("s3", region_name=REGION_NAME)
 
         # STEP 1: Check if cluster_num is valid
         if cluster_num is not None:
             if not is_valid_cluster_num(cluster_num):
-                return "Invalid cluster_num", status.HTTP_400_BAD_REQUEST
+                return ret(error_message="invalid_cluster_num"), status.HTTP_400_BAD_REQUEST
 
             # STEP 2: ALIGNMENT CHECK
             # get most recent img from /clusters/cluster_num
-            most_recent_image = get_last_picture(cluster_num)
+            most_recent_image = get_last_picture(s3, cluster_num)
 
             if most_recent_image is not None:
                 aligned = check_alignment(input_image, most_recent_image)
@@ -81,10 +85,10 @@ def create_app(config=None):
 
             if aligned == -1:
                 print("error, tag not present in input img")
-                return "No tag present", status.HTTP_400_BAD_REQUEST
+                return ret(error_message="no_tag"), status.HTTP_400_BAD_REQUEST
             elif aligned == 0:
                 print("input image not aligned")
-                return "Not aligned", status.HTTP_400_BAD_REQUEST
+                return ret(error_message="not_aligned"), status.HTTP_400_BAD_REQUEST
             else:
                 print("successfully aligned")
         else:
@@ -100,10 +104,13 @@ def create_app(config=None):
             # TODO: Do this as above, via database
             # This is really gross and inefficient, and I apologize. See above comment.
             existing_clusters = list(
-                get_matching_s3_objects("orchardwatchphotos", prefix="clusters")
+                get_matching_s3_objects(s3, "orchardwatchphotos", prefix="clusters")
             )
-            highest_cluster = sorted(existing_clusters, key=lambda o: o["Key"])[-1]["Key"]
-            highest_cluster_id = re.findall("clusters/(\d*)/", highest_cluster)[0]
+            if existing_clusters:
+                highest_cluster = sorted(existing_clusters, key=lambda o: o["Key"])[-1]["Key"]
+                highest_cluster_id = re.findall("clusters/(\d*)/", highest_cluster)[0]
+            else:
+                highest_cluster_id = 0
 
             cluster_num = int(highest_cluster_id) + 1  # No race conditions here, no sir.
 
@@ -113,13 +120,11 @@ def create_app(config=None):
         key = str(date) + "_" + str(time) + IMG_FORMAT
 
         # STEP 4: send to S3 to be stored in /clusters/cluster_num
-        store_in_s3(input_image, cluster_num, key)
-
-        os.remove(filename)
+        store_in_s3(s3, input_image, cluster_num, key)
 
         # TODO: Measure the apple, and appropriately store the data in DB
 
-        return "success", status.HTTP_200_OK
+        return ret(cluster_num=cluster_num), status.HTTP_200_OK
 
     # technically this can be consolidated into label_apples, but
     # I put it separately for readability
@@ -134,6 +139,20 @@ def create_app(config=None):
         return "Hi from the server!", status.HTTP_200_OK
 
     return app
+
+
+def ret(error_message=None, **kwargs):
+    """
+    Make return JSON object
+
+    :param error_message: sets "error" field to given message string
+    :param kwargs: fields to set on the return JSON
+    """
+    r = {}
+    if error_message is not None:
+        r["error"] = error_message
+    r.update(kwargs)
+    return r
 
 
 def is_valid_cluster_num(cluster_num):
@@ -154,16 +173,17 @@ def make_s3_datapoint_name(cluster_num, subkey):
     return bucket_name, folder_key
 
 
-def get_last_picture(cluster_num):
+def get_last_picture(s3, cluster_num):
     bucket_name, folder_key = make_s3_cluster_name(cluster_num)
 
-    cluster_photos = list(get_matching_s3_objects(bucket_name, prefix=folder_key))
+    cluster_photos = list(get_matching_s3_objects(s3, bucket_name, prefix=folder_key))
     if not cluster_photos:
         return None
 
+    s = boto3.resource("s3")
     latest = sorted(cluster_photos, key=lambda o: o["Key"])[-1]
-    print(latest)
-    data = latest.get()["Body"].read()
+
+    data = s.Object(bucket_name, latest["Key"]).get()["Body"].read()
 
     img = Image.open(io.BytesIO(data))
     img = np.asarray(img)
@@ -174,9 +194,8 @@ def get_last_picture(cluster_num):
     return img
 
 
-def store_in_s3(image, cluster_num, subkey):
+def store_in_s3(s3, image, cluster_num, subkey):
     # store image in correct folder in s3
-    s3 = boto3.client("s3", region_name=REGION_NAME)
     bucket_name, key = make_s3_datapoint_name(cluster_num, subkey)
 
     bin_img = io.BytesIO(cv2.imencode(IMG_FORMAT, image)[1].tobytes())
@@ -232,11 +251,11 @@ def check_alignment(l1, l2):
     r_2 = detector.detect(img2_bw)
 
     # Ensure an AprilTag can be detected
-    if r_1 == None or r_2 == None:
+    if not r_1 or not r_2:
         return -1
 
     # Check similarity by checking threshold
-    metric = compute_homography_distance(results[0][0].homography, r[0].homography)
+    metric = compute_homography_distance(r_1[0].homography, r_2[0].homography)
     if metric <= sim_thresh:
         return 1
     else:
@@ -244,16 +263,11 @@ def check_alignment(l1, l2):
 
 
 def get_matching_s3_objects(
-    bucket,
-    aws_access_key_id=None,
-    aws_secret_access_key=None,
-    region_name=REGION_NAME,
-    prefix="",
-    suffix="",
-    max_keys_per_request=100,
+    s3, bucket, prefix="", suffix="", max_keys_per_request=100,
 ):
     """
     List objects in an S3 bucket.
+    :param s3: boto.client("s3") client
     :param bucket: Name of the S3 bucket.
     :param prefix: Only fetch objects whose key starts with
         this prefix (optional).
@@ -261,12 +275,6 @@ def get_matching_s3_objects(
         this suffix (optional).
     :param max_keys_per_request: number of objects to list down
     """
-    s3 = boto3.client(
-        "s3",
-        aws_access_key_id=aws_access_key_id,
-        aws_secret_access_key=aws_secret_access_key,
-        region_name=region_name,
-    )
     kwargs = {"Bucket": bucket}
 
     # If the prefix is a single string (not a tuple of strings), we can
