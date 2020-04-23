@@ -2,9 +2,13 @@ import os
 import argparse
 from flask import request
 from flask_api import FlaskAPI, status, exceptions
+from werkzeug.utils import secure_filename
 import io
 import numpy as np
 from PIL import Image
+import cv2
+from datetime import datetime
+import re
 
 # from flask_cors import CORS
 from logzero import logger
@@ -15,7 +19,14 @@ DB_NAME = "db320"
 ARN = "arn:aws:rds:us-east-2:007372221023:cluster:database320"
 SECRET_ARN = "arn:aws:secretsmanager:us-east-2:007372221023:secret:rds-db-credentials/cluster-BZEL6PSDLGVBVJB6BIDZGZQ4MI/admin320-fsoCse"
 REGION_NAME = "us-east-2"
-IMG_FORMAT = ".jpg"  # changing this is not handled very gracefully at the moment
+IMG_FORMAT = ".jpg"  # changing this is not handled very gracefully at the moment, probably
+
+UPLOAD_FOLDER = "/temp/uploads"
+ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg"}
+
+
+def allowed_file(filename):
+    return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
 def create_app(config=None):
@@ -34,48 +45,77 @@ def create_app(config=None):
     @app.route("/cluster/<int:cluster_num>", methods=["POST"])
     def label_apples(cluster_num=None):
         logger.info("POST /cluster/{}".format(cluster_num))
-        input_image = request.files["image"]
+        if "cluster_img" not in request.files:
+            return "Missing image", status.HTTP_400_BAD_REQUEST
 
-        rds = boto3.client("rds-data", region_name=REGION_NAME)
+        input_image = request.files["cluster_img"]
+
+        if input_image and allowed_file(input_image.filename):
+            filename = secure_filename(input_image.filename)
+            os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+            filename = os.path.join(UPLOAD_FOLDER, filename)
+            input_image.save(filename)
+        else:
+            return "Invalid image", status.HTTP_400_BAD_REQUEST
+
+        # input_image = np.fromstring(input_image.read(), np.uint8)
+        # decode image
+        input_image = cv2.imread(filename)
+        # input_image = cv2.cvtColor(input_image, cv2.COLOR_BGR2RGB)
+        print(input_image.shape)
 
         # STEP 1: Check if cluster_num is valid
-        if not (is_valid_cluster_num(cluster_num)):
-            return "Invalid cluster_num", status.HTTP_400_BAD_REQUEST
+        if cluster_num is not None:
+            if not is_valid_cluster_num(cluster_num):
+                return "Invalid cluster_num", status.HTTP_400_BAD_REQUEST
 
-        # STEP 2: ALIGNMENT CHECK
-        # get most recent img from /harvest2020/cluster_num
-        most_recent_image = get_last_picture(cluster_num)
+            # STEP 2: ALIGNMENT CHECK
+            # get most recent img from /clusters/cluster_num
+            most_recent_image = get_last_picture(cluster_num)
 
-        if most_recent_image is not None:
-            aligned = check_alignment(input_image, most_recent_image)
+            if most_recent_image is not None:
+                aligned = check_alignment(input_image, most_recent_image)
+            else:
+                # TODO: check for good tag positioning
+                aligned = 1
+
+            if aligned == -1:
+                print("error, tag not present in input img")
+                return "No tag present", status.HTTP_400_BAD_REQUEST
+            elif aligned == 0:
+                print("input image not aligned")
+                return "Not aligned", status.HTTP_400_BAD_REQUEST
+            else:
+                print("successfully aligned")
         else:
-            # TODO: check for good tag positioning
-            aligned = 1
+            # rds = boto3.client("rds-data", region_name=REGION_NAME)
+            # cluster_ids = rds.execute_statement(
+            #     secretArn=SECRET_ARN,
+            #     database=DB_NAME,
+            #     resourceArn=ARN,
+            #     sql="SELECT cluster_id FROM Cluster",
+            # )
+            # print(cluster_ids)
 
-        if aligned == -1:
-            print("error, tag not present in input img")
-            return "No tag present", status.HTTP_400_BAD_REQUEST
-        elif aligned == 0:
-            print("input image not aligned")
-            return "Not aligned", status.HTTP_400_BAD_REQUEST
-        else:
-            print("successfully aligned")
+            # TODO: Do this as above, via database
+            # This is really gross and inefficient, and I apologize. See above comment.
+            existing_clusters = list(
+                get_matching_s3_objects("orchardwatchphotos", prefix="clusters")
+            )
+            highest_cluster = sorted(existing_clusters, key=lambda o: o["Key"])[-1]["Key"]
+            highest_cluster_id = re.findall("clusters/(\d*)/", highest_cluster)[0]
+
+            cluster_num = int(highest_cluster_id) + 1  # No race conditions here, no sir.
 
         # STEP 3: if alignment check result == 1: name picture to 'cluster_num_date_time'
         date = datetime.date(datetime.now())
         time = datetime.time(datetime.now())
-        key = date + "_" + time
+        key = str(date) + "_" + str(time) + IMG_FORMAT
 
-        # STEP 4: send to S3 to be stored in /harvest2020/cluster_num
-        # need to figure out how to do this in AWS
-
-        # cluster_ids = client.execute_statement(
-        #     secretArn=SECRET_ARN,
-        #     database=DB_NAME,
-        #     resourceArn=ARN,
-        #     sql="SELECT cluster_id FROM Cluster",
-        # )
+        # STEP 4: send to S3 to be stored in /clusters/cluster_num
         store_in_s3(input_image, cluster_num, key)
+
+        os.remove(filename)
 
         # TODO: Measure the apple, and appropriately store the data in DB
 
@@ -117,11 +157,12 @@ def make_s3_datapoint_name(cluster_num, subkey):
 def get_last_picture(cluster_num):
     bucket_name, folder_key = make_s3_cluster_name(cluster_num)
 
-    cluster_photos = list(get_matching_s3_objects(bucket_name))
+    cluster_photos = list(get_matching_s3_objects(bucket_name, prefix=folder_key))
     if not cluster_photos:
         return None
 
     latest = sorted(cluster_photos, key=lambda o: o["Key"])[-1]
+    print(latest)
     data = latest.get()["Body"].read()
 
     img = Image.open(io.BytesIO(data))
@@ -138,7 +179,7 @@ def store_in_s3(image, cluster_num, subkey):
     s3 = boto3.client("s3", region_name=REGION_NAME)
     bucket_name, key = make_s3_datapoint_name(cluster_num, subkey)
 
-    bin_img = cv2.encode(IMG_FORMAT, image).tobytes()
+    bin_img = io.BytesIO(cv2.imencode(IMG_FORMAT, image)[1].tobytes())
     s3.upload_fileobj(bin_img, bucket_name, key)
 
 
