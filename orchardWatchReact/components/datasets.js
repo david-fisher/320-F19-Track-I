@@ -20,6 +20,12 @@ export default class DataSets extends Component {
     entry: "",
     todisplay: null,
     data: {},
+    entries: [],
+    update: false,
+    targetfruitupdate: 0,
+    averagenumberclustersupdate: 0,
+    potentialfruitpertreeupdate: 0,
+    updateid: 0
   }
 
   handleConfirm = () => {
@@ -34,7 +40,7 @@ export default class DataSets extends Component {
     }
   }
 
-  contains = (name) => this.entries.findIndex(loc => loc.key === name) !== -1
+  contains = (name) => this.state.entries.findIndex(loc => loc.name === name) !== -1
 
 
   handleCancel = () => {
@@ -51,15 +57,6 @@ export default class DataSets extends Component {
     style: styles.rightButton
   }
 
-  entries = [
-    {key: 'location1', last: '3/24/20', data: {
-      numberOfClusters: 0,
-      numberOfTrees: 0,
-      projectedApples: 0
-    }},
-    {key: 'location2', last: '3/20/20', data: {}}
-  ];
-
   actionHandler(index) {
       var currDate = new Date()
       var dateFormat = currDate.getMonth()+1 + "/" + currDate.getDate() + "/" + currDate.getYear()%100
@@ -74,8 +71,9 @@ export default class DataSets extends Component {
       else if(index === 2)
       {
         this.setState({dialogVisible: false})
-        this.props.navigation.navigate('TabularEntry', {entries: this.entries, key: this.state.entry.toLowerCase(), last: dateFormat})
+        // this.props.navigation.navigate('TabularEntry', {entries: this.entries, key: this.state.entry.toLowerCase(), last: dateFormat})
         // this.entries.push({key: this.state.entry.toLowerCase(), last: currDate.getMonth()+1 + "/" + currDate.getDate() + "/" + currDate.getYear()%100})
+        this.props.navigation.navigate('TabularEntry',{name:this.state.entry})
         this.setState({entry: ""})
       }
   }
@@ -83,14 +81,30 @@ export default class DataSets extends Component {
   renderItems = ({item}) =>
     <ListItem 
       containerStyle = {styles.listItem}
-      title={item.key} 
-      subtitle={"Last Updated: " + item.last} 
+      title={item.name} 
+      subtitle={"Location: " + item.location} 
       bottomDivider
       topDivider
       chevron = {{color: 'black'}}
-      onPress={() => this.setState({todisplay: item.key, data: item.data})}
+      onPress={() => this.setState({todisplay: item.name, data: this.getData(item),updateid: item.orchardid})}
     />
 
+  getData(item) {
+    if ('targetfruitpertree' in item) {
+      return [
+        {key: 'Target Fruit Per Tree',data: item.targetfruitpertree},
+        {key: 'Average Number of Clusters',data: item.averagenumberclusters},
+        {key: 'Potential Fruits per Tree',data: item.potentialfruitpertree}
+      ]
+    }
+    else {
+      return [
+        {key: 'Target Fruit Per Tree',data: 0},
+        {key: 'Average Number of Clusters',data: 0},
+        {key: 'Potential Fruits per Tree',data: 0}
+      ]
+    }
+  }
 
   back = () => {
     this.setState({todisplay: null, data: {}})
@@ -98,9 +112,45 @@ export default class DataSets extends Component {
 
   optionsArray = ['Tree Picture', 'Cluster Picture', 'Manual Entry', 'Cancel']
 
+  componentDidMount() {
+    fetch('https://2a2glx2h08.execute-api.us-east-2.amazonaws.com/default/orchards',{
+      method: 'GET'
+    }).then((res) => res.json())
+    .then((json) => {
+      this.setState({entries:json})
+    })
+  }
+
+  update = () => {
+    this.setState({update:true})
+  }
+
+  cancelUpdate = () => {
+    this.setState({update:false})
+  }
+
+  upload = () => {
+    fetch('https://2a2glx2h08.execute-api.us-east-2.amazonaws.com/default/update-data/'+this.state.updateid, {
+      method: 'POST',
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(this.makeData())
+    }).then((res)=>{alert(res.status)})
+    this.setState({update:false, todisplay: null, data: {}})
+  }
+  
+  makeData() {
+    return {
+      averagenumberclusters: this.state.averagenumberclustersupdate,
+      potentialfruitpertree: this.state.potentialfruitpertreeupdate,
+      targetfruitpertree: this.state.targetfruitupdate
+    }
+  }
 
   render() {
-
+    this.componentDidMount()
     if(this.state.todisplay === null)
     {
       return (
@@ -120,7 +170,7 @@ export default class DataSets extends Component {
           </Dialog.Container>
 
           <FlatList
-              data={this.entries}
+              data={this.state.entries}
               renderItem={this.renderItems}
           />
 
@@ -136,18 +186,46 @@ export default class DataSets extends Component {
         </View>
       )
     }
+    else if (this.state.update) {
+      return (
+      <View>
+        <NavigationBar 
+          title = {{title: this.state.todisplay, tintColor: 'black'}}
+          leftButton = {{title: 'Cancel', handler: this.cancelUpdate}}
+          rightButton = {{title: 'Upload', handler: this.upload}}
+          style = {styles.navbarS}
+        />
+        <TextInput style={styles.input}
+          placeholder="Target Fruit per Tree"
+          keyboardType = 'number-pad'
+          onChangeText={(clusters)=>this.setState({targetfruitupdate: clusters})}
+        />
+        <TextInput style={styles.input}
+          placeholder="Average number of clusters"
+          keyboardType = 'number-pad'
+          onChangeText={(trees)=>this.setState({averagenumberclustersupdate: trees})}
+        />
+        <TextInput style={styles.input}
+          placeholder="Potential fruits per tree"
+          keyboardType = 'number-pad'
+          onChangeText={(apples)=>this.setState({potentialfruitpertreeupdate: apples})}
+        />
+      </View>
+      )
+    }
     else {
       return (
 
         <Fragment>
           <View>
             <NavigationBar 
-              title = {{title: this.state.todisplay}}
+              title = {{title: this.state.todisplay, tintColor: 'black'}}
               leftButton = {{title: '< Back', handler: this.back}}
+              rightButton = {{title: 'Update', handler: this.update}}
               style = {styles.navbarS}
             />
           </View>
-          <ExistDataset />
+          <ExistDataset data = {this.state.data}/>
 
         </Fragment>
       )
@@ -181,5 +259,11 @@ const styles = StyleSheet.create({
     marginTop: 40,
     width: Dimensions.get('window').width,
   },
+  input: {
+    margin: 15,
+    height: 40,
+    borderColor: '#7a42f4',
+    borderWidth: 1
+  }
 });
 

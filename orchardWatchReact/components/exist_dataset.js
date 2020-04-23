@@ -8,26 +8,14 @@ import {createStackNavigator, createSwitchNavigator} from '@react-navigation/sta
 
 export default class ExistDataset extends Component {
 
-    state = {
-        projApples: 0,
-        growthRate: 0,
-        avgSize: 0
-    }
-
-    listData = [
-        {key: 'Projected Apples', data: this.state.projApples },
-        {key: 'Growth Rate', data: this.state.growthRate + ' mm/day'},
-        {key: 'Average Fruit Size', data: this.state.avgSize + ' cm'}
-      ]
-
     render() {
         return (
 
             <View style={styles.container}>
                 <FlatList
                     
-                    data={this.listData}
-                    renderItem={({item}) => <ListItem containerStyle={styles.listItem} title={item.key + ": " + item.data} /> }
+                    data={this.props.data}
+                    renderItem={({item}) => <ListItem containerStyle={styles.listItem} title={item.key} subtitle={item.data} /> }
                 />
             </View>
 

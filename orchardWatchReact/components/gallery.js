@@ -39,6 +39,31 @@ export default class Gallery extends Component {
         }
     };
 
+    upload = () => {
+        // data = new FormData()
+        // data.append('clust_num',1)
+        // data.append('clust_img',this.state.image.uri)
+        fetch('https://2a2glx2h08.execute-api.us-east-2.amazonaws.com/default/aprilTag-allignment',{
+            method: 'POST',
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json"
+            },
+            body: {
+                clust_num: 1,
+                clust_img: this.state.image.uri
+            }
+        }).then(res => {
+            if (res.status === 200) {
+                alert('Image successfully uploaded')
+            }
+            else {
+                alert('Error uploading image')
+            }
+        })
+        .catch(err => {alert(err)})
+    }
+
     render() {
         let { image } = this.state;
 
@@ -49,7 +74,7 @@ export default class Gallery extends Component {
                         title = {{title: "Upload Image"}} 
                         style = {styles.navbar}
                         leftButton = {{title: '< Back', handler: () => this.props.navigation.navigate('CameraPage')}}
-                        rightButton = {{title: 'Upload', handler: () => this.props.navigation.navigate('CameraPage')}}
+                        rightButton = {{title: 'Upload', handler: this.upload}}
                     />
                 </View>
                 <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>

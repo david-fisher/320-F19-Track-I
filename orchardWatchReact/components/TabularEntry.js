@@ -16,17 +16,27 @@ import Constants from 'expo-constants';
 
 export default class TableEntry extends Component{
     state = {
-      numberOfClusters: 0,
-      numberOfTrees: 0,
-      projectedApples: 0
+      targetfruitpertree: 0,
+      averagenumberclusters: 0,
+      potentialfruitpertree: 0,
+      location: ''
     }
 
     upload = () => {
       var problems = this.verify()
-      console.log(problems)
       if(problems.length === 0){
-        alert("Successfully uploaded data")
-        this.props.route.params.entries.push({key: this.props.route.params.key, last: this.props.route.params.last, data: this.state})
+        // alert("Successfully uploaded data")
+        fetch('https://2a2glx2h08.execute-api.us-east-2.amazonaws.com/default/orchards',
+        {
+          method: 'POST',
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(this.makeData())
+        })
+        .then(response => {alert(response.status)})
+        // this.props.route.params.entries.push({key: this.props.route.params.key, last: this.props.route.params.last, data: this.state})
         this.props.navigation.navigate("Home")
       }else{
         var msg = ""
@@ -37,7 +47,17 @@ export default class TableEntry extends Component{
       }
     }
 
-    verify = (numClusters = this.state.numberOfClusters, numTrees=this.state.numberOfTrees, projApples=this.state.projectedApples) => {
+    makeData() {
+      return {
+        name: this.props.route.params.name,
+        location: this.state.location,
+        targetFruitPerTree: this.state.targetfruitpertree,
+        averageNumberOfClusters: this.state.averagenumberclusters,
+        potentialFruitPerTree: this.state.potentialfruitpertree
+      }
+    }
+
+    verify = (numClusters = this.state.targetfruitpertree, numTrees=this.state.averagenumberclusters, projApples=this.state.potentialfruitpertree) => {
       var problemsArr = []
 
       if (numClusters === 0) problemsArr.push("Add a number of clusters")
@@ -63,16 +83,23 @@ export default class TableEntry extends Component{
             {/* <Form type={Data}
              /> */}
              <TextInput style={styles.input}
-                placeholder="Number of Clusters"
-                onChangeText={(clusters)=>this.setState({numberOfClusters: clusters})}
+                placeholder="Location"
+                onChangeText={(loc)=>this.setState({location: loc})}
              />
              <TextInput style={styles.input}
-                placeholder="Number of Trees"
-                onChangeText={(trees)=>this.setState({numberOfTrees: trees})}
+                placeholder="Target Fruit per Tree"
+                keyboardType = 'number-pad'
+                onChangeText={(clusters)=>this.setState({targetfruitpertree: clusters})}
              />
              <TextInput style={styles.input}
-                placeholder="Projected Apples"
-                onChangeText={(apples)=>this.setState({projectedApples: apples})}
+                placeholder="Average number of clusters"
+                keyboardType = 'number-pad'
+                onChangeText={(trees)=>this.setState({averagenumberclusters: trees})}
+             />
+             <TextInput style={styles.input}
+                placeholder="Potential fruits per tree"
+                keyboardType = 'number-pad'
+                onChangeText={(apples)=>this.setState({potentialfruitpertree: apples})}
              />
           </View>
         );

@@ -57,6 +57,11 @@ export default class CameraWindow extends Component {
         this.setState({
             imageUri: null
         })
+        // fetch('https://2a2glx2h08.execute-api.us-east-2.amazonaws.com/default/aprilTag-allignment',{
+        //     method: 'POST',
+        //     body: this.state.imageUri
+        // }).then(res => {alert(res.statusText)})
+        // alert(this.state.imageUri)
     }
 
     render() {

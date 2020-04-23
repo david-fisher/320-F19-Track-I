@@ -13,9 +13,8 @@ export default class Login extends Component {
         code: ''
     }
 
-    async completeLogin(json) {
-        console.log(json)
-        if (json.auth_result === 1) {
+    async completeLogin(response) {
+        if (response.status === 200) {
             try {
                     await AsyncStorage.setItem('authenticated','true')
                     this.props.navigation.navigate('Home')
@@ -29,14 +28,11 @@ export default class Login extends Component {
     }
 
     LoginHandler = async () => {
-        // fetch('https://2a2glx2h08.execute-api.us-east-2.amazonaws.com/default/authentication?authentication_token='+this.state.code, {
-        //     method: 'GET'
-        // })
-        // .then((response) => response.json())
-        // .then((json) => {this.completeLogin(json)})
-        // .catch((error) => alert(error))
-        // this.setState({code: ''})
-        this.props.navigation.navigate('Home')
+        fetch('https://2a2glx2h08.execute-api.us-east-2.amazonaws.com/default/authentication?authentication_token='+this.state.code, {
+            method: 'GET'
+        })
+        .then((response) => this.completeLogin(response))
+        .catch((error) => alert(error))
     }
 
     render() {
