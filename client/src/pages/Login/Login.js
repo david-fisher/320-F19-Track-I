@@ -62,7 +62,7 @@ export default function Login() {
         cookies.set("token", json["token"], { path: "/" });
       })
       .then(() => {
-        setModalShow(true);
+        // setModalShow(true);
         document.location.href = "/home";
       })
       .catch(error => {
