@@ -33,7 +33,7 @@ def create_app(config=None):
     @app.route("/cluster", methods=["POST"])
     @app.route("/cluster/<int:cluster_num>", methods=["POST"])
     def label_apples(cluster_num=None):
-        logger.info("POST /cluster/{}" % cluster_num)
+        logger.info("POST /cluster/{}".format(cluster_num))
         input_image = request.files["image"]
 
         rds = boto3.client("rds-data", region_name=REGION_NAME)
@@ -85,9 +85,13 @@ def create_app(config=None):
     # I put it separately for readability
     @app.route("/cluster/<int:cluster_num>", methods=["GET"])
     def get_cluster_data(cluster_num):
-        logger.info("GET /cluster/{}" % cluster_num)
+        logger.info("GET /cluster/{}".format(cluster_num))
         # well, get the data.
         return "", status.HTTP_501_NOT_IMPLEMENTED
+
+    @app.route("/", methods=["GET"])
+    def hello():
+        return "Hi from the server!", status.HTTP_200_OK
 
     return app
 
@@ -100,7 +104,7 @@ def is_valid_cluster_num(cluster_num):
 
 def make_s3_cluster_name(cluster_num):
     bucket_name = "orchardwatchphotos"
-    folder_key = "clusters/{}" % cluster_num
+    folder_key = "clusters/{}".format(cluster_num)
     return bucket_name, folder_key
 
 
