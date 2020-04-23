@@ -40,19 +40,24 @@ def create_app(config=None):
 
         # STEP 1: Check if cluster_num is valid
         if not (is_valid_cluster_num(cluster_num)):
-            return {"statusCode": 400, "body": json.dumps("invalid cluster_num!")}
+            return "Invalid cluster_num", status.HTTP_400_BAD_REQUEST
 
         # STEP 2: ALIGNMENT CHECK
         # get most recent img from /harvest2020/cluster_num
         most_recent_image = get_last_picture(cluster_num)
 
-        aligned = check_alignment(input_image, most_recent_image)
+        if most_recent_image is not None:
+            aligned = check_alignment(input_image, most_recent_image)
+        else:
+            # TODO: check for good tag positioning
+            aligned = 1
+
         if aligned == -1:
             print("error, tag not present in input img")
-            return {"statusCode": 400, "body": "No tag!"}
+            return "No tag present", status.HTTP_400_BAD_REQUEST
         elif aligned == 0:
             print("input image not aligned")
-            return {"statusCode": 300, "body": "Not aligned!"}
+            return "Not aligned", status.HTTP_400_BAD_REQUEST
         else:
             print("successfully aligned")
 
@@ -74,7 +79,7 @@ def create_app(config=None):
 
         # TODO: Measure the apple, and appropriately store the data in DB
 
-        return "", status.HTTP_501_NOT_IMPLEMENTED
+        return "success", status.HTTP_200_OK
 
     # technically this can be consolidated into label_apples, but
     # I put it separately for readability
