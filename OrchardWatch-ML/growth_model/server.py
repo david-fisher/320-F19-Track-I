@@ -26,14 +26,14 @@ def create_app(config=None):
 
     @app.route("/tree", methods=["POST"])
     def get_num_clusters():
-        logger.warning(f"POST /tree")
+        logger.warning("POST /tree")
         image = request.files["image"]
         return "", status.HTTP_501_NOT_IMPLEMENTED
 
     @app.route("/cluster", methods=["POST"])
     @app.route("/cluster/<int:cluster_num>", methods=["POST"])
     def label_apples(cluster_num=None):
-        logger.info(f"POST /cluster/{cluster_num}")
+        logger.info("POST /cluster/{}" % cluster_num)
         input_image = request.files["image"]
 
         rds = boto3.client("rds-data", region_name=REGION_NAME)
@@ -85,21 +85,11 @@ def create_app(config=None):
     # I put it separately for readability
     @app.route("/cluster/<int:cluster_num>", methods=["GET"])
     def get_cluster_data(cluster_num):
-        logger.info(f"GET /cluster/{cluster_num}")
+        logger.info("GET /cluster/{}" % cluster_num)
         # well, get the data.
         return "", status.HTTP_501_NOT_IMPLEMENTED
 
     return app
-
-
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument("-p", "--port", action="store", default="8000")
-
-    args = parser.parse_args()
-    port = int(args.port)
-    app = create_app()
-    app.run(host="0.0.0.0", port=port)
 
 
 def is_valid_cluster_num(cluster_num):
@@ -110,7 +100,7 @@ def is_valid_cluster_num(cluster_num):
 
 def make_s3_cluster_name(cluster_num):
     bucket_name = "orchardwatchphotos"
-    folder_key = f"clusters/{cluster_num}"
+    folder_key = "clusters/{}" % cluster_num
     return bucket_name, folder_key
 
 
@@ -266,3 +256,13 @@ def get_matching_s3_objects(
             kwargs["ContinuationToken"] = resp["NextContinuationToken"]
         except KeyError:
             break
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-p", "--port", action="store", default="8000")
+
+    args = parser.parse_args()
+    port = int(args.port)
+    app = create_app()
+    app.run(host="0.0.0.0", port=port)
