@@ -37,7 +37,8 @@ export default function UpdatePass() {
     )
     .then(response => {
       if (response.status >= 200 && response.status < 300) {
-        console.log("Good response!");
+        alert("Password successfully changed!");
+        document.location.href = "/home";
         return response.json();
       } else {
         throw new Error("Server can't be reached!");
