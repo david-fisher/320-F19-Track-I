@@ -11,7 +11,7 @@ export function Contacts() {
         const fetchContacts = async () => {
             try {
                 setData({contacts: data.contacts, isFetching: true});
-                await fetch("https://2a2glx2h08.execute-api.us-east-2.amazonaws.com/default/contacts")
+                fetch("https://2a2glx2h08.execute-api.us-east-2.amazonaws.com/default/contacts")
                   .then(response => response.json())
                   .then(result => {
                     setData({contacts: result.map(content => ({
