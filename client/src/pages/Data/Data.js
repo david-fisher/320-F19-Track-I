@@ -268,7 +268,7 @@ function CustomTable(props) {
         </thead>
         <tbody>
           {data.map((dataInfo, index)=> {
-            return <tr>
+            return <tr key={index}>
               <td>12-16-19 7:34AM</td>
               <td>{dataInfo.HoboID}</td>
               <td>{dataInfo.Humidity}</td>
@@ -301,7 +301,7 @@ function CustomTable(props) {
         </thead>
         <tbody>
           {appleData.map((dataInfo, index)=> {
-            return <tr>
+            return <tr key={index}>
               <td>{dataInfo.TreeNum}</td>
               <td>{dataInfo.ClusterID}</td>
               <td>{dataInfo.AppleGrowthRates[0]}</td>

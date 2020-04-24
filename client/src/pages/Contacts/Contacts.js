@@ -1,29 +1,55 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import "./Contacts.css";
 import { Container } from "react-bootstrap";
-import ContactsData from "./contacts.json"
+import ContactsData from "./contacts.json";
+
+
 
 export function Contacts() {
+  const [data, setData] = useState({contacts: [], isFetching: false});
+  useEffect(() => {
+        const fetchContacts = async () => {
+            try {
+                setData({contacts: data.contacts, isFetching: true});
+                await fetch("https://2a2glx2h08.execute-api.us-east-2.amazonaws.com/default/contacts")
+                  .then(response => response.json())
+                  .then(result => {
+                    setData({contacts: result.map(content => ({
+                      name: content.name,
+                      email: content.email,
+                      position: content.position,
+                    })), isFetching: false})
+                })
+                .catch(e => {
+                    console.log(e);
+                    setData({contacts: data.contacts, isFetching: false});
+                });
+            } catch (e) {
+                console.log(e);
+                setData({contacts: data.contacts, isFetching: false});
+            }
+        };
+        fetchContacts();
+    }, []);
+  
   return (
-    <body>
+    <div>
       <Container className="Title">
         <h1>Contact Information</h1>
         <hr />
       </Container>
-      
-      
-      {ContactsData.map((contactsInfo, index)=> {
-        return <Container>
-        	<h1 classname="name">{contactsInfo.name}</h1>
-        	<p class="lead border border-light rounded">
-        	  {contactsInfo.position}
-        	</p>
-        	<p class="lead border border-light rounded">
-        	  <a href={"mailto:" + contactsInfo.email}> {contactsInfo.email} </a>
-        	</p>
+      {data.contacts.map((contactsInfo, index)=> {
+        return <Container key={index}>
+          <h1 className="name">{contactsInfo.name}</h1>
+          <p className="lead border border-light rounded">
+            Position: {contactsInfo.position}
+          </p>
+          <p className="lead border border-light rounded">
+            Email: <a href={"mailto:" + contactsInfo.email}> {contactsInfo.email} </a>
+          </p>
         </Container>
-      })}
-    </body>
+      })})}
+    </div>
   );
 }
 
