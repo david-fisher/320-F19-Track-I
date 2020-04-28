@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { AppRegistry, StyleSheet, Text, View, TextInput, Dimensions, Button, Image,AsyncStorage } from 'react-native';
+import { AppRegistry, StyleSheet, Text, View, TextInput, Dimensions, Button, Image,AsyncStorage,TouchableWithoutFeedback, Keyboard } from 'react-native';
 import 'react-native-gesture-handler';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator, createSwitchNavigator} from '@react-navigation/stack';
@@ -12,6 +12,7 @@ export default class Login extends Component {
     state = {
         code: ''
     }
+    
 
     async completeLogin(response) {
         if (response.status === 200) {
@@ -37,41 +38,43 @@ export default class Login extends Component {
 
     render() {
         return (
-            <View style={styles.container}>
-                <Image
-                    style={styles.img}
-                    resizeMode='cover'
-                    source={require('../assets/orchardbg.jpg')} 
-                    blurRadius={4}
-                />
-                <Image
-                    style = {{height: 150, width: Dimensions.get('window').width - 40}}
-                    source = {require('../assets/orchardWatch.png')}
-                />
-                <TextInput 
-                    style = {styles.inputBox}
-                    placeholder = 'Access Code'
-                    secureTextEntry = {true}
-                    keyboardType = 'number-pad'
-                    textAlign = {'center'}
-                    placeholderTextColor = {'white'}
-                    selectionColor={'white'}
-                    onChangeText = {(code)=>this.setState({code})}
-                />
-                <GradientButton
-                    style={{marginVertical: 20}}
-                    gradientBegin='#d44e4e'
-                    gradientEnd='#bf5252'
-                    gradientDirection='diagonal'
-                    text = 'Submit'
-                    height={50}
-                    width={200}
-                    impact
-                    impactStyle='Light'
-                    textStyle={{fontSize: 18}}
-                    onPressAction={this.LoginHandler}
-                />
-            </View>
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+                <View style={styles.container}>
+                    <Image
+                        style={styles.img}
+                        resizeMode='cover'
+                        source={require('../assets/orchardbg.jpg')} 
+                        blurRadius={4}
+                    />
+                    <Image
+                        style = {{height: 150, width: Dimensions.get('window').width - 40}}
+                        source = {require('../assets/orchardWatch.png')}
+                    />
+                    <TextInput 
+                        style = {styles.inputBox}
+                        placeholder = 'Access Code'
+                        secureTextEntry = {true}
+                        keyboardType = 'number-pad'
+                        textAlign = {'center'}
+                        placeholderTextColor = {'white'}
+                        selectionColor={'white'}
+                        onChangeText = {(code)=>this.setState({code})}
+                    />
+                    <GradientButton
+                        style={{marginVertical: 20}}
+                        gradientBegin='#d44e4e'
+                        gradientEnd='#bf5252'
+                        gradientDirection='diagonal'
+                        text = 'Submit'
+                        height={50}
+                        width={200}
+                        impact
+                        impactStyle='Light'
+                        textStyle={{fontSize: 18}}
+                        onPressAction={this.LoginHandler}
+                    />
+                </View>
+            </TouchableWithoutFeedback>
         )
     }
 }
@@ -82,16 +85,17 @@ const styles = StyleSheet.create({
     //   backgroundColor: '#90EE90',
       alignItems: 'center',
       justifyContent: 'center',
+      paddingBottom: Dimensions.get('window').height/6
     },
     inputBox: {
       height: 40, 
-      width: Dimensions.get('window').width - 40, 
+      width: Dimensions.get('window').width - 100, 
       borderColor: 'white',
       color: 'white', 
       borderWidth: 1,
     },
     submitButton: {
-        height: 30
+        height: 30,
     },
     img: {
         position: 'absolute',

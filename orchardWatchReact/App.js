@@ -11,11 +11,16 @@ import CameraWindow from './components/camera.window'
 import Gallery from "./components/gallery";
 import TableEntry from "./components/TabularEntry";
 import ExistDataset from "./components/exist_dataset";
+import * as ScreenOrientation from 'expo-screen-orientation';
 
 
 const Stack = createStackNavigator();
 // const cookies = new Cookies();
 export default class App extends Component {
+
+  async componentDidMount() {
+    await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT);
+  }
   // authentication = Cookies.get('authenticated')
   setRoute = async () => {
     // if (cookies.get('authenticated',{path: '/'}) === true) {

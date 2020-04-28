@@ -12,11 +12,13 @@ import ActionSheetCustom from "react-native-actionsheet";
 import ActionSheet from 'react-native-actionsheet';
 import {ListItem} from "react-native-elements";
 import ExistDataset from "./exist_dataset";
+import Swipeout from 'react-native-swipeout';
 
 export default class DataSets extends Component {
 
   state = {
     dialogVisible: false,
+    isFetching: false,
     entry: "",
     todisplay: null,
     data: {},
@@ -25,15 +27,19 @@ export default class DataSets extends Component {
     targetfruitupdate: 0,
     averagenumberclustersupdate: 0,
     potentialfruitpertreeupdate: 0,
-    updateid: 0
+    updateid: 0,
+  }
+
+  onRefresh() {
+    this.setState({isFetching: true}, function() { this.setEntries() })
   }
 
   handleConfirm = () => {
     var locationName = this.state.entry
 
-    if(locationName !== "" && !(this.contains(locationName.toLowerCase()))){
+    if(locationName !== "" && !(this.contains(locationName))){
         this.ActionSheet.show()
-    }else if(this.contains(locationName.toLowerCase())){
+    }else if(this.contains(locationName)){
         alert("Location name already exists")
     }else{
         alert("Enter a valid location")
@@ -57,14 +63,14 @@ export default class DataSets extends Component {
     style: styles.rightButton
   }
 
-  actionHandler(index) {
+  actionHandler = async (index) => {
       var currDate = new Date()
       var dateFormat = currDate.getMonth()+1 + "/" + currDate.getDate() + "/" + currDate.getYear()%100
 
       if(index === 0 || index === 1)
       {
         this.setState({dialogVisible: false})
-        this.entries.push({key: this.state.entry.toLowerCase(), last: dateFormat})
+        // this.entries.push({key: this.state.entry.toLowerCase(), last: dateFormat})
         this.props.navigation.navigate('CameraPage')
         this.setState({entry: ""})
       }
@@ -73,21 +79,21 @@ export default class DataSets extends Component {
         this.setState({dialogVisible: false})
         // this.props.navigation.navigate('TabularEntry', {entries: this.entries, key: this.state.entry.toLowerCase(), last: dateFormat})
         // this.entries.push({key: this.state.entry.toLowerCase(), last: currDate.getMonth()+1 + "/" + currDate.getDate() + "/" + currDate.getYear()%100})
-        this.props.navigation.navigate('TabularEntry',{name:this.state.entry})
+        this.props.navigation.navigate('TabularEntry', {name:this.state.entry, data: dateFormat})
         this.setState({entry: ""})
       }
   }
 
   renderItems = ({item}) =>
-    <ListItem 
-      containerStyle = {styles.listItem}
-      title={item.name} 
-      subtitle={"Location: " + item.location} 
-      bottomDivider
-      topDivider
-      chevron = {{color: 'black'}}
-      onPress={() => this.setState({todisplay: item.name, data: this.getData(item),updateid: item.orchardid})}
-    />
+      <ListItem 
+        containerStyle = {styles.listItem}
+        title={item.name} 
+        subtitle={"Location: " + item.location + "\nLast Updated: " + item.lastUpdated} 
+        bottomDivider
+        topDivider
+        chevron = {{color: 'black'}}
+        onPress={() => this.setState({todisplay: item.name, data: this.getData(item),updateid: item.orchardid})}
+      />
 
   getData(item) {
     if ('targetfruitpertree' in item) {
@@ -112,13 +118,17 @@ export default class DataSets extends Component {
 
   optionsArray = ['Tree Picture', 'Cluster Picture', 'Manual Entry', 'Cancel']
 
-  componentDidMount() {
+  setEntries = async () => {
     fetch('https://2a2glx2h08.execute-api.us-east-2.amazonaws.com/default/orchards',{
       method: 'GET'
     }).then((res) => res.json())
     .then((json) => {
-      this.setState({entries:json})
+      this.setState({entries:json, isFetching: false})
     })
+  }
+
+  componentDidMount() {
+    this.setEntries()
   }
 
   update = () => {
@@ -129,7 +139,7 @@ export default class DataSets extends Component {
     this.setState({update:false})
   }
 
-  upload = () => {
+  upload = async () => {
     fetch('https://2a2glx2h08.execute-api.us-east-2.amazonaws.com/default/update-data/'+this.state.updateid, {
       method: 'POST',
       headers: {
@@ -142,15 +152,17 @@ export default class DataSets extends Component {
   }
   
   makeData() {
+    var currDate = new Date()
+    var dateFormat = currDate.getMonth()+1 + "/" + currDate.getDate() + "/" + currDate.getYear()%100
     return {
       averagenumberclusters: this.state.averagenumberclustersupdate,
       potentialfruitpertree: this.state.potentialfruitpertreeupdate,
-      targetfruitpertree: this.state.targetfruitupdate
+      targetfruitpertree: this.state.targetfruitupdate,
+      lastUpdated: dateFormat
     }
   }
 
   render() {
-    this.componentDidMount()
     if(this.state.todisplay === null)
     {
       return (
@@ -162,8 +174,8 @@ export default class DataSets extends Component {
           />
 
           <Dialog.Container visible={this.state.dialogVisible}>
-              <Dialog.Title>Location</Dialog.Title>
-              <Dialog.Description>Please enter the location of the dataset</Dialog.Description>
+              <Dialog.Title>New Dataset</Dialog.Title>
+              <Dialog.Description>Please enter the name of the dataset</Dialog.Description>
               <Dialog.Input onChangeText={entry => this.setState({entry})} value={this.state.entry} style={{color: 'black'}} />
               <Dialog.Button label="Ok" onPress={this.handleConfirm} />
               <Dialog.Button label="Cancel" onPress={this.handleCancel} />
@@ -172,6 +184,8 @@ export default class DataSets extends Component {
           <FlatList
               data={this.state.entries}
               renderItem={this.renderItems}
+              onRefresh={() => this.onRefresh()}
+              refreshing={this.state.isFetching}
           />
 
           <ActionSheet 
@@ -262,7 +276,7 @@ const styles = StyleSheet.create({
   input: {
     margin: 15,
     height: 40,
-    borderColor: '#7a42f4',
+    borderColor: '#90EE90',
     borderWidth: 1
   }
 });
