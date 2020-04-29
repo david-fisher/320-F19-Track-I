@@ -3,8 +3,6 @@ import "./Contacts.css";
 import { Container } from "react-bootstrap";
 import ContactsData from "./contacts.json";
 
-
-
 export function Contacts() {
   const [data, setData] = useState({contacts: [], isFetching: false});
   useEffect(() => {
@@ -39,15 +37,17 @@ export function Contacts() {
         <hr />
       </Container>
       {data.contacts.map((contactsInfo, index)=> {
-        return <Container key={index}>
-          <h1 className="name">{contactsInfo.name}</h1>
-          <p className="lead border border-light rounded">
-            Position: {contactsInfo.position}
-          </p>
-          <p className="lead border border-light rounded">
-            Email: <a href={"mailto:" + contactsInfo.email}> {contactsInfo.email} </a>
-          </p>
-        </Container>
+        if (contactsInfo.position === "researcher" || contactsInfo.position === "grower") {
+          return <Container key={index}>
+            <h1 className="name">{contactsInfo.name}</h1>
+            <p className="lead border border-light rounded">
+              Position: {contactsInfo.position}
+            </p>
+            <p className="lead border border-light rounded">
+              Email: <a href={"mailto:" + contactsInfo.email}> {contactsInfo.email} </a>
+            </p>
+          </Container>
+        }
       })})}
     </div>
   );

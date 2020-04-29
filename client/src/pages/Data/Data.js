@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import { Container, Button } from "react-bootstrap";
 import Table from "react-bootstrap/Table";
 import {
@@ -15,7 +15,7 @@ import {
   VictoryVoronoi
 } from "victory";
 
-const data = [
+const hoboData = [
   {
     Epochtime: 1576475402,
     HoboID: "454-788",
@@ -118,42 +118,42 @@ const appleData = [
     AppleGrowthRates: [7, 16, 2, 13, 4, 5]
   },
   {
-    TreeNum: 27,
+    TreeNum: 11,
     ClusterID: "162-12",
     AppleGrowthRates: [15, 2, 14, 3, 4, 11]
   },
   {
-    TreeNum: 27,
+    TreeNum: 11,
     ClusterID: "54-39",
     AppleGrowthRates: [5, 12, 4, 3, 22, 1]
   },
   {
-    TreeNum: 16,
+    TreeNum: 12,
     ClusterID: "73-27",
     AppleGrowthRates: [5, 17, 20, 3, 1, 1]
   },
   {
-    TreeNum: 16,
+    TreeNum: 12,
     ClusterID: "201-17",
     AppleGrowthRates: [7, 12, 1, 3, 4, 12]
   },
   {
-    TreeNum: 34,
+    TreeNum: 13,
     ClusterID: "17-20",
     AppleGrowthRates: [8, 1, 16, 3, 14, 1]
   },
   {
-    TreeNum: 34,
+    TreeNum: 13,
     ClusterID: "59-30",
     AppleGrowthRates: [10, 12, 16, 3, 4, 21]
   },
   {
-    TreeNum: 73,
+    TreeNum: 14,
     ClusterID: "76-12",
     AppleGrowthRates: [15, 2, 6, 3, 4, 11]
   },
   {
-    TreeNum: 73,
+    TreeNum: 14,
     ClusterID: "109-39",
     AppleGrowthRates: [5, 12, 6, 3, 14, 1]
   },
@@ -165,22 +165,24 @@ const treeData = [
     PotentialBoreRate: 12
   },
   {
-    TreeNum: 27,
+    TreeNum: 11,
     PotentialBoreRate: 17
   },
   {
-    TreeNum: 16,
+    TreeNum: 12,
     PotentialBoreRate: 22
   },
   {
-    TreeNum: 34,
+    TreeNum: 13,
     PotentialBoreRate: 7
   },
   {
-    TreeNum: 73,
+    TreeNum: 14,
     PotentialBoreRate: 6
   }
 ];
+
+let orchardData = [];
 
 function downloadData() {
     let csv =
@@ -215,6 +217,7 @@ class SelectDataType extends React.Component {
           <option value="Hobonet Data"> Hobonet Data </option>
           <option value="Apple Growth Rates"> Apple Growth Rates </option>
           <option value="Potential Fruit Bore Per Tree"> Potential Fruit Bore Per Tree </option>
+          <option value="Orchard Data"> Orchard Data </option>
         </select>
         {this.state.dataType === "Hobonet Data" && 
           <h1>HoboNet Data</h1>
@@ -224,6 +227,9 @@ class SelectDataType extends React.Component {
         }
         {this.state.dataType === "Potential Fruit Bore Per Tree" && 
           <h1>Potential Fruit Bore Per Tree</h1>
+        }
+        {this.state.dataType === "Orchard Data" && 
+          <h1>Orchard Data</h1>
         }
         <hr />
         <CustomTable y={this.state} />
@@ -243,6 +249,9 @@ class SelectDataType extends React.Component {
           {this.state.dataType === "Potential Fruit Bore Per Tree" && 
             <SelectFruitBore />
           }
+          {this.state.dataType === "Orchard Data" && 
+            <SelectOrchardData />
+          }
         </Container>
       </div>
     );
@@ -250,7 +259,7 @@ class SelectDataType extends React.Component {
 }
 
 function CustomTable(props) {
-  if (props.y.dataType == "Hobonet Data") {
+  if (props.y.dataType === "Hobonet Data") {
     const page = (
       <Table striped bordered hover>
         <thead>
@@ -267,7 +276,7 @@ function CustomTable(props) {
           </tr>
         </thead>
         <tbody>
-          {data.map((dataInfo, index)=> {
+          {hoboData.map((dataInfo, index)=> {
             return <tr key={index}>
               <td>12-16-19 7:34AM</td>
               <td>{dataInfo.HoboID}</td>
@@ -284,7 +293,7 @@ function CustomTable(props) {
       </Table>
     );
     return page;
-  } else if (props.y.dataType == "Apple Growth Rates") {
+  } else if (props.y.dataType === "Apple Growth Rates") {
     const page = (
       <Table striped bordered hover>
         <thead>
@@ -316,7 +325,7 @@ function CustomTable(props) {
       </Table>
     );
     return page;
-  } else {
+  } else if (props.y.dataType === "Potential Fruit Bore Per Tree") {
     const page = (
       <Table striped bordered hover>
         <thead>
@@ -327,9 +336,37 @@ function CustomTable(props) {
         </thead>
         <tbody>
           {treeData.map((dataInfo, index)=> {
-            return <tr>
+            return <tr key={index}>
               <td>{dataInfo.TreeNum}</td>
               <td>{dataInfo.PotentialBoreRate}</td>
+            </tr>
+          })}
+        </tbody>
+      </Table>
+    );
+    return page;
+  } else {
+    const page = (
+      <Table striped bordered hover>
+        <thead>
+          <tr>
+            <th>OrchardID</th>
+            <th>Orchard Name</th>
+            <th>Location</th>
+            <th>Target Fruit Per Tree</th>
+            <th>Average Number of Clusters</th>
+            <th>Potential Fruit Bore Per Tree</th>
+          </tr>
+        </thead>
+        <tbody>
+          {orchardData.map((dataInfo, index)=> {
+            return <tr key={index}>
+              <td>{dataInfo.orchardid}</td>
+              <td>{dataInfo.name}</td>
+              <td>{dataInfo.location}</td>
+              <td>{dataInfo.targetfruitpertree}</td>
+              <td>{dataInfo.averagenumberclusters}</td>
+              <td>{dataInfo.potentialfruitpertree}</td>
             </tr>
           })}
         </tbody>
@@ -418,9 +455,9 @@ class SelectHobo extends React.Component {
   }
   sortData(h) {
     let newdata = [];
-    for (let i = 0; i < data.length; i++) {
-      if (data[i].HoboID === h) {
-        newdata.push(data[i]);
+    for (let i = 0; i < hoboData.length; i++) {
+      if (hoboData[i].HoboID === h) {
+        newdata.push(hoboData[i]);
       }
     }
     return newdata;
@@ -456,7 +493,7 @@ class SelectHobo extends React.Component {
 }
 
 function HoboGraph(props) {
-  if (props.y.chartType == "Line") {
+  if (props.y.chartType === "Line") {
   	const page = (
       <VictoryChart domainPadding={20} theme={VictoryTheme.material}>
         <VictoryLabel text={props.y.y} x={50} y={30} textAnchor="middle" />
@@ -468,7 +505,7 @@ function HoboGraph(props) {
       </VictoryChart>
     );
     return page;
-  } else if (props.y.chartType == "Bar"){
+  } else if (props.y.chartType === "Bar"){
     const page = (
       <VictoryChart domainPadding={20} theme={VictoryTheme.material}>
         <VictoryLabel text={props.y.y} x={50} y={30} textAnchor="middle" />
@@ -480,7 +517,7 @@ function HoboGraph(props) {
       </VictoryChart>
     );
     return page;
-  } else if (props.y.chartType == "Scatter"){
+  } else if (props.y.chartType === "Scatter"){
     const page = (
       <VictoryChart domainPadding={20} theme={VictoryTheme.material}>
         <VictoryLabel text={props.y.y} x={50} y={30} textAnchor="middle" />
@@ -491,7 +528,7 @@ function HoboGraph(props) {
       </VictoryChart>
     );
     return page;
-  } else if (props.y.chartType == "Pie"){
+  } else if (props.y.chartType === "Pie"){
     const page = (
       <VictoryPie colorScale={["tomato", "orange", "cyan", "navy" ]} data={props.y.sdata} y={props.y.y} />
     );
@@ -579,7 +616,7 @@ class SelectGrowthRates extends React.Component {
 }
 
 function AppleGraph(props) {
-  if (props.y.chartType == "Line") {
+  if (props.y.chartType === "Line") {
   	const page = (
       <VictoryChart domainPadding={20} theme={VictoryTheme.material}>
         <VictoryLabel text={"ClusterID: " + props.y.cluster} x={50} y={30} textAnchor="inherit" />
@@ -591,7 +628,7 @@ function AppleGraph(props) {
       </VictoryChart>
     );
     return page;
-  } else if (props.y.chartType == "Bar"){
+  } else if (props.y.chartType === "Bar"){
     const page = (
       <VictoryChart domainPadding={20} theme={VictoryTheme.material}>
         <VictoryLabel text={"ClusterID: " + props.y.cluster} x={50} y={30} textAnchor="inherit" />
@@ -603,7 +640,7 @@ function AppleGraph(props) {
       </VictoryChart>
     );
     return page;
-  } else if (props.y.chartType == "Scatter"){
+  } else if (props.y.chartType === "Scatter"){
     const page = (
       <VictoryChart domainPadding={20} theme={VictoryTheme.material}>
         <VictoryLabel text={"ClusterID: " + props.y.cluster} x={50} y={30} textAnchor="inherit" />
@@ -614,7 +651,7 @@ function AppleGraph(props) {
       </VictoryChart>
     );
     return page;
-  } else if (props.y.chartType == "Pie"){
+  } else if (props.y.chartType === "Pie"){
     const page = (
       <VictoryPie colorScale={["tomato", "orange", "cyan", "navy" ]} data={props.y.sdata} />
     );
@@ -680,7 +717,7 @@ class SelectFruitBore extends React.Component {
 }
 
 function BoreRateGraph(props) {
-  if (props.y.chartType == "Line") {
+  if (props.y.chartType === "Line") {
   	const page = (
       <VictoryChart domainPadding={20} theme={VictoryTheme.material}>
         <VictoryLabel text="Potential Fruit Bore Per Tree" x={50} y={30} textAnchor="inherit" />
@@ -692,7 +729,7 @@ function BoreRateGraph(props) {
       </VictoryChart>
     );
     return page;
-  } else if (props.y.chartType == "Bar"){
+  } else if (props.y.chartType === "Bar"){
     const page = (
       <VictoryChart domainPadding={20} theme={VictoryTheme.material}>
         <VictoryLabel text="Potential Fruit Bore Per Tree" x={50} y={30} textAnchor="inherit" />
@@ -704,7 +741,7 @@ function BoreRateGraph(props) {
       </VictoryChart>
     );
     return page;
-  } else if (props.y.chartType == "Scatter"){
+  } else if (props.y.chartType === "Scatter"){
     const page = (
       <VictoryChart domainPadding={20} theme={VictoryTheme.material}>
         <VictoryLabel text="Potential Fruit Bore Per Tree" x={50} y={30} textAnchor="inherit" />
@@ -715,7 +752,7 @@ function BoreRateGraph(props) {
       </VictoryChart>
     );
     return page;
-  } else if (props.y.chartType == "Pie"){
+  } else if (props.y.chartType === "Pie"){
     const page = (
       <VictoryPie colorScale={["tomato", "orange", "cyan", "navy" ]} data={props.y.sdata} />
     );
@@ -735,7 +772,162 @@ function BoreRateGraph(props) {
   }
 }
 
+class SelectOrchardData extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      category: "Target Fruit Per Tree",
+      sdata: this.sortData("Target Fruit Per Tree"),
+      chartType: "Line"
+    };
+
+    this.handleSelectCategory = this.handleSelectCategory.bind(this);
+    this.handleSelectChartType = this.handleSelectChartType.bind(this);
+
+    this.sortData = this.sortData.bind(this);
+  }
+  
+  handleSelectCategory(e) {
+    this.setState({ category: e.target.value });
+    this.setState({ sdata: this.sortData(e.target.value) });
+  }
+  handleSelectChartType(e) {
+  	this.setState({ chartType: e.target.value});
+  }
+  sortData(c) {
+    let newdata = [];
+    for (let i = 0; i < orchardData.length; i++) {
+      if (c === "Target Fruit Per Tree") {
+        let temp = {
+          x: i, 
+          y: orchardData[i].targetfruitpertree
+        };
+        newdata.push(temp);
+      } else if (c === "Average Number of Clusters") {
+        let temp = {
+          x: i, 
+          y: orchardData[i].averagenumberclusters
+        };
+        newdata.push(temp);
+      } else {
+        let temp = {
+          x: i, 
+          y: orchardData[i].potentialfruitpertree
+        };
+        newdata.push(temp);
+      }
+    }
+    return newdata;
+  }
+  
+  render() {
+    return (
+      <div>
+        <select onChange={this.handleSelectCategory}>
+          <option value="Target Fruit Per Tree"> Target Fruit Per Tree </option>
+          <option value="Average Number of Clusters"> Average Number of Clusters </option>
+          <option value="Potential Fruit Bore Per Tree"> Potential Fruit Bore Per Tree </option>
+        </select>
+        <select onChange={this.handleSelectChartType}>
+          <option value="Line"> Line </option>
+          <option value="Bar"> Bar </option>
+          <option value="Scatter"> Scatter </option>
+          <option value="Pie"> Pie </option>
+          <option value="Area"> Area </option>
+        </select>
+        <OrchardGraph y={this.state} />
+        {/*{this.table(this.state)}*/}
+      </div>
+    );
+  }
+}
+
+function OrchardGraph(props) {
+  if (props.y.chartType === "Line") {
+  	const page = (
+      <VictoryChart domainPadding={20} theme={VictoryTheme.material}>
+        <VictoryLabel text={props.y.category} x={50} y={30} textAnchor="inherit" />
+        <VictoryLabel text="Time" x={410} y={270} textAnchor="middle" />
+        <VictoryLine data={props.y.sdata} 
+          animate={{duration: 2000, onLoad: { duration: 1000 }}}/>
+        <VictoryAxis tickFormat={() => ""} />
+        <VictoryAxis dependentAxis />
+      </VictoryChart>
+    );
+    return page;
+  } else if (props.y.chartType === "Bar"){
+    const page = (
+      <VictoryChart domainPadding={20} theme={VictoryTheme.material}>
+        <VictoryLabel text={props.y.category} x={50} y={30} textAnchor="inherit" />
+        <VictoryLabel text="Time" x={410} y={270} textAnchor="middle" />
+        <VictoryBar data={props.y.sdata} style={{ data: { fill: "#c43a31" } }} 
+          animate={{duration: 2000, onLoad: { duration: 1000 }}} />
+        <VictoryAxis tickFormat={() => ""} />
+        <VictoryAxis dependentAxis />
+      </VictoryChart>
+    );
+    return page;
+  } else if (props.y.chartType === "Scatter"){
+    const page = (
+      <VictoryChart domainPadding={20} theme={VictoryTheme.material}>
+        <VictoryLabel text={props.y.category} x={50} y={30} textAnchor="inherit" />
+        <VictoryLabel text="Time" x={410} y={270} textAnchor="middle" />
+        <VictoryScatter data={props.y.sdata} />
+        <VictoryAxis tickFormat={() => ""} />
+        <VictoryAxis dependentAxis />
+      </VictoryChart>
+    );
+    return page;
+  } else if (props.y.chartType === "Pie"){
+    const page = (
+      <VictoryPie colorScale={["tomato", "orange", "cyan", "navy" ]} data={props.y.sdata} />
+    );
+    return page;
+  } else {
+  	const page = (
+      <VictoryChart domainPadding={20} theme={VictoryTheme.material}>
+        <VictoryLabel text={props.y.category} x={50} y={30} textAnchor="inherit" />
+        <VictoryLabel text="Time" x={410} y={270} textAnchor="middle" />
+        <VictoryArea data={props.y.sdata} style={{ data: { fill: "#c43a31" } }} 
+          animate={{duration: 2000, onLoad: { duration: 1000 }}} />
+        <VictoryAxis tickFormat={() => ""} />
+        <VictoryAxis dependentAxis />
+      </VictoryChart>
+    );
+    return page;
+  }
+}
+
 export default function Data() {
+  const [data, setData] = useState({orchards: [], isFetching: false});
+  useEffect(() => {
+        const fetchOrchards = async () => {
+            try {
+                setData({orchards: data.orchards, isFetching: true});
+                fetch("https://2a2glx2h08.execute-api.us-east-2.amazonaws.com/default/orchards")
+                  .then(response => response.json())
+                  .then(result => {
+                    setData({orchards: result.map(content => ({
+                      orchardid: content.orchardid,
+                      name: content.name,
+                      location: content.location,
+                      targetfruitpertree: content.targetfruitpertree,
+                      averagenumberclusters: content.averagenumberclusters,
+                      potentialfruitpertree: content.potentialfruitpertree,
+                    })), isFetching: false})
+                })
+                .catch(e => {
+                    console.log(e);
+                    setData({orchards: data.orchards, isFetching: false});
+                });
+            } catch (e) {
+                console.log(e);
+                setData({orchards: data.orchards, isFetching: false});
+            }
+        };
+        fetchOrchards();
+    }, []);
+  orchardData = data.orchards;
   return (
     <div>
       <Container className="Title">
