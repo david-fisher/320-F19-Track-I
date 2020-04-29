@@ -64,7 +64,7 @@ export default class DataSets extends Component {
       if(index === 0 || index === 1)
       {
         this.setState({dialogVisible: false})
-        this.entries.push({key: this.state.entry.toLowerCase(), last: dateFormat})
+        // this.entries.push({key: this.state.entry.toLowerCase(), last: dateFormat})
         this.props.navigation.navigate('CameraPage')
         this.setState({entry: ""})
       }
@@ -137,7 +137,11 @@ export default class DataSets extends Component {
         "Content-Type": "application/json"
       },
       body: JSON.stringify(this.makeData())
-    }).then((res)=>{alert(res.status)})
+    }).then((res)=>{
+      if (res.status === 200) {
+        alert('Update successful')
+      }
+    })
     this.setState({update:false, todisplay: null, data: {}})
   }
   

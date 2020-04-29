@@ -35,7 +35,11 @@ export default class TableEntry extends Component{
           },
           body: JSON.stringify(this.makeData())
         })
-        .then(response => {alert(response.status)})
+        .then(response => {
+          if (response.status === 200) {
+            alert('Upload Successful')
+          }
+        })
         // this.props.route.params.entries.push({key: this.props.route.params.key, last: this.props.route.params.last, data: this.state})
         this.props.navigation.navigate("Home")
       }else{
