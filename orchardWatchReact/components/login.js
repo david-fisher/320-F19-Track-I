@@ -15,7 +15,7 @@ export default class Login extends Component {
     
 
     async completeLogin(response) {
-        if (response.status === 200) {
+        if (response.auth_result === 1) {
             try {
                     await AsyncStorage.setItem('authenticated','true')
                     this.props.navigation.navigate('Home')
@@ -32,7 +32,8 @@ export default class Login extends Component {
         fetch('https://2a2glx2h08.execute-api.us-east-2.amazonaws.com/default/authentication?authentication_token='+this.state.code, {
             method: 'GET'
         })
-        .then((response) => this.completeLogin(response))
+        .then((response) => response.json())
+        .then((json) => this.completeLogin(json))
         .catch((error) => alert(error))
     }
 

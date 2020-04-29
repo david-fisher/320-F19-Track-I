@@ -147,7 +147,11 @@ export default class DataSets extends Component {
         "Content-Type": "application/json"
       },
       body: JSON.stringify(this.makeData())
-    }).then((res)=>{alert(res.status)})
+    }).then((res)=>{
+      if (res.status === 200) {
+        alert('Update successful')
+      }
+    })
     this.setState({update:false, todisplay: null, data: {}})
   }
   
