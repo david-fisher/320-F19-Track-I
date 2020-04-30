@@ -53,6 +53,7 @@ Thumbs.db
 *.swp
 *.swo
 *.un~
+.vscode
 .Rhistory
 
 # Evil evil evil evil #

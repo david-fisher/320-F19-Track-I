@@ -1,0 +1,8 @@
+Flask-API
+flask-cors
+logzero
+boto3
+Pillow
+numpy
+opencv
+apriltag
