@@ -1,21 +1,21 @@
 import React, { useState } from "react";
-import { Button, FormGroup, FormControl, FormLabel } from "react-bootstrap";
+import { Button, FormGroup, FormControl, FormLabel, Col, Row } from "react-bootstrap";
 import "./UploadData.css";
 
 export default function UploadData() {
   const [name, setName] = useState("");
   const [location, setLocation] = useState("");
-  const [targetfruitpertree, setTargetFruitPerTree] = useState("");
-  const [averagenumberclusters, setAverageNumberClusters] = useState("");
-  const [potentialfruitpertree, setPotentialFruitPerTree] = useState("");
+  const [targetFruitPerTree, setTargetFruitPerTree] = useState("");
+  const [averageNumberOfClusters, setAverageNumberOfClusters] = useState("");
+  const [potentialFruitPerTree, setPotentialFruitPerTree] = useState("");
 
   function validateForm() {
     return (
       name.length > 0 &&
       location.length > 0 &&
-      targetfruitpertree.length > 0 &&
-      averagenumberclusters.length > 0 &&
-      potentialfruitpertree.length > 0
+      targetFruitPerTree.length > 0 &&
+      averageNumberOfClusters.length > 0 &&
+      potentialFruitPerTree.length > 0
     );
   }
 
@@ -31,11 +31,11 @@ export default function UploadData() {
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          name: name,
-          location: location,
-          targetfruitpertree: targetfruitpertree,
-          averagenumberclusters: averagenumberclusters,
-          potentialfruitpertree: potentialfruitpertree
+          "name": name,
+          "location": location,
+          "targetFruitPerTree": targetFruitPerTree,
+          "averageNumberOfClusters": averageNumberOfClusters,
+          "potentialFruitPerTree": potentialFruitPerTree
         })
       }
     )
@@ -48,7 +48,7 @@ export default function UploadData() {
       }
     })
     .then(() => {
-      document.location.href = "/home";
+      document.location.href = "/data";
     })
     .catch(error => {
       alert("Upload failed!");
@@ -57,57 +57,59 @@ export default function UploadData() {
   }
   
   return (
-    <div>
-      <div className="UploadData">
-        <form onSubmit={handleSubmit}>
-          <FormGroup controlId="name">
-            <FormLabel>Orchard Name</FormLabel>
-            <FormControl
-              autoFocus
-              type="name"
-              value={name}
-              onChange={e => setName(e.target.value)}
-            />
-          </FormGroup>
-          <FormGroup controlId="location">
-            <FormLabel>Location</FormLabel>
-            <FormControl
-              type="location"
-              value={location}
-              onChange={e => setLocation(e.target.value)}
-            />
-          </FormGroup>
-          <FormGroup controlId="targetfruitpertree">
-            <FormLabel>Target Fruit Per Tree</FormLabel>
-            <FormControl
-              type="targetfruitpertree"
-              value={targetfruitpertree}
-              onChange={e => setTargetFruitPerTree(e.target.value)}
-            />
-          </FormGroup>
-          <FormGroup controlId="averagenumberclusters">
-            <FormLabel>Average Number of Clusters</FormLabel>
-            <FormControl
-              type="averagenumberclusters"
-              value={averagenumberclusters}
-              onChange={e => setAverageNumberClusters(e.target.value)}
-            />
-          </FormGroup>
-          <FormGroup controlId="potentialfruitpertree">
-            <FormLabel>Potential Fruit Bore Per Tree</FormLabel>
-            <FormControl
-              type="potentialfruitpertree"
-              value={potentialfruitpertree}
-              onChange={e => setPotentialFruitPerTree(e.target.value)}
-            />
-          </FormGroup>
-          <FormGroup>
-            <Button block disabled={!validateForm()} type="submit">
-              Upload Data
-            </Button>
-          </FormGroup>
-        </form>
-      </div>
-    </div>
+   <Row>
+      <Col md={{ span: 6, offset: 3 }}>
+        <div className="" style={{ marginTop: "60px" }}>
+          <form onSubmit={handleSubmit}>
+            <FormGroup as={Col} controlId="name">
+              <FormLabel>Orchard Name</FormLabel>
+              <FormControl
+                autoFocus
+				type="name"
+				value={name}
+				onChange={e => setName(e.target.value)}
+              />
+            </FormGroup>
+			<FormGroup as={Col} controlId="location">
+			  <FormLabel>Location</FormLabel>
+			  <FormControl
+				type="location"
+				value={location}
+				onChange={e => setLocation(e.target.value)}
+			  />
+			</FormGroup>
+			<FormGroup as={Col} controlId="targetFruitPerTree">
+			  <FormLabel>Target Fruit Per Tree (Ex: 12.0)</FormLabel>
+			  <FormControl
+				type="targetFruitPerTree"
+				value={targetFruitPerTree}
+				onChange={e => setTargetFruitPerTree(e.target.value)}
+			  />
+			</FormGroup>
+			<FormGroup as={Col} controlId="averageNumberOfClusters">
+			  <FormLabel>Average Number of Clusters (Ex: 5.0)</FormLabel>
+			  <FormControl
+				type="averageNumberOfClusters"
+				value={averageNumberOfClusters}
+				onChange={e => setAverageNumberOfClusters(e.target.value)}
+			  />
+			</FormGroup>
+			<FormGroup as={Col} controlId="potentialFruitPerTree">
+			  <FormLabel>Potential Fruit Bore Per Tree (Ex: 6.0)</FormLabel>
+			  <FormControl
+				type="potentialFruitPerTree"
+				value={potentialFruitPerTree}
+				onChange={e => setPotentialFruitPerTree(e.target.value)}
+			  />
+			</FormGroup>
+			<FormGroup>
+			  <Button block disabled={!validateForm()} type="submit">
+				Upload Data
+			  </Button>
+			</FormGroup>
+          </form>
+        </div>
+      </Col>
+    </Row>
   );
 }

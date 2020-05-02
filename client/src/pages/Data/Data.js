@@ -236,9 +236,11 @@ class SelectDataType extends React.Component {
         <Button block href={downloadData()} download="data.csv">
           Download
         </Button>
-        <Button block href="/uploaddata">
-          Upload Orchard Data
-        </Button>
+        {this.state.dataType === "Orchard Data" && 
+          <Button block href="/uploaddata">
+            Upload Orchard Data
+          </Button>
+        }
         <Container>
           <hr />
           <h1>Visualize</h1>
