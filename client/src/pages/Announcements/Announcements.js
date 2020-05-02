@@ -34,6 +34,7 @@ export function Announcements() {
                                 title: content[1].stringValue,
                                 description: content[2].stringValue,
                                 date: content[3].stringValue,
+                                email: content[4].stringValue,
                             })), isFetching: false})
                     })
                     .catch(e => {
@@ -73,6 +74,9 @@ export function Announcements() {
               </p>
               <p className="lead border border-light rounded">
                 {announcementsInfo.description}
+              </p>
+              <p className="lead border border-light rounded">
+              {announcementsInfo.email}
               </p>
           </Container>
     })})}
