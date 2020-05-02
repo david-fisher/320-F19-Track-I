@@ -184,15 +184,39 @@ const treeData = [
 
 let orchardData = [];
 
-function downloadData() {
-    let csv =
-      "data:text/csv;charset=utf-8," +
-      'Epochtime, 1576475402, HoboID, "454-788", Humidity, 7, LeafWetness, 9, Rainfall, 23, SoilMoisture, 43, SolarRadiation, 343413, Temperature: 92, Wind, 4' +
-      'Epochtime, 1576475403, HoboID, "454-788", Humidity, 9, LeafWetness, 4, Rainfall, 83, SoilMoisture, 63, SolarRadiation, 341233, Temperature: 12, Wind, 1' +
-      'Epochtime, 1576475404, HoboID, "454-788", Humidity, 7, LeafWetness, 2, Rainfall, 53, SoilMoisture, 43, SolarRadiation, 343413, Temperature: 42, Wind, 4' +
-      'Epochtime, 1576475405, HoboID, "454-788", Humidity, 6, LeafWetness, 9, Rainfall, 73, SoilMoisture, 13, SolarRadiation, 344412, Temperature: 52, Wind, 7' +
-      'Epochtime, 1576475406, HoboID, "454-789", Humidity, 1, LeafWetness, 9, Rainfall, 73, SoilMoisture, 33, SolarRadiation, 351411, Temperature: 72, Wind, 6' +
-      'Epochtime, 1576475407, HoboID, "454-789", Humidity, 2, LeafWetness, 5, Rainfall, 33, SoilMoisture, 63, SolarRadiation, 332133, Temperature: 92, Wind, 3';
+function downloadHoboData() {
+    let csv = "data:text/csv;charset=utf-8," + "Epoch Time,HoboID,Humidity,Leaf Wetness,Rainfall,Soil Moisture,Solar Radiation,Temperature,Wind\n";
+    hoboData.map((dataInfo, index)=> {
+      csv += dataInfo.Epochtime + "," + dataInfo.HoboID + "," + dataInfo.Humidity + "," + dataInfo.LeafWetness + "," +
+        dataInfo.Rainfall + "," + dataInfo.SoilMoisture + "," + dataInfo.SolarRadiation + "," + dataInfo.Temperature + 
+        "," + dataInfo.Wind + "\n";
+    });
+    return encodeURI(csv);
+}
+
+function downloadAppleData() {
+    let csv = "data:text/csv;charset=utf-8," + "Tree Number,ClusterID,Apple #1 Growth Rate (cm/day),Apple #2 Growth Rate (cm/day),Apple #3 Growth Rate (cm/day),Apple #4 Growth Rate (cm/day),Apple #5 Growth Rate (cm/day),Apple #6 Growth Rate (cm/day)\n";
+    appleData.map((dataInfo, index)=> {
+      csv += dataInfo.TreeNum + "," + dataInfo.ClusterID + "," + dataInfo.AppleGrowthRates[0] + "," + dataInfo.AppleGrowthRates[1] + "," +
+        dataInfo.AppleGrowthRates[2] + "," + dataInfo.AppleGrowthRates[3] + "," + dataInfo.AppleGrowthRates[4] + "," + dataInfo.AppleGrowthRates[5] + "\n";
+    });
+    return encodeURI(csv);
+}
+
+function downloadPFBData() {
+    let csv = "data:text/csv;charset=utf-8," + "Tree Number,Potential Bore (apples)\n";
+    treeData.map((dataInfo, index)=> {
+      csv += dataInfo.TreeNum + "," + dataInfo.PotentialBoreRate + "\n";
+    });
+    return encodeURI(csv);
+}
+
+function downloadOrchardData() {
+    let csv = "data:text/csv;charset=utf-8," + "OrchardID,Orchard Name,Location,Target Fruit Per Tree,Average Number of Clusters,Potential Fruit Bore Per Tree\n";
+    orchardData.map((dataInfo, index)=> {
+      csv += dataInfo.orchardid + "," + dataInfo.name + "," + dataInfo.location + "," + dataInfo.targetfruitpertree + 
+        "," + dataInfo.averagenumberclusters + "," + dataInfo.potentialfruitpertree + "\n";
+    });
     return encodeURI(csv);
 }
 
@@ -233,9 +257,26 @@ class SelectDataType extends React.Component {
         }
         <hr />
         <CustomTable y={this.state} />
-        <Button block href={downloadData()} download="data.csv">
-          Download
-        </Button>
+        {this.state.dataType === "Hobonet Data" &&
+          <Button block href={downloadHoboData()} download="data.csv">
+            Download Data
+          </Button>
+        }
+        {this.state.dataType === "Apple Growth Rates" &&
+          <Button block href={downloadAppleData()} download="data.csv">
+            Download Data
+          </Button>
+        }
+        {this.state.dataType === "Potential Fruit Bore Per Tree" && 
+          <Button block href={downloadPFBData()} download="data.csv">
+            Download Data
+          </Button>
+        }
+        {this.state.dataType === "Orchard Data" && 
+          <Button block href={downloadOrchardData()} download="data.csv">
+            Download Data
+          </Button>
+        }
         {this.state.dataType === "Orchard Data" && 
           <Button block href="/uploaddata">
             Upload Orchard Data
