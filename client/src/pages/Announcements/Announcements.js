@@ -70,10 +70,13 @@ export function Announcements() {
                 {announcementsInfo.title}
               </h1>
               <p className="lead border border-light rounded">
-                Posted on {announcementsInfo.date}, by {announcementsInfo.email}
+                {announcementsInfo.date}
               </p>
               <p className="lead border border-light rounded">
                 {announcementsInfo.description}
+              </p>
+              <p className="lead border border-light rounded">
+              {announcementsInfo.email}
               </p>
           </Container>
     })})}
