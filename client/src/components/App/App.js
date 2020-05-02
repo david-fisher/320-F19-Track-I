@@ -47,7 +47,6 @@ export default function App() {
         </Nav>
 
         <Nav className="justify-content-end">
-          {token === undefined && (<Nav.Link href="/accountinfo">Account Info</Nav.Link>)}
           {token === undefined && (
             <Nav.Link href="/register">Register</Nav.Link>
           )}

@@ -186,14 +186,14 @@ let orchardData = [];
 
 function downloadData() {
     let csv =
-      encodeURI("data:text/csv;charset=utf-8,") +
+      "data:text/csv;charset=utf-8," +
       'Epochtime, 1576475402, HoboID, "454-788", Humidity, 7, LeafWetness, 9, Rainfall, 23, SoilMoisture, 43, SolarRadiation, 343413, Temperature: 92, Wind, 4' +
       'Epochtime, 1576475403, HoboID, "454-788", Humidity, 9, LeafWetness, 4, Rainfall, 83, SoilMoisture, 63, SolarRadiation, 341233, Temperature: 12, Wind, 1' +
       'Epochtime, 1576475404, HoboID, "454-788", Humidity, 7, LeafWetness, 2, Rainfall, 53, SoilMoisture, 43, SolarRadiation, 343413, Temperature: 42, Wind, 4' +
       'Epochtime, 1576475405, HoboID, "454-788", Humidity, 6, LeafWetness, 9, Rainfall, 73, SoilMoisture, 13, SolarRadiation, 344412, Temperature: 52, Wind, 7' +
       'Epochtime, 1576475406, HoboID, "454-789", Humidity, 1, LeafWetness, 9, Rainfall, 73, SoilMoisture, 33, SolarRadiation, 351411, Temperature: 72, Wind, 6' +
       'Epochtime, 1576475407, HoboID, "454-789", Humidity, 2, LeafWetness, 5, Rainfall, 33, SoilMoisture, 63, SolarRadiation, 332133, Temperature: 92, Wind, 3';
-    return csv;
+    return encodeURI(csv);
 }
 
 class SelectDataType extends React.Component {
@@ -235,6 +235,9 @@ class SelectDataType extends React.Component {
         <CustomTable y={this.state} />
         <Button block href={downloadData()} download="data.csv">
           Download
+        </Button>
+        <Button block href="/uploaddata">
+          Upload Orchard Data
         </Button>
         <Container>
           <hr />
