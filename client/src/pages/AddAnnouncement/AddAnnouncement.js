@@ -18,7 +18,7 @@ const cookies = new Cookies();
 const email = cookies.get("email");
 
 var dateSendTemp = new Date();
-var dateSend = dateSendTemp.getFullYear() + '-' + (dateSendTemp.getMonth()+1) + '-' + dateSendTemp.getDate() +' '+ dateSendTemp.getHours()+':'+ dateSendTemp.getMinutes()+':'+ dateSendTemp.getSeconds();
+var dateSend = (dateSendTemp.getMonth()+1) + '-' + dateSendTemp.getDate() + '-' + dateSendTemp.getFullYear() + ' '+ dateSendTemp.getHours()%12 +':'+ dateSendTemp.getMinutes();
 
 export default function AddAnnouncement() {
     const [title, setTitle] = useState("");
@@ -45,7 +45,8 @@ export default function AddAnnouncement() {
                 body: JSON.stringify({
                     "title": title,
                     "description": description,
-                    "date": dateSend
+                    "date": dateSend,
+                    "email": email
                 })
             }
         )
