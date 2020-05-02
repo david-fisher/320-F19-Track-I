@@ -63,7 +63,6 @@ export function Announcements() {
     </Button>}
     </Container>
 
-      </Container>
       {data.announcements.map((announcementsInfo, index)=> {
           return <Container key={index}>
               <h1 className="title">
