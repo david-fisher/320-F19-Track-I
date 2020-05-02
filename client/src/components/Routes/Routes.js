@@ -22,6 +22,7 @@ import UpdatePass from "../../pages/UpdatePass/UpdatePass";
 import UploadData from "../../pages/UploadData/UploadData";
 import UnauthenticatedRoute from "./UnauthenticatedRoute";
 import AuthenticatedRoute from "./AuthenticatedRoute";
+import AddAnnouncement from "../../pages/AddAnnouncement/AddAnnouncement";
 
 export default function Routes() {
   return (
@@ -42,6 +43,7 @@ export default function Routes() {
       <AuthenticatedRoute path="/predict" exact component={Predict} />
       <Route path="/forgot" exact component={Forgot} />
       <Route path="/announcements" exact component={Announcements} />
+      <Route path="/addannouncement" exact component={AddAnnouncement} />
       <Route path="/accountinfo" exact component={AccountInfo} />
       <Route path="/contacts" exact component={Contacts} />
       <Route path="/updatepass" exact component={UpdatePass} />
