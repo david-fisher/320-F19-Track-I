@@ -1,0 +1,9 @@
+      {TestData.map((annInfo, index)=> {
+        return <Container>
+          <h1 classname="title">{annInfo.title}</h1>
+          <p class="lead border border-light rounded">
+            {annInfo.date}: {annInfo.description}
+          </p>
+        	
+        </Container>
+      })}	
