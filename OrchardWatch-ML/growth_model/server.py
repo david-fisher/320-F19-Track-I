@@ -107,7 +107,7 @@ def create_app(config=None):
                 get_matching_s3_objects(s3, "orchardwatchphotos", prefix="clusters")
             )
             if existing_clusters:
-                lambda get_cluster_id key: int(re.findall("clusters/(\d*)/", key)[0])
+                get_cluster_id = lambda key: int(re.findall("clusters/(\d*)/", key)[0])
                 highest_cluster_id = sorted(existing_clusters, key=lambda o: get_cluster_id(o["Key"]))[-1]
             else:
                 highest_cluster_id = 0
