@@ -27,11 +27,3 @@
   width: 100%;
   object-fit: contain;
 }
-.form-group {
-  width: 10em;
-  display: inline-block;
-  margin-bottom: 0 !important;
-  vertical-align: middle;
-  margin-left: 1em;
-  width: 7.3em;
-}
