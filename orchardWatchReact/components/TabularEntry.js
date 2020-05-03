@@ -38,7 +38,9 @@ export default class TableEntry extends Component{
         })
         .then(response => {
           if (response.status === 200) {
-            alert('Upload Successful')
+            alert('Upload successful, refresh to see changes')
+          }else{
+            alert('Upload failed')
           }
         })
         // this.props.route.params.entries.push({key: this.props.route.params.key, last: this.props.route.params.last, data: this.state})
@@ -63,6 +65,10 @@ export default class TableEntry extends Component{
       }
     }
 
+    async componentDidMount() {
+      this.setState({name: this.props.route.params.name})
+    }
+
     verify = (location = this.state.location, numClusters = this.state.targetfruitpertree, numTrees=this.state.averagenumberclusters, projApples=this.state.potentialfruitpertree) => {
       var problemsArr = []
 
@@ -78,35 +84,33 @@ export default class TableEntry extends Component{
         return (
           <View style={styles.container}>
             <NavigationBar 
-                title={{title: 'New Dataset'}}
+                title={{title: this.state.name}}
                 leftButton={{title: '< Back', handler: () => {this.props.navigation.navigate('Home')}}}
                 rightButton={{title: 'Upload', handler: this.upload}}
             />
             {/* <Form type={Data}
              /> */}
+             <View style={styles.form}>
              <Text style={styles.headers}>Location</Text>
              <TextInput style={styles.input}
-                // placeholder="Location"
                 onChangeText={(loc)=>this.setState({location: loc})}
              />
              <Text style={styles.headers}>Target Fruit per Tree</Text>
              <TextInput style={styles.input}
-                // placeholder="Target Fruit per Tree"
                 keyboardType = 'number-pad'
                 onChangeText={(clusters)=>this.setState({targetfruitpertree: clusters})}
              />
              <Text style={styles.headers}>Average number of clusters</Text>
              <TextInput style={styles.input}
-                // placeholder="Average number of clusters"
                 keyboardType = 'number-pad'
                 onChangeText={(trees)=>this.setState({averagenumberclusters: trees})}
              />
              <Text style={styles.headers}>Potential fruits per tree</Text>
              <TextInput style={styles.input}
-                // placeholder="Potential fruits per tree"
                 keyboardType = 'number-pad'
                 onChangeText={(apples)=>this.setState({potentialfruitpertree: apples})}
              />
+             </View>
           </View>
         );
       }
@@ -122,10 +126,16 @@ const styles = StyleSheet.create({
     input: {
       margin: 15,
       height: 40,
-      borderColor: '#90EE90',
-      borderWidth: 1
+      borderColor: '#618759',
+      borderWidth: 1,
+      borderRadius: 5,
+      fontSize: 18
     },
     headers:{
-      marginLeft: 15
+      marginLeft: 15,
+      fontSize: 18
+    },
+    form: {
+      marginTop: 25
     }
   });

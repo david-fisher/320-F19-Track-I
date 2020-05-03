@@ -12,7 +12,7 @@ import ActionSheetCustom from "react-native-actionsheet";
 import ActionSheet from 'react-native-actionsheet';
 import {ListItem} from "react-native-elements";
 import ExistDataset from "./exist_dataset";
-import Swipeout from 'react-native-swipeout';
+
 
 export default class DataSets extends Component {
 
@@ -46,7 +46,7 @@ export default class DataSets extends Component {
     }
   }
 
-  contains = (name) => this.state.entries.findIndex(loc => loc.name === name) !== -1
+  contains = (name) => this.state.entries.findIndex(loc => loc.name.toUpperCase() === name.toUpperCase()) !== -1
 
 
   handleCancel = () => {
@@ -88,10 +88,11 @@ export default class DataSets extends Component {
       <ListItem 
         containerStyle = {styles.listItem}
         title={item.name} 
+        titleStyle={{color: '#618759', fontWeight: 'bold'}}
         subtitle={"Location: " + item.location + "\nLast Updated: " + item.lastUpdated} 
         bottomDivider
         topDivider
-        chevron = {{color: 'black'}}
+        chevron = {{color: '#618759'}}
         onPress={() => this.setState({todisplay: item.name, data: this.getData(item),updateid: item.orchardid})}
       />
 
@@ -132,39 +133,65 @@ export default class DataSets extends Component {
   }
 
   update = () => {
-    this.setState({update:true})
+    this.ActionSheetUpdate.show()
+    // this.setState({update:true})
   }
+
+  actionHandlerUpdate = async (index) => {
+    var currDate = new Date()
+    var dateFormat = currDate.getMonth()+1 + "/" + currDate.getDate() + "/" + currDate.getYear()%100
+
+    if(index === 0 || index === 1)
+    {
+      this.props.navigation.navigate('CameraPage')
+    }
+    else if(index === 2)
+    {
+      this.setState({update:true})
+    }
+}
 
   cancelUpdate = () => {
     this.setState({update:false})
   }
 
   upload = async () => {
-    fetch('https://2a2glx2h08.execute-api.us-east-2.amazonaws.com/default/update-data/'+this.state.updateid, {
-      method: 'POST',
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(this.makeData())
-    }).then((res)=>{
-      if (res.status === 200) {
-        alert('Update successful')
-      }
-    })
-    this.setState({update:false, todisplay: null, data: {}})
+    let dataObj = this.makeData()
+
+    if(Object.keys(dataObj).length > 1){
+      fetch('https://2a2glx2h08.execute-api.us-east-2.amazonaws.com/default/update-data/'+this.state.updateid, {
+        method: 'POST',
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(this.makeData())
+      }).then((res)=>{
+        if (res.status === 200) {
+          alert('Update successful')
+          this.setState({update:false, todisplay: null, data: {}})
+        }else{
+          alert('Something went wrong with updating the dataset')
+        }
+      })
+    }else{
+      alert('Fill out at least one field to update')
+    }
   }
   
   makeData() {
     var currDate = new Date()
     var dateFormat = currDate.getMonth()+1 + "/" + currDate.getDate() + "/" + currDate.getYear()%100
-    return {
-      averagenumberclusters: this.state.averagenumberclustersupdate,
-      potentialfruitpertree: this.state.potentialfruitpertreeupdate,
-      targetfruitpertree: this.state.targetfruitupdate,
-      lastUpdated: dateFormat
-    }
+    var dataObj = {}
+
+    dataObj.lastUpdated = dateFormat
+    if(this.state.averagenumberclustersupdate !== 0 && this.state.averagenumberclustersupdate !== "") dataObj.averagenumberclusters = this.state.averagenumberclustersupdate
+    if(this.state.potentialfruitpertreeupdate !== 0 && this.state.potentialfruitpertreeupdate !== "") dataObj.potentialfruitpertree = this.state.potentialfruitpertreeupdate
+    if(this.state.targetfruitupdate !== 0 && this.state.targetfruitupdate !== "") dataObj.targetfruitpertree = this.state.targetfruitupdate
+    
+    return dataObj
   }
+
 
   render() {
     if(this.state.todisplay === null)
@@ -172,14 +199,14 @@ export default class DataSets extends Component {
       return (
         <View style={styles.container}>
           <NavigationBar 
-              title = {{title: 'Datasets'}}
+              title = {{title: 'My Datasets'}}
               rightButton = {this.rightButton}
               style = {styles.navbar}
           />
 
           <Dialog.Container visible={this.state.dialogVisible}>
               <Dialog.Title>New Dataset</Dialog.Title>
-              <Dialog.Description>Please enter the name of the dataset</Dialog.Description>
+              <Dialog.Description>Please enter the name of your dataset</Dialog.Description>
               <Dialog.Input onChangeText={entry => this.setState({entry})} value={this.state.entry} style={{color: 'black'}} />
               <Dialog.Button label="Ok" onPress={this.handleConfirm} />
               <Dialog.Button label="Cancel" onPress={this.handleCancel} />
@@ -190,6 +217,7 @@ export default class DataSets extends Component {
               renderItem={this.renderItems}
               onRefresh={() => this.onRefresh()}
               refreshing={this.state.isFetching}
+              keyExtractor={(item) => item.name}
           />
 
           <ActionSheet 
@@ -207,27 +235,30 @@ export default class DataSets extends Component {
     else if (this.state.update) {
       return (
       <View>
-        <NavigationBar 
-          title = {{title: this.state.todisplay, tintColor: 'black'}}
-          leftButton = {{title: 'Cancel', handler: this.cancelUpdate}}
-          rightButton = {{title: 'Upload', handler: this.upload}}
-          style = {styles.navbarS}
-        />
-        <TextInput style={styles.input}
-          placeholder="Target Fruit per Tree"
-          keyboardType = 'number-pad'
-          onChangeText={(clusters)=>this.setState({targetfruitupdate: clusters})}
-        />
-        <TextInput style={styles.input}
-          placeholder="Average number of clusters"
-          keyboardType = 'number-pad'
-          onChangeText={(trees)=>this.setState({averagenumberclustersupdate: trees})}
-        />
-        <TextInput style={styles.input}
-          placeholder="Potential fruits per tree"
-          keyboardType = 'number-pad'
-          onChangeText={(apples)=>this.setState({potentialfruitpertreeupdate: apples})}
-        />
+          <NavigationBar 
+            title = {{title: this.state.todisplay, tintColor: 'black'}}
+            leftButton = {{title: 'Cancel', handler: this.cancelUpdate}}
+            rightButton = {{title: 'Update', handler: this.upload}}
+            style = {styles.navbarS}
+          />
+          <Text style={styles.instructions}>Fill out all fields you would like to update</Text>
+          <View style={styles.updatedataset}>
+            <Text style={styles.headers}>Target Fruit per Tree</Text>
+            <TextInput style={styles.input}
+              keyboardType = 'number-pad'
+              onChangeText={(clusters)=>this.setState({targetfruitupdate: clusters})}
+            />
+            <Text style={styles.headers}>Average number of clusters</Text>
+            <TextInput style={styles.input}
+              keyboardType = 'number-pad'
+              onChangeText={(trees)=>this.setState({averagenumberclustersupdate: trees})}
+            />
+            <Text style={styles.headers}>Potential fruits per tree</Text>
+            <TextInput style={styles.input}
+              keyboardType = 'number-pad'
+              onChangeText={(apples)=>this.setState({potentialfruitpertreeupdate: apples})}
+            />
+          </View>
       </View>
       )
     }
@@ -244,6 +275,14 @@ export default class DataSets extends Component {
             />
           </View>
           <ExistDataset data = {this.state.data}/>
+
+          <ActionSheet 
+              ref = {o => (this.ActionSheetUpdate = o)}
+              title = {'Choose data entry mode'}
+              options = {this.optionsArray}
+              cancelButtonIndex = {3}
+              onPress = {index => {this.actionHandlerUpdate(index)}}
+          />
 
         </Fragment>
       )
@@ -272,6 +311,7 @@ const styles = StyleSheet.create({
   rightButton: {
     width: 20,
     height: 20,
+    fontSize: 30
   },
   navbarS: {
     marginTop: 40,
@@ -280,8 +320,26 @@ const styles = StyleSheet.create({
   input: {
     margin: 15,
     height: 40,
-    borderColor: '#90EE90',
-    borderWidth: 1
-  }
+    borderColor: '#618759',
+    borderWidth: 1,
+    fontSize:18,
+    borderRadius:5
+  },
+  headers:{
+    marginLeft: 15,
+    fontSize: 18
+  },
+  updatedataset:{
+    marginVertical: 20,
+    backgroundColor: 'white',
+    padding: 15
+  },
+  instructions:{
+    marginTop: 20, 
+    textAlign:'center', 
+    fontSize: 15, 
+    color: 'tomato', 
+    fontWeight: 'bold'
+  },
 });
 

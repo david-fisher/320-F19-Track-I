@@ -62,13 +62,13 @@ export default class Login extends Component {
                         onChangeText = {(code)=>this.setState({code})}
                     />
                     <GradientButton
-                        style={{marginVertical: 20}}
+                        style={{marginTop: 20}}
                         gradientBegin='#d44e4e'
                         gradientEnd='#bf5252'
                         gradientDirection='diagonal'
                         text = 'Submit'
-                        height={50}
-                        width={200}
+                        height={45}
+                        width={155}
                         impact
                         impactStyle='Light'
                         textStyle={{fontSize: 18}}
@@ -89,14 +89,20 @@ const styles = StyleSheet.create({
       paddingBottom: Dimensions.get('window').height/6
     },
     inputBox: {
-      height: 40, 
-      width: Dimensions.get('window').width - 100, 
+      height: 50, 
+      width: Dimensions.get('window').width - 225, 
       borderColor: 'white',
+      borderBottomWidth: 2,
+      borderTopWidth: 2,
+      borderLeftWidth: 2,
+      borderRightWidth: 2,
       color: 'white', 
       borderWidth: 1,
+      borderRadius: 15
     },
     submitButton: {
         height: 30,
+        width: 80
     },
     img: {
         position: 'absolute',
