@@ -1,5 +1,6 @@
-import React from "react";
-import { Container, Button, Jumbotron } from "react-bootstrap";
+import React, { useState } from "react";
+import { Container, Button, Jumbotron, Col, FormControl, FormGroup, FormLabel, } from "react-bootstrap";
+import Form from "react-bootstrap/Form";
 import "./Predict.css";
 
 function openFileExplorer() {
@@ -7,6 +8,55 @@ function openFileExplorer() {
 }
 
 export default function Predict() {
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [imagePreviewUrl, setImagePreviewUrl] = useState(null);
+  const [clusterNum, setClusterNum] = useState("");
+
+  function fileChangeHandler(e) {
+    setSelectedFile(e.target.files[0]);
+
+    var previewPlaceholder = document.getElementsByClassName("imageContainer");
+    previewPlaceholder[0].children[0].classList.add("hiddenFile");
+    previewPlaceholder[0].children[1].classList.remove("hiddenFile");
+
+    
+
+    let reader = new FileReader();
+
+    reader.onloadend = () => {
+        setImagePreviewUrl(reader.result)
+    }
+
+    reader.readAsDataURL(e.target.files[0])
+  }
+
+  function submit(event) {
+    console.log(selectedFile);
+
+    const cluster_image = new FormData();
+    cluster_image.append('cluster_img', selectedFile);
+
+    let endpointURL = "https://2a2glx2h08.execute-api.us-east-2.amazonaws.com/default/ml/cluster/" + clusterNum;
+    console.log(endpointURL);
+
+    fetch(
+      endpointURL,
+      {
+        method: "POST",
+        headers: {
+          Accept: "*/*",
+          "Content-Type": "multipart/form-data"
+        },
+        body: cluster_image
+      }
+    )
+    .then(response => {
+      console.log(response.status);
+    });
+
+    
+  }
+
   return (
     <Container>
       <Container className="jumb">
@@ -19,12 +69,35 @@ export default function Predict() {
           </p>
         </Jumbotron>
       </Container>
+      
+      <div className="imageContainer" >
+        <div className="previewPlaceholder"><h1>Preview</h1></div>
+        <img className="hiddenFile previewImage" src={imagePreviewUrl} /> 
+      </div>
 
-      <Button block onClick={openFileExplorer}>
-        Predict
+      <div className="buttonCenter" > 
+      <Button onClick={openFileExplorer}>
+        Select Image
       </Button>
 
-      <input className="hiddenFile" id="fileInput" type="file" />
+      <FormGroup controlId="clusterNum">
+        <FormControl
+          autoFocus
+          type="firstName"
+          value={clusterNum}
+          onChange={e => setClusterNum(e.target.value)}
+          placeholder="Cluster num."
+        />
+      </FormGroup>
+      </div>
+
+      <div className="buttonCenter">
+      <Button onClick={e => submit(e)}>
+        Predict
+      </Button>
+      </div>
+
+      <input className="hiddenFile" id="fileInput" type="file" onChange={e => fileChangeHandler(e)} />
     </Container>
   );
 }
