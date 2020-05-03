@@ -401,7 +401,7 @@ function CustomTable(props) {
             <th>Location</th>
             <th>Target Fruit Per Tree</th>
             <th>Average Number of Clusters</th>
-            <th>Potential Fruit Bore Per Tree</th>
+            <th>Potential Fruit Per Tree</th>
           </tr>
         </thead>
         <tbody>
