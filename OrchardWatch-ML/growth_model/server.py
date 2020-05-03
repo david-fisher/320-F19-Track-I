@@ -107,8 +107,8 @@ def create_app(config=None):
                 get_matching_s3_objects(s3, "orchardwatchphotos", prefix="clusters")
             )
             if existing_clusters:
-                highest_cluster = sorted(existing_clusters, key=lambda o: int(o["Key"]))[-1]["Key"]
-                highest_cluster_id = re.findall("clusters/(\d*)/", highest_cluster)[0]
+                lambda get_cluster_id key: int(re.findall("clusters/(\d*)/", key)[0])
+                highest_cluster_id = sorted(existing_clusters, key=lambda o: get_cluster_id(o["Key"]))[-1]
             else:
                 highest_cluster_id = 0
 
@@ -124,7 +124,7 @@ def create_app(config=None):
 
         # TODO: Measure the apple, and appropriately store the data in DB
 
-        return ret(cluster_num=cluster_num), status.HTTP_200_OK
+        return ret(cluster_num=cluster_num), status.HTTP_201_CREATED if cluster_num is None else status.HTTP_200_OK
 
     # technically this can be consolidated into label_apples, but
     # I put it separately for readability
