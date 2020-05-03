@@ -24,12 +24,12 @@ export function Announcements() {
     useEffect(() => {
         const fetchAnnouncements = async () => {
             try {
-                setData({announcements: data.announcements, isFetching: true});
+                setData({announcements: data.announcements.reverse(), isFetching: true});
                 fetch('https://2a2glx2h08.execute-api.us-east-2.amazonaws.com/default/announcements')
                     .then(response => response.json())
                     .then(result => {
                         setData({
-                            announcements: result.map(content => ({
+                            announcements: result.reverse().map(content => ({
                                 num: content[0].longValue,
                                 title: content[1].stringValue,
                                 description: content[2].stringValue,
@@ -43,7 +43,7 @@ export function Announcements() {
                     });
             } catch (e) {
                 console.log(e);
-                setData({announcements: data.announcements, isFetching: false});
+                setData({announcements: data.announcements.reverse(), isFetching: false});
             }
         };
         fetchAnnouncements();
