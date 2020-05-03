@@ -95,14 +95,14 @@ export default function UploadData() {
 			  />
 			</FormGroup>
 			<FormGroup as={Col} controlId="potentialFruitPerTree">
-			  <FormLabel>Potential Fruit Bore Per Tree (Ex: 6.0)</FormLabel>
+			  <FormLabel>Potential Fruit Per Tree (Ex: 6.0)</FormLabel>
 			  <FormControl
 				type="potentialFruitPerTree"
 				value={potentialFruitPerTree}
 				onChange={e => setPotentialFruitPerTree(e.target.value)}
 			  />
 			</FormGroup>
-			<FormGroup>
+			<FormGroup as={Col}>
 			  <Button block disabled={!validateForm()} type="submit">
 				Upload Data
 			  </Button>
