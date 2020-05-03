@@ -108,7 +108,8 @@ def create_app(config=None):
             )
             if existing_clusters:
                 get_cluster_id = lambda key: int(re.findall("clusters/(\d*)/", key)[0])
-                highest_cluster_id = sorted(existing_clusters, key=lambda o: get_cluster_id(o["Key"]))[-1]
+                highest_cluster = sorted(existing_clusters, key=lambda o: get_cluster_id(o["Key"]))[-1]
+                highest_cluster_id = get_cluster_id(highest_cluster["Key"])
             else:
                 highest_cluster_id = 0
 
