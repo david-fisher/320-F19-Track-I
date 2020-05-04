@@ -46,8 +46,9 @@ def create_app(config=None):
     @app.route("/cluster", methods=["POST"])
     @app.route("/cluster/<int:cluster_num>", methods=["POST"])
     def label_apples(cluster_num=None):
-        logger.info("POST /cluster/{}".format(cluster_num))
+        logger.info("POST /cluster/{}".format(cluster_num if cluster_num is not None else ""))
         if "cluster_img" not in request.files:
+            logger.error("missing_cluster_img")
             return ret(error_message="missing_cluster_img"), status.HTTP_400_BAD_REQUEST
 
         input_image = request.files["cluster_img"]
@@ -58,6 +59,7 @@ def create_app(config=None):
             filename = os.path.join(UPLOAD_FOLDER, filename)
             input_image.save(filename)
         else:
+            logger.error("invalid_cluster_img")
             return ret(error_message="invalid_cluster_img"), status.HTTP_400_BAD_REQUEST
 
         # input_image = np.fromstring(input_image.read(), np.uint8)
@@ -71,6 +73,7 @@ def create_app(config=None):
         # STEP 1: Check if cluster_num is valid
         if cluster_num is not None:
             if not is_valid_cluster_num(cluster_num):
+                logger.error("invalid_cluster_img")
                 return ret(error_message="invalid_cluster_num"), status.HTTP_400_BAD_REQUEST
 
             # STEP 2: ALIGNMENT CHECK
@@ -84,13 +87,13 @@ def create_app(config=None):
                 aligned = 1
 
             if aligned == -1:
-                print("error, tag not present in input img")
+                logger.error("error, tag not present in input img")
                 return ret(error_message="no_tag"), status.HTTP_400_BAD_REQUEST
             elif aligned == 0:
-                print("input image not aligned")
+                logger.error("input image not aligned")
                 return ret(error_message="not_aligned"), status.HTTP_400_BAD_REQUEST
             else:
-                print("successfully aligned")
+                logger.info("successfully aligned")
         else:
             # rds = boto3.client("rds-data", region_name=REGION_NAME)
             # cluster_ids = rds.execute_statement(
@@ -125,6 +128,7 @@ def create_app(config=None):
 
         # TODO: Measure the apple, and appropriately store the data in DB
 
+        logger.info("Success!")
         return ret(cluster_num=cluster_num), status.HTTP_201_CREATED if cluster_num is None else status.HTTP_200_OK
 
     # technically this can be consolidated into label_apples, but
