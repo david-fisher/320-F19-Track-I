@@ -15,7 +15,7 @@ export default class ExistDataset extends Component {
                 <FlatList
                     
                     data={this.props.data}
-                    renderItem={({item}) => <ListItem containerStyle={styles.listItem} title={item.key} subtitle={item.data} /> }
+                    renderItem={({item}) => <ListItem containerStyle={styles.listItem} title={item.key} titleStyle={{fontSize: 18}} rightTitle={item.data} rightTitleStyle={{color:'tomato', fontSize: 20}} bottomDivider='true' /> }
                 />
             </View>
 
@@ -26,7 +26,7 @@ export default class ExistDataset extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        paddingTop: 40
+        paddingTop: 0
     },
     leftButton: {
         width: 20,
@@ -42,6 +42,7 @@ const styles = StyleSheet.create({
         width: Dimensions.get('window').width,
     },
     listItem: {
-        backgroundColor: '#8bd483'
+        backgroundColor: 'white',
+        padding: 20
     }
 })

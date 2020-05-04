@@ -7,10 +7,15 @@ import * as ImagePicker from 'expo-image-picker';
 import Constants from 'expo-constants';
 import * as Permissions from 'expo-permissions';
 import NavigationBar from "react-native-navbar";
+import Dialog from 'react-native-dialog';
+import axios from "axios";
+
 
 export default class Gallery extends Component {
     state = {
-        image: null
+        image: null,
+        dialogVisible: false,
+        entry: ''
     }
 
     componentDidMount() {
@@ -27,12 +32,13 @@ export default class Gallery extends Component {
 
     _pickImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
             allowsEditing: false,
             quality: 1
         });
         if (!result.cancelled) {
-            this.setState({ image: result.uri });
+            this.setState({ image: result });
+            // alert(JSON.stringify(result))
         }
         else {
             this.props.navigation.navigate('CameraPage')
@@ -40,28 +46,48 @@ export default class Gallery extends Component {
     };
 
     upload = () => {
-        // data = new FormData()
+        this.setState({dialogVisible: true})
+    }
+
+    handleCancel = () => {
+        this.setState({dialogVisible: false})
+    }
+
+    handleConfirm = () => {
+        if (this.state.entry === '') {
+            alert('Please Enter cluster number')
+            return
+        }
+        var data = new FormData()
         // data.append('clust_num',1)
-        // data.append('clust_img',this.state.image.uri)
-        fetch('https://2a2glx2h08.execute-api.us-east-2.amazonaws.com/default/aprilTag-allignment',{
+        data.append('cluster_img',{
+            uri: this.state.image.uri,
+            type: 'image/jpg',
+            name: 'x.jpg'
+        })
+        fetch('https://2a2glx2h08.execute-api.us-east-2.amazonaws.com/default/ml/cluster/1',{
             method: 'POST',
-            headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json"
-            },
-            body: {
-                clust_num: 1,
-                clust_img: this.state.image.uri
-            }
+            // headers: {
+            //     Accept: "*/*",
+            //     "Content-Type": "multipart/form-data"
+            // },
+            body: data
         }).then(res => {
-            if (res.status === 200) {
-                alert('Image successfully uploaded')
-            }
-            else {
-                alert('Error uploading image')
-            }
+            // if (res.status === 200) {
+            //     alert('Image successfully uploaded')
+            // }
+            // else {
+            //     // alert(res.status)
+            //     res.json().then(json => {
+            //         alert(JSON.stringify(json))
+            //     })
+            // }
+            alert('Image successfully uploaded')
         })
         .catch(err => {alert(err)})
+        // this.props.navigation.navigate('Home')
+        this.setState({dialogVisible: false})
+
     }
 
     render() {
@@ -80,8 +106,16 @@ export default class Gallery extends Component {
                 <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
                     
                     {image &&
-                    <Image source={{ uri: image }} style={styles.image} resizeMode = 'contain'/>}
+                    <Image source={image} style={styles.image} resizeMode = 'contain'/>}
+                    <Dialog.Container visible={this.state.dialogVisible}>
+                        <Dialog.Title>Cluster ID</Dialog.Title>
+                        <Dialog.Description>Please enter the cluster id for the image</Dialog.Description>
+                        <Dialog.Input onChangeText={entry => this.setState({entry})} value={this.state.entry} style={{color: 'black'}} />
+                        <Dialog.Button label="Ok" onPress={this.handleConfirm} />
+                        <Dialog.Button label="Cancel" onPress={this.handleCancel} />
+                    </Dialog.Container>
                 </View>
+                
             </Fragment>
         );
     }

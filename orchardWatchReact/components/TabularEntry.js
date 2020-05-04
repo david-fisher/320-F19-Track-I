@@ -19,10 +19,11 @@ export default class TableEntry extends Component{
       targetfruitpertree: 0,
       averagenumberclusters: 0,
       potentialfruitpertree: 0,
-      location: ''
+      location: '',
+      lastUpdated: ''
     }
 
-    upload = () => {
+    upload = async () => {
       var problems = this.verify()
       if(problems.length === 0){
         // alert("Successfully uploaded data")
@@ -37,7 +38,9 @@ export default class TableEntry extends Component{
         })
         .then(response => {
           if (response.status === 200) {
-            alert('Upload Successful')
+            alert('Upload successful, refresh to see changes')
+          }else{
+            alert('Upload failed')
           }
         })
         // this.props.route.params.entries.push({key: this.props.route.params.key, last: this.props.route.params.last, data: this.state})
@@ -54,6 +57,7 @@ export default class TableEntry extends Component{
     makeData() {
       return {
         name: this.props.route.params.name,
+        lastupdated: this.props.route.params.data,
         location: this.state.location,
         targetFruitPerTree: this.state.targetfruitpertree,
         averageNumberOfClusters: this.state.averagenumberclusters,
@@ -61,17 +65,17 @@ export default class TableEntry extends Component{
       }
     }
 
-    verify = (numClusters = this.state.targetfruitpertree, numTrees=this.state.averagenumberclusters, projApples=this.state.potentialfruitpertree) => {
+    async componentDidMount() {
+      this.setState({name: this.props.route.params.name})
+    }
+
+    verify = (location = this.state.location, numClusters = this.state.targetfruitpertree, numTrees=this.state.averagenumberclusters, projApples=this.state.potentialfruitpertree) => {
       var problemsArr = []
 
+      if (location.length===0 || location === ' ') problemsArr.push("Enter a valid location")
       if (numClusters === 0) problemsArr.push("Add a number of clusters")
-      else if( typeof numClusters !== "string") problemsArr.push("Invalid type for clusters")
-
       if(numTrees === 0) problemsArr.push("Add a number of trees")
-      else if(typeof numTrees !== "string") problemsArr.push("Invalid type for trees, enter a number")
-
       if(projApples === 0) problemsArr.push("Add a projected number of apples")
-      else if(typeof projApples !== "string") problemsArr.push("Invalid type for apples, enter a number")
       
       return problemsArr
     }
@@ -80,31 +84,33 @@ export default class TableEntry extends Component{
         return (
           <View style={styles.container}>
             <NavigationBar 
-                title={{title: 'New Dataset'}}
+                title={{title: this.state.name}}
                 leftButton={{title: '< Back', handler: () => {this.props.navigation.navigate('Home')}}}
                 rightButton={{title: 'Upload', handler: this.upload}}
             />
             {/* <Form type={Data}
              /> */}
+             <View style={styles.form}>
+             <Text style={styles.headers}>Location</Text>
              <TextInput style={styles.input}
-                placeholder="Location"
                 onChangeText={(loc)=>this.setState({location: loc})}
              />
+             <Text style={styles.headers}>Target Fruit per Tree</Text>
              <TextInput style={styles.input}
-                placeholder="Target Fruit per Tree"
                 keyboardType = 'number-pad'
                 onChangeText={(clusters)=>this.setState({targetfruitpertree: clusters})}
              />
+             <Text style={styles.headers}>Average number of clusters</Text>
              <TextInput style={styles.input}
-                placeholder="Average number of clusters"
                 keyboardType = 'number-pad'
                 onChangeText={(trees)=>this.setState({averagenumberclusters: trees})}
              />
+             <Text style={styles.headers}>Potential fruits per tree</Text>
              <TextInput style={styles.input}
-                placeholder="Potential fruits per tree"
                 keyboardType = 'number-pad'
                 onChangeText={(apples)=>this.setState({potentialfruitpertree: apples})}
              />
+             </View>
           </View>
         );
       }
@@ -120,7 +126,16 @@ const styles = StyleSheet.create({
     input: {
       margin: 15,
       height: 40,
-      borderColor: '#7a42f4',
-      borderWidth: 1
+      borderColor: '#618759',
+      borderWidth: 1,
+      borderRadius: 5,
+      fontSize: 18
+    },
+    headers:{
+      marginLeft: 15,
+      fontSize: 18
+    },
+    form: {
+      marginTop: 25
     }
   });
