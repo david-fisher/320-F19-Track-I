@@ -33,7 +33,7 @@ def allowed_file(filename):
 
 def create_app(config=None):
     app = FlaskAPI(__name__)
-    app.config.update(dict(DEBUG=True))
+    app.config.update(dict(DEBUG=False))
     app.config.update(config or {})
     CORS(app)
 
