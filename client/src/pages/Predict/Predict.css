@@ -27,3 +27,8 @@
   width: 100%;
   object-fit: contain;
 }
+.clusterNumForm{
+  width: 10em;
+  display: inline-block;
+  margin-left: 1em;
+}

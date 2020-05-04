@@ -11,6 +11,7 @@ export default function Predict() {
   const [selectedFile, setSelectedFile] = useState(null);
   const [imagePreviewUrl, setImagePreviewUrl] = useState(null);
   const [clusterNum, setClusterNum] = useState("");
+  
 
   function fileChangeHandler(e) {
     setSelectedFile(e.target.files[0]);
@@ -25,35 +26,47 @@ export default function Predict() {
 
     reader.onloadend = () => {
         setImagePreviewUrl(reader.result)
-    }
+    };
 
-    reader.readAsDataURL(e.target.files[0])
+    reader.readAsDataURL(e.target.files[0]);
   }
 
   function submit(event) {
     console.log(selectedFile);
 
-    const cluster_image = new FormData();
-    cluster_image.append('cluster_img', selectedFile);
+    var data = new FormData();
+    data.append('cluster_img', selectedFile);
 
     let endpointURL = "https://2a2glx2h08.execute-api.us-east-2.amazonaws.com/default/ml/cluster/" + clusterNum;
     console.log(endpointURL);
+
+    console.log(data);
 
     fetch(
       endpointURL,
       {
         method: "POST",
-        headers: {
-          Accept: "*/*",
-          "Content-Type": "multipart/form-data"
-        },
-        body: cluster_image
+        body: data
       }
     )
     .then(response => {
+      response.json().then(json => {
+        if (response.status >= 200 && response.status < 300) {
+          var clustNum = json["cluster_num"];
+          alert("Success! Cluster number: " + clustNum);
+        }
+        else {
+          var error_message = json["error"];
+          alert("Error: " + error_message);
+        }
+      })
       console.log(response.status);
-    });
+      console.log(response.statusText);
 
+    })
+    .catch(error => {
+      console.log(error);
+    })
     
   }
 
@@ -80,7 +93,7 @@ export default function Predict() {
         Select Image
       </Button>
 
-      <FormGroup controlId="clusterNum">
+      <FormGroup controlId="clusterNum" className="clusterNumForm" >
         <FormControl
           autoFocus
           type="firstName"
