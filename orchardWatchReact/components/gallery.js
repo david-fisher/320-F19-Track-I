@@ -41,7 +41,7 @@ export default class Gallery extends Component {
             // alert(JSON.stringify(result))
         }
         else {
-            this.props.navigation.navigate('CameraPage')
+            this.props.navigation.navigate('Home')
         }
     };
 
@@ -54,10 +54,6 @@ export default class Gallery extends Component {
     }
 
     handleConfirm = () => {
-        if (this.state.entry === '') {
-            alert('Please Enter cluster number')
-            return
-        }
         var data = new FormData()
         // data.append('clust_num',1)
         data.append('cluster_img',{
@@ -65,7 +61,7 @@ export default class Gallery extends Component {
             type: 'image/jpg',
             name: 'x.jpg'
         })
-        fetch('https://2a2glx2h08.execute-api.us-east-2.amazonaws.com/default/ml/cluster/1',{
+        fetch('https://2a2glx2h08.execute-api.us-east-2.amazonaws.com/default/ml/cluster/'+this.state.entry,{
             method: 'POST',
             // headers: {
             //     Accept: "*/*",
@@ -73,19 +69,22 @@ export default class Gallery extends Component {
             // },
             body: data
         }).then(res => {
-            // if (res.status === 200) {
-            //     alert('Image successfully uploaded')
-            // }
-            // else {
-            //     // alert(res.status)
-            //     res.json().then(json => {
-            //         alert(JSON.stringify(json))
-            //     })
-            // }
-            alert('Image successfully uploaded')
+            if (res.status === 200) {
+                res.json().then(json => {
+                    alert(JSON.stringify(json))
+                })
+            }
+            else {
+                // alert(res.status)
+                res.json().then(json => {
+                    alert(JSON.stringify(json))
+                })
+            }
+            // alert('Image successfully uploaded')
         })
         .catch(err => {alert(err)})
-        // this.props.navigation.navigate('Home')
+        this.props.navigation.navigate('Home')
+        // alert('Image successfully Uploaded')
         this.setState({dialogVisible: false})
 
     }
@@ -99,7 +98,7 @@ export default class Gallery extends Component {
                     <NavigationBar
                         title = {{title: "Upload Image"}} 
                         style = {styles.navbar}
-                        leftButton = {{title: '< Back', handler: () => this.props.navigation.navigate('CameraPage')}}
+                        leftButton = {{title: '< Back', handler: () => this.props.navigation.navigate('Home')}}
                         rightButton = {{title: 'Upload', handler: this.upload}}
                     />
                 </View>

@@ -89,7 +89,7 @@ export default class DataSets extends Component {
         containerStyle = {styles.listItem}
         title={item.name} 
         titleStyle={{color: '#618759', fontWeight: 'bold'}}
-        subtitle={"Location: " + item.location + "\nLast Updated: " + item.lastUpdated} 
+        subtitle={"Location: " + item.location + "\nLast Updated: " + item.lastupdated} 
         bottomDivider
         topDivider
         chevron = {{color: '#618759'}}
