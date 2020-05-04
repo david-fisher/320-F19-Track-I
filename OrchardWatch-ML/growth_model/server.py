@@ -12,7 +12,7 @@ import re
 import math
 import apriltag
 
-# from flask_cors import CORS
+from flask_cors import CORS
 from logzero import logger
 import boto3
 
@@ -33,9 +33,9 @@ def allowed_file(filename):
 
 def create_app(config=None):
     app = FlaskAPI(__name__)
-    app.config.update(dict(DEBUG=True))
+    app.config.update(dict(DEBUG=False))
     app.config.update(config or {})
-    # CORS(app)
+    CORS(app)
 
     @app.route("/tree", methods=["POST"])
     def get_num_clusters():
@@ -46,8 +46,9 @@ def create_app(config=None):
     @app.route("/cluster", methods=["POST"])
     @app.route("/cluster/<int:cluster_num>", methods=["POST"])
     def label_apples(cluster_num=None):
-        logger.info("POST /cluster/{}".format(cluster_num))
+        logger.info("POST /cluster/{}".format(cluster_num if cluster_num is not None else ""))
         if "cluster_img" not in request.files:
+            logger.error("missing_cluster_img")
             return ret(error_message="missing_cluster_img"), status.HTTP_400_BAD_REQUEST
 
         input_image = request.files["cluster_img"]
@@ -58,6 +59,7 @@ def create_app(config=None):
             filename = os.path.join(UPLOAD_FOLDER, filename)
             input_image.save(filename)
         else:
+            logger.error("invalid_cluster_img")
             return ret(error_message="invalid_cluster_img"), status.HTTP_400_BAD_REQUEST
 
         # input_image = np.fromstring(input_image.read(), np.uint8)
@@ -71,6 +73,7 @@ def create_app(config=None):
         # STEP 1: Check if cluster_num is valid
         if cluster_num is not None:
             if not is_valid_cluster_num(cluster_num):
+                logger.error("invalid_cluster_img")
                 return ret(error_message="invalid_cluster_num"), status.HTTP_400_BAD_REQUEST
 
             # STEP 2: ALIGNMENT CHECK
@@ -84,13 +87,13 @@ def create_app(config=None):
                 aligned = 1
 
             if aligned == -1:
-                print("error, tag not present in input img")
+                logger.error("error, tag not present in input img")
                 return ret(error_message="no_tag"), status.HTTP_400_BAD_REQUEST
             elif aligned == 0:
-                print("input image not aligned")
+                logger.error("input image not aligned")
                 return ret(error_message="not_aligned"), status.HTTP_400_BAD_REQUEST
             else:
-                print("successfully aligned")
+                logger.info("successfully aligned")
         else:
             # rds = boto3.client("rds-data", region_name=REGION_NAME)
             # cluster_ids = rds.execute_statement(
@@ -107,8 +110,9 @@ def create_app(config=None):
                 get_matching_s3_objects(s3, "orchardwatchphotos", prefix="clusters")
             )
             if existing_clusters:
-                highest_cluster = sorted(existing_clusters, key=lambda o: o["Key"])[-1]["Key"]
-                highest_cluster_id = re.findall("clusters/(\d*)/", highest_cluster)[0]
+                get_cluster_id = lambda key: int(re.findall("clusters/(\d*)/", key)[0])
+                highest_cluster = sorted(existing_clusters, key=lambda o: get_cluster_id(o["Key"]))[-1]
+                highest_cluster_id = get_cluster_id(highest_cluster["Key"])
             else:
                 highest_cluster_id = 0
 
@@ -123,8 +127,70 @@ def create_app(config=None):
         store_in_s3(s3, input_image, cluster_num, key)
 
         # TODO: Measure the apple, and appropriately store the data in DB
+        
+        # Get the measurements for the apple
+        # measurements = measure_image(input_image, most_recent_image)
+        # num_apples = len(measurements)
 
-        return ret(cluster_num=cluster_num), status.HTTP_200_OK
+        # Instantiate an rds
+        # rds = boto3.client("rds-data", region_name=REGION_NAME)
+
+        # Create a ClusterImage record
+        # time = time[:8]
+        # time_stamp = str(date) + " " + str(time)
+        # file_url = key
+        # sql_parameters = [
+        #     {'name':'cluster_id', 'value':{'varchar': str(cluster_num)}},
+        #     {'name':'time_stamp', 'value':{'timestamp': time_stamp}},
+        #     {'name':'file_url', 'value':{'varchar': file_url}},
+        # ]
+        # rds.execute_statement(
+        #     secretArn=SECRET_ARN,
+        #     database=DB_NAME,
+        #     resourceArn=ARN,
+        #     sql="INSERT INTO ClusterImage (cluster_id, time_stamp, file_url) VALUES (:cluster_id, :time_stamp, :file_url)",
+        #     parameters=sql_parameters
+        # )
+
+        # Get cluster_image_id
+        # sql_parameters = [
+        #     {'name':'cluster_id', 'value':{'varchar': str(cluster_num)}},
+        #     {'name':'time_stamp', 'value':{'timestamp': time_stamp}},
+        # ]
+        # cluster_image_id = int(rds.execute_statement(
+        #     secretArn=SECRET_ARN,
+        #     database=DB_NAME,
+        #     resourceArn=ARN,
+        #     sql="SELECT cluster_image_id FROM ClusterImage WHERE cluster_id = :cluster_id AND time_stamp=:time_stamp",
+        #     parameters=sql_parameters
+        # ))
+        # Create a ClusterDataPoint record
+        # TODO: Figure out how to handle the rest of the data in the schema that is not provided during image upload
+
+        # TODO: Get all assumptions cleared up
+        # Create a FruitDataPoint per fruitlet
+        # Assume fruit_id to be the index of the measurement
+        # Assume model_id to be 0
+        # stem_color = 'green'
+        # for fruit_id in range(num_apples):
+        #     sql_parameters = [
+        #         {'name':'fruit_id', 'value':{'varchar': str(cluster_num)}},
+        #         {'name':'cluster_image_id', 'value':{'cluster_image_id': cluster_image_id}},
+        #         {'name':'model_id', 'value':{'model_id': 0}},
+        #         {'name':'time_stamp', 'value':{'timestamp': time_stamp}},
+        #         {'name':'measurement', 'value':{'measurement': measurements[fruit_id]}},
+        #         {'name':'stem_color', 'value':{'stem_color': stem_color}},
+        #     ]
+        #     rds.execute_statement(
+        #         secretArn=SECRET_ARN,
+        #         database=DB_NAME,
+        #         resourceArn=ARN,
+        #         sql="INSERT INTO FruitDataPoint (fruit_id, cluster_image_id, model_id, time_stamp, measurement, stem_color) VALUES (:fruit_id, :cluster_image_id, :model_id, :time_stamp, :measurement, :stem_color)",
+        #         parameters=sql_parameters
+        #     )
+
+        logger.info("Success!")
+        return ret(cluster_num=cluster_num), status.HTTP_201_CREATED if cluster_num is None else status.HTTP_200_OK
 
     # technically this can be consolidated into label_apples, but
     # I put it separately for readability
@@ -154,6 +220,12 @@ def ret(error_message=None, **kwargs):
     r.update(kwargs)
     return r
 
+def measure_image(input_image, most_recent_image):
+    # Returns: list of doubles corresponding to relative growth rate per apple
+    return dummy_measurement()
+
+def dummy_measurement():
+    return [5.2, 3.1, 2.5]
 
 def is_valid_cluster_num(cluster_num):
     N_VALID_CLUSTERS = 10000
