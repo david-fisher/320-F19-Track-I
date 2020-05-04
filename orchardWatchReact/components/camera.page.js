@@ -6,6 +6,8 @@ import { Component } from 'react';
 import Toolbar from './toolbar.component';
 import Constants from "expo-constants";
 import NavigationBar from "react-native-navbar";
+import Dialog from 'react-native-dialog';
+
 
 
 export default class CameraPage extends Component {
@@ -15,7 +17,9 @@ export default class CameraPage extends Component {
         capturing: null,
         cameraType: Camera.Constants.Type.back,
         hasCameraPermission: null,
-        imageUri: null
+        imageUri: null,
+        dialogVisible: false,
+        entry: ''
     };
 
     setFlashMode = (flashMode) => this.setState({ flashMode });
@@ -46,15 +50,54 @@ export default class CameraPage extends Component {
         })
     }
 
+    // upload = () => {
+    //     alert("Successfully uploaded image")
+    //     this.setState({
+    //         imageUri: null
+    //     })
+    //     // fetch('https://2a2glx2h08.execute-api.us-east-2.amazonaws.com/default/aprilTag-allignment',{
+    //     //     method: 'POST',
+    //     //     body: this.state.imageUri
+    //     // }).then(res => {alert(res.status)})
+    // }
     upload = () => {
-        alert("Successfully uploaded image")
-        this.setState({
-            imageUri: null
+        this.setState({dialogVisible: true})
+    }
+
+    handleCancel = () => {
+        this.setState({dialogVisible: false})
+    }
+
+    handleConfirm = async () => {
+        if (this.state.entry === '') {
+            alert('Please Enter cluster number')
+            return
+        }
+        var data = new FormData()
+        // data.append('clust_num',1)
+        data.append('cluster_img',{
+            uri: this.state.imageUri.uri,
+            type: 'image/jpg',
+            name: 'image.jpg'
         })
-        // fetch('https://2a2glx2h08.execute-api.us-east-2.amazonaws.com/default/aprilTag-allignment',{
-        //     method: 'POST',
-        //     body: this.state.imageUri
-        // }).then(res => {alert(res.status)})
+        fetch('https://2a2glx2h08.execute-api.us-east-2.amazonaws.com/default/ml/cluster/'+this.state.entry,{
+            method: 'POST',
+            headers: {
+                "Content-Type": "multipart/form-data"
+            },
+            body: data
+        }).then(res => {
+            if (res.status === 200) {
+                alert('Image successfully uploaded')
+            }
+            else {
+                alert('Image could not be uploaded')
+            }
+        })
+        .catch(err => {alert(err)})
+        this.setState({dialogVisible: false})
+        this.setState({imageUri: null})
+        this.setState({entry: ''})
     }
 
     render() {
@@ -74,6 +117,13 @@ export default class CameraPage extends Component {
                         rightButton = {{title: "Upload", handler: this.upload}}
                         style = {styles.navbar}
                     />
+                    <Dialog.Container visible={this.state.dialogVisible}>
+                        <Dialog.Title>Cluster ID</Dialog.Title>
+                        <Dialog.Description>Please enter the cluster id for the image</Dialog.Description>
+                        <Dialog.Input onChangeText={entry => this.setState({entry})} value={this.state.entry} style={{color: 'black'}} />
+                        <Dialog.Button label="Ok" onPress={this.handleConfirm} />
+                        <Dialog.Button label="Cancel" onPress={this.handleCancel} />
+                    </Dialog.Container>
                 </Fragment>
             );
         }
