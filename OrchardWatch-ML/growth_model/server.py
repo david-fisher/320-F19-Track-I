@@ -12,7 +12,7 @@ import re
 import math
 import apriltag
 
-# from flask_cors import CORS
+from flask_cors import CORS
 from logzero import logger
 import boto3
 
@@ -35,7 +35,7 @@ def create_app(config=None):
     app = FlaskAPI(__name__)
     app.config.update(dict(DEBUG=True))
     app.config.update(config or {})
-    # CORS(app)
+    CORS(app)
 
     @app.route("/tree", methods=["POST"])
     def get_num_clusters():
