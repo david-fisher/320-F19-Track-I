@@ -127,6 +127,67 @@ def create_app(config=None):
         store_in_s3(s3, input_image, cluster_num, key)
 
         # TODO: Measure the apple, and appropriately store the data in DB
+        
+        # Get the measurements for the apple
+        # measurements = measure_image(input_image, most_recent_image)
+        # num_apples = len(measurements)
+
+        # Instantiate an rds
+        # rds = boto3.client("rds-data", region_name=REGION_NAME)
+
+        # Create a ClusterImage record
+        # time = time[:8]
+        # time_stamp = str(date) + " " + str(time)
+        # file_url = key
+        # sql_parameters = [
+        #     {'name':'cluster_id', 'value':{'varchar': str(cluster_num)}},
+        #     {'name':'time_stamp', 'value':{'timestamp': time_stamp}},
+        #     {'name':'file_url', 'value':{'varchar': file_url}},
+        # ]
+        # rds.execute_statement(
+        #     secretArn=SECRET_ARN,
+        #     database=DB_NAME,
+        #     resourceArn=ARN,
+        #     sql="INSERT INTO ClusterImage (cluster_id, time_stamp, file_url) VALUES (:cluster_id, :time_stamp, :file_url)",
+        #     parameters=sql_parameters
+        # )
+
+        # Get cluster_image_id
+        # sql_parameters = [
+        #     {'name':'cluster_id', 'value':{'varchar': str(cluster_num)}},
+        #     {'name':'time_stamp', 'value':{'timestamp': time_stamp}},
+        # ]
+        # cluster_image_id = int(rds.execute_statement(
+        #     secretArn=SECRET_ARN,
+        #     database=DB_NAME,
+        #     resourceArn=ARN,
+        #     sql="SELECT cluster_image_id FROM ClusterImage WHERE cluster_id = :cluster_id AND time_stamp=:time_stamp",
+        #     parameters=sql_parameters
+        # ))
+        # Create a ClusterDataPoint record
+        # TODO: Figure out how to handle the rest of the data in the schema that is not provided during image upload
+
+        # TODO: Get all assumptions cleared up
+        # Create a FruitDataPoint per fruitlet
+        # Assume fruit_id to be the index of the measurement
+        # Assume model_id to be 0
+        # stem_color = 'green'
+        # for fruit_id in range(num_apples):
+        #     sql_parameters = [
+        #         {'name':'fruit_id', 'value':{'varchar': str(cluster_num)}},
+        #         {'name':'cluster_image_id', 'value':{'cluster_image_id': cluster_image_id}},
+        #         {'name':'model_id', 'value':{'model_id': 0}},
+        #         {'name':'time_stamp', 'value':{'timestamp': time_stamp}},
+        #         {'name':'measurement', 'value':{'measurement': measurements[fruit_id]}},
+        #         {'name':'stem_color', 'value':{'stem_color': stem_color}},
+        #     ]
+        #     rds.execute_statement(
+        #         secretArn=SECRET_ARN,
+        #         database=DB_NAME,
+        #         resourceArn=ARN,
+        #         sql="INSERT INTO FruitDataPoint (fruit_id, cluster_image_id, model_id, time_stamp, measurement, stem_color) VALUES (:fruit_id, :cluster_image_id, :model_id, :time_stamp, :measurement, :stem_color)",
+        #         parameters=sql_parameters
+        #     )
 
         logger.info("Success!")
         return ret(cluster_num=cluster_num), status.HTTP_201_CREATED if cluster_num is None else status.HTTP_200_OK
@@ -159,6 +220,12 @@ def ret(error_message=None, **kwargs):
     r.update(kwargs)
     return r
 
+def measure_image(input_image, most_recent_image):
+    # Returns: list of doubles corresponding to relative growth rate per apple
+    return dummy_measurement()
+
+def dummy_measurement():
+    return [5.2, 3.1, 2.5]
 
 def is_valid_cluster_num(cluster_num):
     N_VALID_CLUSTERS = 10000
