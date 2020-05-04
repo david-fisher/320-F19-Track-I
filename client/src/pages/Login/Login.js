@@ -17,7 +17,7 @@ export default function Login() {
     event.preventDefault();
 
     fetch(
-      "https://mt7pf3aohi.execute-api.us-east-2.amazonaws.com/test/user-login",
+      "https://2a2glx2h08.execute-api.us-east-2.amazonaws.com/default/user/login",
       {
         method: "POST",
         headers: {
@@ -25,8 +25,8 @@ export default function Login() {
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          Email: email,
-          Password: password
+          email: email,
+          pass: password
         })
       }
     )
@@ -46,20 +46,24 @@ export default function Login() {
         cookies.remove("lastName");
         cookies.remove("role");
         cookies.remove("token");
-        cookies.set("email", json["body"]["userinfo"]["EMail"], {
+        
+        // cookies.set for email/firstName/lastName is super duper not secure and should be changed when a better solution is available 
+        // (They shouldnt be stored in cookies)
+        cookies.set("email", email, {
           path: "/"
         });
-        cookies.set("firstName", json["body"]["userinfo"]["FName"], {
-          path: "/"
-        });
-        cookies.set("lastName", json["body"]["userinfo"]["LName"], {
-          path: "/"
-        });
-        cookies.set("role", json["body"]["userinfo"]["Role"], { path: "/" });
-        cookies.set("token", json["body"]["token"], { path: "/" });
+        // cookies.set("firstName", json["body"]["userinfo"]["FName"], {
+        //   path: "/"
+        // });
+        // cookies.set("lastName", json["body"]["userinfo"]["LName"], {
+        //   path: "/"
+        // });
+        // cookies.set("role", json["body"]["userinfo"]["Role"], { path: "/" });
+        cookies.set("token", json["token"], { path: "/" });
       })
       .then(() => {
-        setModalShow(true);
+        // setModalShow(true);
+        document.location.href = "/home";
       })
       .catch(error => {
         alert("Invalid credentials");
@@ -96,6 +100,11 @@ export default function Login() {
           <FormGroup>
             <Button block href="/register">
               Create an account
+            </Button>
+          </FormGroup>
+          <FormGroup>
+            <Button block href="/forgot">
+              Forgot Password
             </Button>
           </FormGroup>
           <LoginModal

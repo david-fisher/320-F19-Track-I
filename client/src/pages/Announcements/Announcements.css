@@ -1,0 +1,27 @@
+.Title {
+  padding: 1rem;
+}
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+}
+.title {
+  margin-top: 20px;
+  font-style: italic;
+}
+.sticky {
+  position: fixed;
+  width: 100%;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+.left-margin {
+  margin-left: 10px;
+}
+.addUpdate {
+  margin-left: auto;
+  margin-right: auto;
+}

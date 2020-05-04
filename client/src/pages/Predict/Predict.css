@@ -1,3 +1,34 @@
 .hiddenFile {
   display: none;
 }
+.buttonCenter {
+  text-align: center;
+  padding-bottom: 1em;
+}
+.imageContainer {
+  text-align: center;
+  padding: 2em;
+  padding-top: 0;
+}
+.imageContainer .previewPlaceholder{
+  border-style: dashed;
+  border-color: #C0C0C0;
+  height: 20em;
+}
+.imageContainer .previewPlaceholder h1 {
+  padding: 3em;
+  margin-bottom: 0;
+  color: #C0C0C0;
+}
+.imageContainer .previewImage {
+  max-height: 20em;
+  max-width: 960px;
+  height: 20em;
+  width: 100%;
+  object-fit: contain;
+}
+.clusterNumForm{
+  width: 10em;
+  display: inline-block;
+  margin-left: 1em;
+}

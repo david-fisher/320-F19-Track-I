@@ -13,12 +13,6 @@ export default function SuccessModal(props) {
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">Success!</Modal.Title>
       </Modal.Header>
-      <Modal.Body>
-        <p>
-          You have successfully created an account. Please log in using your
-          newly created credentials.
-        </p>
-      </Modal.Body>
       <Modal.Footer>
         <Button onClick={props.onHide}>Close</Button>
       </Modal.Footer>

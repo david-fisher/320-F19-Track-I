@@ -25,6 +25,8 @@ export default function App() {
         <Nav className="mr-auto">
           <Nav.Link href="/home">Home</Nav.Link>
           <Nav.Link href="/about">About Us</Nav.Link>
+          <Nav.Link href="/announcements">Announcements</Nav.Link>
+          <Nav.Link href="/contacts">Contacts</Nav.Link>
           {/*{token !== undefined && (*/}
           {/*  <Nav.Link href="/orchards">Orchards</Nav.Link>*/}
           {/*)}*/}
@@ -55,7 +57,7 @@ export default function App() {
               <Dropdown.Menu alignRight={true}>
                 <Dropdown.Item href="/profile">Profile</Dropdown.Item>
                 {/*<Dropdown.Item href="/dashboard">Dashboard</Dropdown.Item>*/}
-                <Dropdown.Item onClick={logout}>Logout</Dropdown.Item>
+                <Dropdown.Item href="/home" onClick={logout}>Logout</Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
           )}
@@ -65,3 +67,4 @@ export default function App() {
     </div>
   );
 }
+

@@ -1,0 +1,22 @@
+[
+	{
+		"name": "Bob Marston",
+		"position": "Farmer",
+		"email": "farmersUnited@gmail.com"
+	},
+	{
+		"name": "Donut Monkeys",
+		"position": "Farmer",
+		"email": "giveMeDonuts@aol.com"
+	},
+	{
+		"name": "Phil",
+		"position": "Researcher",
+		"email": "researchersUnited@gmail.com"
+	},
+	{
+		"name": "Dirty Dan",
+		"position": "Researcher",
+		"email": "imNotPinheadLarry@aol.com"
+	}
+]
