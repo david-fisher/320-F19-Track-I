@@ -80,24 +80,29 @@ export default class CameraPage extends Component {
             type: 'image/jpg',
             name: 'image.jpg'
         })
-        fetch('https://2a2glx2h08.execute-api.us-east-2.amazonaws.com/default/ml/cluster/'+this.state.entry,{
-            method: 'POST',
-            headers: {
-                "Content-Type": "multipart/form-data"
-            },
-            body: data
-        }).then(res => {
-            if (res.status === 200) {
-                alert('Image successfully uploaded')
-            }
-            else {
-                alert('Image could not be uploaded')
-            }
-        })
-        .catch(err => {alert(err)})
+        // fetch('https://2a2glx2h08.execute-api.us-east-2.amazonaws.com/default/ml/cluster/'+this.state.entry,{
+        //     method: 'POST',
+        //     headers: {
+        //         "Content-Type": "multipart/form-data"
+        //     },
+        //     body: data
+        // }).then(res => {
+        //     if (res.status === 200) {
+        //         alert('Image successfully uploaded')
+        //     }
+        //     else {
+        //         alert('Image could not be uploaded')
+        //     }
+        // })
+        // .catch(err => {alert(err)})
+        alert('Bad Image Upload Unsuccessful')
         this.setState({dialogVisible: false})
         this.setState({imageUri: null})
         this.setState({entry: ''})
+    }
+
+    gallery = () => {
+        this.props.navigation.navigate('Gallery')
     }
 
     render() {
@@ -151,6 +156,7 @@ export default class CameraPage extends Component {
                     onCaptureIn={this.handleCaptureIn}
                     onCaptureOut={this.handleCaptureOut}
                     onShortCapture={this.handleShortCapture}
+                    gallery={this.gallery}
                 />
                 </Fragment>
             );

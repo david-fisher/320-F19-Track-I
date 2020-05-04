@@ -9,7 +9,7 @@ const { FlashMode: CameraFlashModes } = Camera.Constants;
 export default ({ 
     capturing = false, 
     flashMode = CameraFlashModes.off, 
-    setFlashMode, 
+    setFlashMode, gallery,
     onCaptureIn, onCaptureOut, onShortCapture,  
 }) => (
     <Grid style={styles.bottomToolbar}>
@@ -36,6 +36,13 @@ export default ({
                 </TouchableWithoutFeedback>
             </Col>
             <Col style={styles.alignCenter}>
+                <TouchableOpacity onPress={() => gallery()}>
+                        <Ionicons
+                            name='md-photos'
+                            color="white"
+                            size={30}
+                        />
+                </TouchableOpacity>
             </Col>
         </Row>
     </Grid>
