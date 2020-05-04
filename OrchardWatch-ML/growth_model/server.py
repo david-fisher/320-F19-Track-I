@@ -95,6 +95,11 @@ def create_app(config=None):
             else:
                 logger.info("successfully aligned")
         else:
+            tag = detect_tag(input_image)
+            if not tag: # just check if the tag is there
+                logger.error("error, tag not present in input img")
+                return ret(error_message="no_tag"), status.HTTP_400_BAD_REQUEST
+
             # rds = boto3.client("rds-data", region_name=REGION_NAME)
             # cluster_ids = rds.execute_statement(
             #     secretArn=SECRET_ARN,
@@ -127,7 +132,7 @@ def create_app(config=None):
         store_in_s3(s3, input_image, cluster_num, key)
 
         # TODO: Measure the apple, and appropriately store the data in DB
-        
+
         # Get the measurements for the apple
         # measurements = measure_image(input_image, most_recent_image)
         # num_apples = len(measurements)
@@ -285,6 +290,15 @@ def compute_homography_distance(m1, m2):
     result = math.sqrt(result)
     return result
 
+def detect_tag(image):
+    img_bw = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)  # convert to grayscale for apriltag library
+    (thresh, img_bw) = cv2.threshold(
+        img_bw, 128, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU
+    )  # threshold
+
+    detector = apriltag.Detector()
+    tag_info = detector.detect(img_bw)
+    return tag_info
 
 # Params: l1 and l2 are color image matrices
 # Returns: 1 if aligned, 0 otherwise, -1 on error
@@ -305,22 +319,8 @@ def check_alignment(l1, l2):
     img1 = l1
     img2 = l2
 
-    # Convert from RGB to black and white
-    img1_bw = cv2.cvtColor(img1, cv2.COLOR_RGB2GRAY)  # convert to grayscale for apriltag library
-    img2_bw = cv2.cvtColor(img2, cv2.COLOR_RGB2GRAY)  # convert to grayscale for apriltag library
-
-    # Further preprocessing
-    (thresh, img1_bw) = cv2.threshold(
-        img1_bw, 128, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU
-    )  # threshold
-    (thresh, img2_bw) = cv2.threshold(
-        img2_bw, 128, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU
-    )  # threshold
-
-    # Declare and apply detector
-    detector = apriltag.Detector()
-    r_1 = detector.detect(img1_bw)
-    r_2 = detector.detect(img2_bw)
+    r_1 = detect_tag(img1)
+    r_2 = detect_tag(img2)
 
     # Ensure an AprilTag can be detected
     if not r_1 or not r_2:
